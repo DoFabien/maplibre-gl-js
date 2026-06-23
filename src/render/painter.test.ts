@@ -6,6 +6,7 @@ import {StubMap} from '../util/test/util.ts';
 import {Texture} from '../webgl/texture.ts';
 import {createNullGL} from '../util/test/null_gl.ts';
 import {OverscaledTileID} from '../tile/tile_id.ts';
+import type {StyleLayer} from '../style/style_layer.ts';
 
 describe('render', () => {
     let painter: Painter;
@@ -78,6 +79,35 @@ describe('render', () => {
 
         expect(painter.getTerrainDataForTile(tileID, true)).toBe(terrainData);
         expect(getTerrainData).toHaveBeenCalledWith(tileID);
+    });
+
+    describe('renderTileClippingMasks', () => {
+        const clippedLayer = {
+            source: 'source',
+            isTileClipped: () => true
+        } as StyleLayer;
+        const tileIDs = [new OverscaledTileID(0, 0, 0, 0, 0)];
+
+        function renderTileMaskBorderPasses() {
+            const renderTileMasks = vi.spyOn(painter, '_renderTileMasks').mockImplementation(() => {});
+
+            painter.renderTileClippingMasks(clippedLayer, tileIDs, true);
+
+            return renderTileMasks.mock.calls.map(([, , , useBorders]) => useBorders);
+        }
+
+        test('uses one mask pass for non-subdivided projections', () => {
+            painter.style = style;
+
+            expect(renderTileMaskBorderPasses()).toEqual([false]);
+        });
+
+        test('keeps two mask passes for subdivided projections', () => {
+            painter.style = style;
+            vi.spyOn(style.projection, 'useSubdivision', 'get').mockReturnValue(true);
+
+            expect(renderTileMaskBorderPasses()).toEqual([true, false]);
+        });
     });
 });
 
