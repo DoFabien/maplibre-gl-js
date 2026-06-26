@@ -239,7 +239,8 @@ export class Placement {
     private _getTerrainElevationFunc(tileID: OverscaledTileID) {
         const terrain = this.terrain;
         if (!terrain) return null;
-        return (x: number, y: number) => terrain.getElevation(tileID, x, y);
+        const sampler = terrain.getSamplingContext(tileID);
+        return sampler ? (x: number, y: number) => sampler.getElevation(x, y) : null;
     }
 
     getBucketParts(results: BucketPart[], styleLayer: StyleLayer, tile: Tile, sortAcrossTiles: boolean): void {

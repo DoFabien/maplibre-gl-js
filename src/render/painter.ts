@@ -521,6 +521,7 @@ export class Painter {
     render(style: Style, options: PainterOptions): void {
         this.style = style;
         this.options = options;
+        style.map.terrain?.resetSamplingContextCache?.();
 
         this.lineAtlas = style.lineAtlas;
         this.imageManager = style.imageManager;

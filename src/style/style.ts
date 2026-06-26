@@ -1873,6 +1873,7 @@ export class Style extends Evented<MapEventType> {
             // render frame
             this.placement.setStale();
         } else {
+            this.map.terrain?.resetSamplingContextCache?.();
             this.pauseablePlacement.continuePlacement(this._order, this._layers, layerTiles);
 
             if (this.pauseablePlacement.isDone()) {

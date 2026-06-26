@@ -276,6 +276,49 @@ describe('Terrain', () => {
         expect(mockTerrain.getDEMElevation(tileID, 0.4, 0.2)).toBeCloseTo(42);
     });
 
+    test('getSamplingContext samples DEM data with exaggeration', () => {
+        const terrain = new Terrain(null, {_source: {tileSize: 512}} as any, {exaggeration: 2} as any);
+        const tileID = new OverscaledTileID(1, 0, 1, 0, 0);
+        const sourceTile = {
+            tileID,
+            dem: {
+                dim: 1,
+                sampleBilinear: vi.fn((x: number, y: number) => 100 * x + 10 * y)
+            },
+            toString: () => 'source-tile'
+        } as any as Tile;
+        terrain.tileManager.getSourceTile = vi.fn(() => sourceTile);
+        terrain.tileManager.getSource = vi.fn(() => ({minzoom: 0, maxzoom: 22}) as any);
+
+        const sampler = terrain.getSamplingContext(tileID);
+
+        expect(sampler.getElevation(EXTENT / 2, EXTENT / 2)).toBeCloseTo(110);
+    });
+
+    test('getSamplingContext is cached until reset', () => {
+        const terrain = new Terrain(null, {_source: {tileSize: 512}} as any, {exaggeration: 1} as any);
+        const tileID = new OverscaledTileID(1, 0, 1, 0, 0);
+        const sourceTile = {
+            tileID,
+            dem: {
+                dim: 1,
+                sampleBilinear: vi.fn(() => 1)
+            },
+            toString: () => 'source-tile'
+        } as any as Tile;
+        terrain.tileManager.getSourceTile = vi.fn(() => sourceTile);
+        terrain.tileManager.getSource = vi.fn(() => ({minzoom: 0, maxzoom: 22}) as any);
+
+        const first = terrain.getSamplingContext(tileID);
+        const second = terrain.getSamplingContext(tileID);
+        terrain.resetSamplingContextCache();
+        const third = terrain.getSamplingContext(tileID);
+
+        expect(first).toBe(second);
+        expect(third).not.toBe(first);
+        expect(terrain.tileManager.getSourceTile).toHaveBeenCalledTimes(2);
+    });
+
     test('getElevationForLngLat uses covering tiles to get the right zoom', () => {
         const zoom = 10;
         const painter = {
