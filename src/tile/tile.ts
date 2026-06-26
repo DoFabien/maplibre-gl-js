@@ -235,10 +235,15 @@ export class Tile {
      */
     releaseRTT(painter: Painter): void {
         if (this.rttObjects.length === 0) return;
+        let objectCount = 0;
         for (const obj of this.rttObjects) {
             // Release RTT only if defined (undefined for holes in sparse array)
-            if (obj) painter.releaseRTT(obj);
+            if (obj) {
+                objectCount++;
+                painter.releaseRTT(obj);
+            }
         }
+        painter.terrainRenderStats?.recordRttInvalidation?.(objectCount);
         this.rttObjects.length = 0;
     }
 

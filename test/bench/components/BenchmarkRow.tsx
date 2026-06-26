@@ -13,8 +13,39 @@ export type BenchmarkRowProps = {
     finishedAll: boolean;
 }
 
+function formatOptionalMs(value: unknown): string {
+    return typeof value === 'number' && isFinite(value) ? `${formatSample(value)} ms` : 'n/a';
+}
+
+function latestDiagnostics(version: Version): Record<string, any> | undefined {
+    return version.diagnostics?.[version.diagnostics.length - 1] as Record<string, any> | undefined;
+}
+
+function renderDiagnostics(version: Version): React.JSX.Element {
+    const diagnostics = latestDiagnostics(version);
+    if (!diagnostics) return <p/>;
+
+    const cpu = diagnostics.cpuFrameMs || {};
+    const gpu = diagnostics.gpuMs || {};
+    const rtt = diagnostics.rtt || {};
+    const gl = diagnostics.gl || {};
+    const terrain = diagnostics.terrain || {};
+    const renderer = diagnostics.renderer || {};
+    const hardwareCounters = renderer.hardwareCounters || {};
+
+    return <p className="small">
+        frame p50/p95 {formatOptionalMs(cpu.p50)} / {formatOptionalMs(cpu.p95)};{' '}
+        cycles/instructions {hardwareCounters.cycles ?? 'n/a'} / {hardwareCounters.instructions ?? 'n/a'};{' '}
+        GPU rtt/masks/terrain/depth {formatOptionalMs(gpu.rtt)} / {formatOptionalMs(gpu.masks)} / {formatOptionalMs(gpu.terrain)} / {formatOptionalMs(gpu.depth)};{' '}
+        RTT hit/miss {rtt.cacheHits ?? 'n/a'} / {rtt.cacheMisses ?? 'n/a'};{' '}
+        draws/uniforms/textures {gl.drawCalls ?? 'n/a'} / {gl.uniformUploads ?? 'n/a'} / {gl.textureBinds ?? 'n/a'};{' '}
+        tiles/batches/vertices {rtt.tileCount ?? 'n/a'} / {rtt.batchCount ?? 'n/a'} / {terrain.vertexCount ?? 'n/a'}
+    </p>;
+}
+
 export const BenchmarkRow = (props: BenchmarkRowProps): React.JSX.Element => {
     const endedCount = props.versions.filter(version => version.status === 'ended').length;
+    const canRenderPlots = props.versions.length > 1 && props.versions.every(version => version.samples.length > 1);
 
     let main: Version;
     let current: Version;
@@ -94,11 +125,13 @@ export const BenchmarkRow = (props: BenchmarkRowProps): React.JSX.Element => {
                                 version.regression.correlation < 0.99 ? '\u26A0\uFE0F' : ''}</p>)}
                     {renderStatistic('Minimum',
                         (version) => <p>{formatSample(version.summary.min)} ms</p>)}
+                    {props.versions.some(version => version.diagnostics?.length > 0) && renderStatistic('Diagnostics',
+                        (version) => renderDiagnostics(version))}
                     {pInferiority && <tr><td colSpan={3}>{pInferiority}</td></tr>}
                 </tbody>
             </table>
-            {props.finishedAll && <StatisticsPlot versions={props.versions}/>}
-            {props.finishedAll && <RegressionPlot versions={props.versions}/>}
+            {props.finishedAll && canRenderPlots && <StatisticsPlot versions={props.versions}/>}
+            {props.finishedAll && canRenderPlots && <RegressionPlot versions={props.versions}/>}
         </div>
     );
 

@@ -1,5 +1,15 @@
 import {Map} from '../../../src/ui/map.ts';
 
+function mapErrorEventToError(event: any): Error {
+    if (event?.error instanceof Error) return event.error;
+    if (event instanceof Error) return event;
+    if (event?.error) return new Error(String(event.error));
+
+    const type = event?.type ? ` type=${event.type}` : '';
+    const message = event?.message ? ` message=${event.message}` : '';
+    return new Error(`Map error event without error payload.${type}${message}`);
+}
+
 const createMap = (options: any): Promise<Map> => {
     return new Promise((resolve, reject) => {
         if (options) {
@@ -33,7 +43,7 @@ const createMap = (options: any): Promise<Map> => {
             }
             resolve(map);
         });
-        map.on('error', (e) => reject(e.error));
+        map.on('error', (e) => reject(mapErrorEventToError(e)));
         map.on('remove', () => container.remove());
     });
 };

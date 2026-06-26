@@ -380,6 +380,21 @@ export type MapOptions = {
      */
     maxCanvasSize?: [number, number];
     /**
+     * Maximum size in pixels for terrain render-to-texture tiles.
+     *
+     * When 3D terrain is enabled, draped layers are rendered into offscreen
+     * textures before being composited onto the terrain mesh. This option caps
+     * the size of those intermediate textures.
+     *
+     * Lower values reduce GPU memory and fill-rate cost, especially on mobile,
+     * at the cost of possible loss of sharpness for draped raster, line, fill,
+     * hillshade and color-relief layers. Symbol layers are not rendered into
+     * these terrain render-to-texture tiles.
+     *
+     * If omitted, the current behavior is preserved.
+     */
+    terrainRenderToTextureMaxSize?: number;
+    /**
      * Determines whether to cancel, or retain, tiles from the current viewport which are still loading but which belong to a farther (smaller) zoom level than the current one.
      * * If `true`, when zooming in, tiles which didn't manage to load for previous zoom levels will become canceled. This might save some computing resources for slower devices, but the map details might appear more abruptly at the end of the zoom.
      * * If `false`, when zooming in, the previous zoom level(s) tiles will progressively appear, giving a smoother map details experience. However, more tiles will be rendered in a short period of time.
@@ -526,6 +541,20 @@ const defaultOptions: Readonly<Partial<MapOptions>> = {
     anisotropicFilterPitch: defaultAnisotropicFilterPitch,
 };
 
+function validateTerrainRenderToTextureMaxSize(value?: number): number | undefined {
+    if (value === undefined || value === null) return undefined;
+
+    if (!Number.isFinite(value) || value <= 0) {
+        throw new Error('terrainRenderToTextureMaxSize must be a positive number');
+    }
+
+    if (!Number.isInteger(value) || !Number.isInteger(Math.log2(value))) {
+        throw new Error('terrainRenderToTextureMaxSize must be a power of two');
+    }
+
+    return value;
+}
+
 /**
  * The `Map` object represents the map on your page. It exposes methods
  * and properties that enable you to programmatically change the map,
@@ -608,6 +637,7 @@ export class Map extends Camera {
     _clickTolerance: number;
     _overridePixelRatio: number | null | undefined;
     _maxCanvasSize: [number, number];
+    _terrainRenderToTextureMaxSize: number | undefined;
     _terrainDataCallback: (e: MapStyleDataEvent | MapSourceDataEvent) => void;
     /** @internal */
     _zoomLevelsToOverscale: number | undefined;
@@ -774,6 +804,7 @@ export class Map extends Camera {
         this._clickTolerance = resolvedOptions.clickTolerance;
         this._overridePixelRatio = resolvedOptions.pixelRatio;
         this._maxCanvasSize = resolvedOptions.maxCanvasSize;
+        this._terrainRenderToTextureMaxSize = validateTerrainRenderToTextureMaxSize(resolvedOptions.terrainRenderToTextureMaxSize);
         this._zoomLevelsToOverscale = resolvedOptions.zoomLevelsToOverscale;
         this.transformCameraUpdate = resolvedOptions.transformCameraUpdate;
         this.transformConstrain = resolvedOptions.transformConstrain;
@@ -3519,6 +3550,7 @@ export class Map extends Camera {
         }
 
         this.painter = new Painter(gl, this.transform);
+        this.painter.terrainRenderToTextureMaxSize = this._terrainRenderToTextureMaxSize;
     }
 
     override migrateProjection(newTransform: ITransform, newCameraHelper: ICameraHelper): void {

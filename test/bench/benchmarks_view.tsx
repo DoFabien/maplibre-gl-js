@@ -5,6 +5,37 @@ import {BenchmarksTable} from './components/BenchmarkTable.tsx';
 import {summaryStatistics, regression, Summary} from './lib/statistics.ts';
 import {ensureError} from '../../src/util/util.ts';
 import type {BenchmarkRowProps} from './components/BenchmarkRow.tsx';
+import type {Measurement} from './lib/benchmark.ts';
+
+type ExternalDiagnostics = {
+    rendererHardwareCounters?: Record<string, unknown>;
+};
+
+function getDiagnostics(measurements: Measurement[]): Record<string, unknown>[] {
+    return measurements
+        .map(measurement => measurement.diagnostics)
+        .filter((diagnostics): diagnostics is Record<string, unknown> => !!diagnostics);
+}
+
+function mergeExternalDiagnostics(measurement: Measurement, externalDiagnostics?: ExternalDiagnostics | null): Measurement {
+    if (!externalDiagnostics) return measurement;
+
+    const diagnostics = measurement.diagnostics || {};
+    const renderer = typeof diagnostics.renderer === 'object' && diagnostics.renderer ?
+        diagnostics.renderer as Record<string, unknown> :
+        {};
+
+    return {
+        ...measurement,
+        diagnostics: {
+            ...diagnostics,
+            renderer: {
+                ...renderer,
+                hardwareCounters: externalDiagnostics.rendererHardwareCounters
+            }
+        }
+    };
+}
 
 function updateUI(benchmarks: BenchmarkRowProps[], finished?: boolean) {
     finished = !!finished;
@@ -20,6 +51,8 @@ export async function run(benchmarks: BenchmarkRowProps[]): Promise<BenchmarkRow
         for (const version of benchmark.versions) {
             version.status = 'waiting';
             version.samples = [];
+            version.measurements = [];
+            version.diagnostics = [];
             version.summary = {} as Summary;
         }
     }
@@ -34,9 +67,27 @@ export async function run(benchmarks: BenchmarkRowProps[]): Promise<BenchmarkRow
             updateUI(benchmarks);
 
             try {
-                const measurements = await version.bench.run();
+                let externalDiagnostics: ExternalDiagnostics | null | undefined;
+                await (window as any).maplibreglBenchmarkBeforeVersionRun?.({
+                    benchmarkName: bench.name,
+                    versionName: version.name,
+                    versionDisplayName: version.displayName
+                });
+                let measurements: Measurement[];
+                try {
+                    measurements = await version.bench.run();
+                } finally {
+                    externalDiagnostics = await (window as any).maplibreglBenchmarkAfterVersionRun?.({
+                        benchmarkName: bench.name,
+                        versionName: version.name,
+                        versionDisplayName: version.displayName
+                    });
+                }
+                measurements = measurements.map(measurement => mergeExternalDiagnostics(measurement, externalDiagnostics));
                 const samples = measurements.map(({time, iterations}) => time / iterations);
                 version.status = 'ended';
+                version.measurements = measurements;
+                version.diagnostics = getDiagnostics(measurements);
                 version.samples = samples;
                 version.summary = summaryStatistics(samples);
                 version.regression = regression(measurements);

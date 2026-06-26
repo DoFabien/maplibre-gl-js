@@ -26,6 +26,30 @@ describe('mapOptions', () => {
         expect(map._maxTileCacheZoomLevels).toBe(1);
     });
 
+    test('terrainRenderToTextureMaxSize defaults to undefined', () => {
+        const map = createMap();
+        expect(map._terrainRenderToTextureMaxSize).toBeUndefined();
+        expect(map.painter.terrainRenderToTextureMaxSize).toBeUndefined();
+    });
+
+    test('terrainRenderToTextureMaxSize accepts a power of two', () => {
+        const map = createMap({terrainRenderToTextureMaxSize: 1024});
+        expect(map._terrainRenderToTextureMaxSize).toBe(1024);
+        expect(map.painter.terrainRenderToTextureMaxSize).toBe(1024);
+    });
+
+    test('terrainRenderToTextureMaxSize rejects non power of two values', () => {
+        expect(() => createMap({terrainRenderToTextureMaxSize: 1000})).toThrow(
+            new Error('terrainRenderToTextureMaxSize must be a power of two')
+        );
+    });
+
+    test('terrainRenderToTextureMaxSize rejects negative values', () => {
+        expect(() => createMap({terrainRenderToTextureMaxSize: -1024})).toThrow(
+            new Error('terrainRenderToTextureMaxSize must be a positive number')
+        );
+    });
+
     test('Style validation is enabled by default', () => {
         let validationOption = false;
         vi.spyOn(Style.prototype, 'loadJSON').mockImplementationOnce((styleJson, options) => {

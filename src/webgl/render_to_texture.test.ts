@@ -78,6 +78,7 @@ describe('render to texture', () => {
         drawFunctions: {
             terrainDepth: vi.fn(),
             terrainCoords: vi.fn(),
+            terrain: vi.fn(() => { layersDrawn++; }),
         }
     } as any as Painter;
     const map = {painter} as Map;
@@ -126,6 +127,35 @@ describe('render to texture', () => {
     beforeEach(() => {
         tile.rttObjects.length = 0;
         tile.rttFingerprint = {};
+        painter.terrainRenderToTextureMaxSize = undefined;
+        terrain.tileManager.tileSize = 512;
+        terrain.qualityFactor = 2;
+    });
+
+    test('uses uncapped RTT size by default', () => {
+        const uncappedRtt = new RenderToTexture(painter, terrain);
+
+        expect(uncappedRtt.rttSize).toBe(terrain.tileManager.tileSize * terrain.qualityFactor);
+    });
+
+    test('caps RTT size when terrainRenderToTextureMaxSize is set', () => {
+        painter.terrainRenderToTextureMaxSize = 1024;
+        terrain.tileManager.tileSize = 1024;
+        terrain.qualityFactor = 2;
+
+        const cappedRtt = new RenderToTexture(painter, terrain);
+
+        expect(cappedRtt.rttSize).toBe(1024);
+    });
+
+    test('does not upscale RTT size when cap is larger than computed size', () => {
+        painter.terrainRenderToTextureMaxSize = 2048;
+        terrain.tileManager.tileSize = 512;
+        terrain.qualityFactor = 2;
+
+        const cappedRtt = new RenderToTexture(painter, terrain);
+
+        expect(cappedRtt.rttSize).toBe(1024);
     });
 
     test('should call painter with overlay tiles for terrain tile', () => {

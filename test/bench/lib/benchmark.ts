@@ -9,6 +9,7 @@ const minTimeForMeasurement = 0.02 * 1000;
 export type Measurement = {
     iterations: number;
     time: number;
+    diagnostics?: Record<string, unknown>;
 };
 
 export interface BenchmarkLike {

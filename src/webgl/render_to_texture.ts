@@ -2,7 +2,6 @@ import {type Painter, type RenderOptions} from '../render/painter.ts';
 import {type Tile} from '../tile/tile.ts';
 import {Color} from '@maplibre/maplibre-gl-style-spec';
 import {type OverscaledTileID} from '../tile/tile_id.ts';
-import {drawTerrain} from './draw/draw_terrain.ts';
 import {type Style} from '../style/style.ts';
 import {type Terrain} from '../render/terrain.ts';
 import {type Texture} from './texture.ts';
@@ -70,7 +69,9 @@ export class RenderToTexture {
     constructor(painter: Painter, terrain: Terrain) {
         this.painter = painter;
         this.terrain = terrain;
-        this.rttSize = terrain.tileManager.tileSize * terrain.qualityFactor;
+        const computedRttSize = terrain.tileManager.tileSize * terrain.qualityFactor;
+        const maxRttSize = painter.terrainRenderToTextureMaxSize;
+        this.rttSize = maxRttSize ? Math.min(computedRttSize, maxRttSize) : computedRttSize;
     }
 
     getTexture(tile: Tile): Texture {
@@ -159,10 +160,15 @@ export class RenderToTexture {
         if (LAYERS_TO_TEXTURES[this._prevType] || (LAYERS_TO_TEXTURES[type] && isLastLayer)) {
             this._prevType = type;
             const stack = this._stacks.length - 1, layers = this._stacks[stack] || [];
+            painter.terrainRenderStats?.recordRttStack?.(this.rttSize, this._renderableTiles.length, layers.length);
             for (const tile of this._renderableTiles) {
                 this._rttTiles.push(tile);
                 // Cache hit: this tile already has a RTT object for this stack from a previous frame.
-                if (tile.getRTT(stack)) continue;
+                if (tile.getRTT(stack)) {
+                    painter.terrainRenderStats?.recordRttCacheHit?.(this.rttSize);
+                    continue;
+                }
+                painter.terrainRenderStats?.recordRttCacheMiss?.(this.rttSize);
                 const obj = tile.acquireRTT(painter, stack, this.rttSize);
                 painter.bindRTT(obj);
                 painter.context.clear({color: Color.transparent, stencil: 0});
@@ -176,7 +182,7 @@ export class RenderToTexture {
                     if (layer.source) tile.rttFingerprint[layer.source] = this._rttFingerprints[layer.source][tile.tileID.key];
                 }
             }
-            drawTerrain(this.painter, this.terrain, this._rttTiles, options);
+            this.painter.drawFunctions.terrain(this.painter, this.terrain, this._rttTiles, options);
             this._rttTiles = [];
 
             return LAYERS_TO_TEXTURES[type];

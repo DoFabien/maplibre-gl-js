@@ -92,13 +92,24 @@
                 for (const result of results) {
                     window.maplibreglBenchmarkResults[result.name] = {};
                     for (const version of result.versions) {
-                        window.maplibreglBenchmarkResults[result.name][version.name] = {name: version.name, summary: version.summary, regression: version.regression};
+                        window.maplibreglBenchmarkResults[result.name][version.name] = {
+                            name: version.name,
+                            summary: version.summary,
+                            regression: version.regression,
+                            diagnostics: version.diagnostics
+                        };
                     }
                 }
 
                 window.maplibreglBenchmarkFinished = true;
             } catch (ex) {
                 console.error(ex);
+                window.maplibreglBenchmarkError = {
+                    name: ex && ex.name,
+                    message: ex && ex.message ? ex.message : String(ex),
+                    stack: ex && ex.stack
+                };
+                window.maplibreglBenchmarkFinished = true;
             }
         }
 
