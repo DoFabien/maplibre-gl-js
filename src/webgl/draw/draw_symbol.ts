@@ -30,7 +30,7 @@ import type {UniformValues} from '../uniform_binding.ts';
 import type {SymbolSDFUniformsType} from '../program/symbol_program.ts';
 import type {CrossTileID, VariableOffset} from '../../symbol/placement.ts';
 import type {SymbolBucket, SymbolBuffers} from '../../data/bucket/symbol_bucket.ts';
-import type {TerrainData} from '../../render/terrain.ts';
+import type {TerrainData, TerrainSamplingContext} from '../../render/terrain.ts';
 import type {SymbolLayerSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {IReadonlyTransform} from '../../geo/transform_interface.ts';
 import type {ColorMode} from '../color_mode.ts';
@@ -59,6 +59,23 @@ type SymbolTileRenderState = {
 };
 
 const identityMat4 = mat4.identity(new Float32Array(16));
+
+function createTerrainElevationGetter(sampler: TerrainSamplingContext | null | undefined, painter: Painter): ElevationGetter | null {
+    if (!sampler) return null;
+    const approximateWhileMoving = painter.options?.moving && painter.terrainSymbolElevationMode === 'approximate-while-moving';
+    const cachedWhileMoving = painter.options?.moving && painter.terrainSymbolElevationMode === 'cached-while-moving';
+    const getElevation = ((x: number, y: number) => {
+        if (approximateWhileMoving) return sampler.getElevationApproximate(x, y);
+        if (cachedWhileMoving) return sampler.getElevationCachedOrApproximate(x, y);
+        return sampler.getElevation(x, y);
+    }) as ElevationGetter;
+    getElevation.getElevations = (points, output = []) => {
+        if (approximateWhileMoving) return sampler.getElevationsApproximate(points, output);
+        if (cachedWhileMoving) return sampler.getElevationsCachedOrApproximate(points, output);
+        return sampler.getElevations(points, output);
+    };
+    return getElevation;
+}
 
 export function drawSymbols(painter: Painter, tileManager: TileManager, layer: SymbolStyleLayer, coords: OverscaledTileID[], variableOffsets: {
     [_ in CrossTileID]: VariableOffset;
@@ -155,8 +172,7 @@ function updateVariableAnchors(coords: OverscaledTileID[],
         if (size) {
             const tileScale = Math.pow(2, transform.zoom - tile.tileID.overscaledZ);
             const sampler = terrain?.getSamplingContext(coord);
-            const getElevation = sampler ? ((x: number, y: number) => sampler.getElevation(x, y)) as ElevationGetter : null;
-            if (getElevation) getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
+            const getElevation = createTerrainElevationGetter(sampler, painter);
             const translation = translatePosition(transform, tile, translate, translateAnchor);
             updateVariableAnchorsForBucket(bucket, rotateWithMap, pitchWithMap, variableOffsets,
                 transform, pitchedLabelPlaneMatrix, tileScale, size, updateTextFitIcon, translation, coord.toUnwrapped(), getElevation);
@@ -394,8 +410,7 @@ function drawLayerSymbols(
             fastInvertTransformMat4(pitchedLabelPlaneMatrixInverse, pitchedLabelPlaneMatrix);
 
             const sampler = painter.style.map.terrain?.getSamplingContext(coord);
-            const getElevation = sampler ? ((x: number, y: number) => sampler.getElevation(x, y)) as ElevationGetter : null;
-            if (getElevation) getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
+            const getElevation = createTerrainElevationGetter(sampler, painter);
             const rotateToLine = layer.layout.get('text-rotation-alignment') === 'map';
             updateLineLabels(bucket, painter, isText, pitchedLabelPlaneMatrix, pitchedLabelPlaneMatrixInverse, pitchWithMap, keepUpright, rotateToLine, coord.toUnwrapped(), transform.width, transform.height, translation, getElevation);
         }

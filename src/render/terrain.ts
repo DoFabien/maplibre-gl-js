@@ -39,6 +39,8 @@ export type TerrainData = {
     tile: Tile;
 };
 
+export type TerrainSymbolElevationMode = 'exact' | 'cached-while-moving' | 'approximate-while-moving';
+
 export class TerrainSamplingContext {
     terrain: Terrain;
     tileID: OverscaledTileID;
@@ -100,6 +102,42 @@ export class TerrainSamplingContext {
         return output;
     }
 
+    getElevationCachedOrApproximate(x: number, y: number, extent: number = EXTENT): number {
+        if (extent === EXTENT) {
+            const cached = this._getCachedElevation(x, y);
+            if (cached !== undefined) return cached;
+        }
+        return this.getElevationApproximate(x, y, extent);
+    }
+
+    getElevationsCachedOrApproximate(points: ArrayLike<{x: number; y: number}>, output: number[] = [], extent: number = EXTENT): number[] {
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            output[i] = this.getElevationCachedOrApproximate(point.x, point.y, extent);
+        }
+        return output;
+    }
+
+    getElevationApproximate(x: number, y: number, extent: number = EXTENT): number {
+        if (x >= 0 && x < extent && y >= 0 && y < extent) {
+            return this._sampleNearest(x, y, extent);
+        }
+
+        const normalized = this.tileID.normalizeCoordinates(x, y, extent);
+        if (!normalized) return 0;
+
+        const sampler = this.terrain.getSamplingContext(normalized.tileID);
+        return sampler ? sampler._sampleNearest(normalized.x, normalized.y, extent) : 0;
+    }
+
+    getElevationsApproximate(points: ArrayLike<{x: number; y: number}>, output: number[] = [], extent: number = EXTENT): number[] {
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            output[i] = this.getElevationApproximate(point.x, point.y, extent);
+        }
+        return output;
+    }
+
     _getCachedElevation(x: number, y: number): number | undefined {
         return this._elevationCache.get(x)?.get(y);
     }
@@ -119,6 +157,13 @@ export class TerrainSamplingContext {
             (x * extentScale * this.scaleX + this.offsetX) * this.dem.dim,
             (y * extentScale * this.scaleY + this.offsetY) * this.dem.dim
         ) * this.exaggeration;
+    }
+
+    _sampleNearest(x: number, y: number, extent: number): number {
+        const extentScale = extent === EXTENT ? 1 : EXTENT / extent;
+        const demX = Math.max(-1, Math.min(this.dem.dim, Math.round((x * extentScale * this.scaleX + this.offsetX) * this.dem.dim)));
+        const demY = Math.max(-1, Math.min(this.dem.dim, Math.round((y * extentScale * this.scaleY + this.offsetY) * this.dem.dim)));
+        return this.dem.get(demX, demY) * this.exaggeration;
     }
 }
 

@@ -19,7 +19,7 @@ import type {SymbolBucket, CollisionArrays, SingleCollisionBox, SymbolBuffers} f
 import type {CollisionBoxArray, CollisionVertexArray, SymbolInstance, TextAnchorOffset} from '../data/array_types.g.ts';
 import type {FeatureIndex} from '../data/feature_index.ts';
 import type {OverscaledTileID, UnwrappedTileID} from '../tile/tile_id.ts';
-import {type Terrain} from '../render/terrain.ts';
+import {type Terrain, type TerrainSymbolElevationMode} from '../render/terrain.ts';
 import {translatePosition, warnOnce} from '../util/util.ts';
 import {type TextAnchor, TextAnchorEnum} from '../style/style_layer/variable_text_anchor.ts';
 
@@ -211,10 +211,14 @@ export class Placement {
     }>>;
     _terrainAnchorScratch: Array<{x: number; y: number}>;
     _terrainElevationScratch: number[];
+    terrainSymbolElevationMode: TerrainSymbolElevationMode;
+    moving: boolean;
 
-    constructor(transform: ITransform, terrain: Terrain, fadeDuration: number, crossSourceCollisions: boolean, prevPlacement?: Placement) {
+    constructor(transform: ITransform, terrain: Terrain, fadeDuration: number, crossSourceCollisions: boolean, prevPlacement?: Placement, terrainSymbolElevationMode: TerrainSymbolElevationMode = 'exact', moving: boolean = false) {
         this.transform = transform.clone();
         this.terrain = terrain;
+        this.terrainSymbolElevationMode = terrainSymbolElevationMode;
+        this.moving = moving;
         this.collisionIndex = new CollisionIndex(this.transform);
         this.placements = {};
         this.opacities = {};
@@ -245,14 +249,25 @@ export class Placement {
         if (!terrain) return null;
         const sampler = terrain.getSamplingContext(tileID);
         if (!sampler) return null;
-        const getElevation = ((x: number, y: number) => sampler.getElevation(x, y)) as projection.ElevationGetter;
-        getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
+        const approximateWhileMoving = this.moving && this.terrainSymbolElevationMode === 'approximate-while-moving';
+        const cachedWhileMoving = this.moving && this.terrainSymbolElevationMode === 'cached-while-moving';
+        const getElevation = ((x: number, y: number) => {
+            if (approximateWhileMoving) return sampler.getElevationApproximate(x, y);
+            if (cachedWhileMoving) return sampler.getElevationCachedOrApproximate(x, y);
+            return sampler.getElevation(x, y);
+        }) as projection.ElevationGetter;
+        getElevation.getElevations = (points, output = []) => {
+            if (approximateWhileMoving) return sampler.getElevationsApproximate(points, output);
+            if (cachedWhileMoving) return sampler.getElevationsCachedOrApproximate(points, output);
+            return sampler.getElevations(points, output);
+        };
         return getElevation;
     }
 
     private _preloadTerrainAnchorElevations(tileID: OverscaledTileID, bucket: SymbolBucket, start: number, end: number): void {
         const terrain = this.terrain;
         if (!terrain) return;
+        if (this.moving && this.terrainSymbolElevationMode !== 'exact') return;
 
         const anchors = this._terrainAnchorScratch;
         anchors.length = end - start;

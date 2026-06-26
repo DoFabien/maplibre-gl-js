@@ -5,7 +5,7 @@ import type {ITransform} from '../geo/transform_interface.ts';
 import type {StyleLayer} from './style_layer.ts';
 import type {Tile} from '../tile/tile.ts';
 import type {BucketPart} from '../symbol/placement.ts';
-import type {Terrain} from '../render/terrain.ts';
+import type {Terrain, TerrainSymbolElevationMode} from '../render/terrain.ts';
 
 class LayerPlacement {
     _sortAcrossTiles: boolean;
@@ -74,9 +74,11 @@ export class PauseablePlacement {
         showCollisionBoxes: boolean,
         fadeDuration: number,
         crossSourceCollisions: boolean,
-        prevPlacement?: Placement
+        prevPlacement?: Placement,
+        terrainSymbolElevationMode: TerrainSymbolElevationMode = 'exact',
+        moving: boolean = false
     ) {
-        this.placement = new Placement(transform, terrain, fadeDuration, crossSourceCollisions, prevPlacement);
+        this.placement = new Placement(transform, terrain, fadeDuration, crossSourceCollisions, prevPlacement, terrainSymbolElevationMode, moving);
         this._currentPlacementIndex = order.length - 1;
         this._forceFullPlacement = forceFullPlacement;
         this._showCollisionBoxes = showCollisionBoxes;

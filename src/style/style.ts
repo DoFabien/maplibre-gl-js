@@ -45,6 +45,7 @@ const emitValidationErrors = (evented: Evented, errors?: ReadonlyArray<{
 
 import type {Map} from '../ui/map.ts';
 import type {IReadonlyTransform, ITransform} from '../geo/transform_interface.ts';
+import type {TerrainSymbolElevationMode} from '../render/terrain.ts';
 import type {StyleImage} from './style_image.ts';
 import type {EvaluationParameters} from './evaluation_parameters.ts';
 import type {Placement} from '../symbol/placement.ts';
@@ -1831,7 +1832,7 @@ export class Style extends Evented<MapEventType> {
         }
     }
 
-    _updatePlacement(transform: ITransform, showCollisionBoxes: boolean, fadeDuration: number, crossSourceCollisions: boolean, forceFullPlacement: boolean = false): boolean {
+    _updatePlacement(transform: ITransform, showCollisionBoxes: boolean, fadeDuration: number, crossSourceCollisions: boolean, forceFullPlacement: boolean = false, terrainSymbolElevationMode: TerrainSymbolElevationMode = 'exact', moving: boolean = false): boolean {
         let symbolBucketsChanged = false;
         let placementCommitted = false;
 
@@ -1862,9 +1863,12 @@ export class Style extends Evented<MapEventType> {
         forceFullPlacement ||= this._layerOrderChanged || fadeDuration === 0;
 
         if (forceFullPlacement || !this.pauseablePlacement || (this.pauseablePlacement.isDone() && !this.placement.stillRecent(now(), transform.zoom))) {
-            this.pauseablePlacement = new PauseablePlacement(transform, this.map.terrain, this._order, forceFullPlacement, showCollisionBoxes, fadeDuration, crossSourceCollisions, this.placement);
+            this.pauseablePlacement = new PauseablePlacement(transform, this.map.terrain, this._order, forceFullPlacement, showCollisionBoxes, fadeDuration, crossSourceCollisions, this.placement, terrainSymbolElevationMode, moving);
             this._layerOrderChanged = false;
         }
+
+        this.pauseablePlacement.placement.terrainSymbolElevationMode = terrainSymbolElevationMode;
+        this.pauseablePlacement.placement.moving = moving;
 
         if (this.pauseablePlacement.isDone()) {
             // the last placement finished running, but the next one hasn’t

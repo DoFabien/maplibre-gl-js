@@ -25,7 +25,7 @@ import {TaskQueue} from '../util/task_queue.ts';
 import {throttle} from '../util/throttle.ts';
 import {type Source} from '../source/source.ts';
 import {type StyleLayer} from '../style/style_layer.ts';
-import {Terrain} from '../render/terrain.ts';
+import {Terrain, type TerrainSymbolElevationMode} from '../render/terrain.ts';
 import {RenderToTexture} from '../webgl/render_to_texture.ts';
 import {config} from '../util/config.ts';
 import {defaultLocale} from './default_locale.ts';
@@ -395,6 +395,17 @@ export type MapOptions = {
      */
     terrainRenderToTextureMaxSize?: number;
     /**
+     * Controls how terrain elevations are sampled for symbol placement while the map is moving.
+     *
+     * If set to `"exact"`, symbol placement always uses exact bilinear DEM sampling.
+     * If set to `"cached-while-moving"`, moving placement uses cached exact elevations when available and otherwise falls back to a nearest DEM sample.
+     * If set to `"approximate-while-moving"`, moving placement uses nearest DEM samples.
+     * Idle placement always uses exact bilinear DEM sampling.
+     *
+     * @defaultValue "exact"
+     */
+    terrainSymbolElevationMode?: TerrainSymbolElevationMode;
+    /**
      * Determines whether to cancel, or retain, tiles from the current viewport which are still loading but which belong to a farther (smaller) zoom level than the current one.
      * * If `true`, when zooming in, tiles which didn't manage to load for previous zoom levels will become canceled. This might save some computing resources for slower devices, but the map details might appear more abruptly at the end of the zoom.
      * * If `false`, when zooming in, the previous zoom level(s) tiles will progressively appear, giving a smoother map details experience. However, more tiles will be rendered in a short period of time.
@@ -537,6 +548,7 @@ const defaultOptions: Readonly<Partial<MapOptions>> = {
     cancelPendingTileRequestsWhileZooming: true,
     centerClampedToGround: true,
     terrainSkirtLength: 'auto',
+    terrainSymbolElevationMode: 'exact',
     zoomLevelsToOverscale: 4,
     anisotropicFilterPitch: defaultAnisotropicFilterPitch,
 };
@@ -550,6 +562,16 @@ function validateTerrainRenderToTextureMaxSize(value?: number): number | undefin
 
     if (!Number.isInteger(value) || !Number.isInteger(Math.log2(value))) {
         throw new Error('terrainRenderToTextureMaxSize must be a power of two');
+    }
+
+    return value;
+}
+
+function validateTerrainSymbolElevationMode(value?: TerrainSymbolElevationMode): TerrainSymbolElevationMode {
+    if (value === undefined || value === null) return 'exact';
+
+    if (value !== 'exact' && value !== 'cached-while-moving' && value !== 'approximate-while-moving') {
+        throw new Error('terrainSymbolElevationMode must be "exact", "cached-while-moving", or "approximate-while-moving"');
     }
 
     return value;
@@ -638,6 +660,7 @@ export class Map extends Camera {
     _overridePixelRatio: number | null | undefined;
     _maxCanvasSize: [number, number];
     _terrainRenderToTextureMaxSize: number | undefined;
+    _terrainSymbolElevationMode: TerrainSymbolElevationMode;
     _terrainDataCallback: (e: MapStyleDataEvent | MapSourceDataEvent) => void;
     /** @internal */
     _zoomLevelsToOverscale: number | undefined;
@@ -805,6 +828,7 @@ export class Map extends Camera {
         this._overridePixelRatio = resolvedOptions.pixelRatio;
         this._maxCanvasSize = resolvedOptions.maxCanvasSize;
         this._terrainRenderToTextureMaxSize = validateTerrainRenderToTextureMaxSize(resolvedOptions.terrainRenderToTextureMaxSize);
+        this._terrainSymbolElevationMode = validateTerrainSymbolElevationMode(resolvedOptions.terrainSymbolElevationMode);
         this._zoomLevelsToOverscale = resolvedOptions.zoomLevelsToOverscale;
         this.transformCameraUpdate = resolvedOptions.transformCameraUpdate;
         this.transformConstrain = resolvedOptions.transformConstrain;
@@ -3551,6 +3575,7 @@ export class Map extends Camera {
 
         this.painter = new Painter(gl, this.transform);
         this.painter.terrainRenderToTextureMaxSize = this._terrainRenderToTextureMaxSize;
+        this.painter.terrainSymbolElevationMode = this._terrainSymbolElevationMode;
     }
 
     override migrateProjection(newTransform: ITransform, newCameraHelper: ICameraHelper): void {
@@ -3747,7 +3772,8 @@ export class Map extends Camera {
             }
         }
 
-        this._placementDirty = this.style?._updatePlacement(this.transform, this.showCollisionBoxes, fadeDuration, this._crossSourceCollisions, globeRenderingChanged);
+        const moving = this.isMoving();
+        this._placementDirty = this.style?._updatePlacement(this.transform, this.showCollisionBoxes, fadeDuration, this._crossSourceCollisions, globeRenderingChanged, this._terrainSymbolElevationMode, moving);
 
         // Actually draw
         this.painter.render(this.style, {
@@ -3755,7 +3781,7 @@ export class Map extends Camera {
             showOverdrawInspector: this._showOverdrawInspector,
             rotating: this.isRotating(),
             zooming: this.isZooming(),
-            moving: this.isMoving(),
+            moving,
             fadeDuration,
             showPadding: this.showPadding,
             anisotropicFilterPitch: this.getAnisotropicFilterPitch(),

@@ -35,7 +35,7 @@ import type {IndexBuffer} from '../webgl/index_buffer.ts';
 import type {DepthRangeType, DepthMaskType, DepthFuncType} from '../webgl/types.ts';
 import type {ResolvedImage} from '@maplibre/maplibre-gl-style-spec';
 import type {IRenderToTexture} from './render_to_texture_interface.ts';
-import type {TerrainData} from './terrain.ts';
+import type {TerrainData, TerrainSymbolElevationMode} from './terrain.ts';
 import type {ProjectionData} from '../geo/projection/projection_data.ts';
 import type {Framebuffer} from '../webgl/framebuffer.ts';
 import {coveringTiles} from '../geo/projection/covering_tiles.ts';
@@ -128,6 +128,7 @@ export class Painter {
     height: number;
     pixelRatio: number;
     terrainRenderToTextureMaxSize: number | undefined;
+    terrainSymbolElevationMode: TerrainSymbolElevationMode;
     tileExtentBuffer: VertexBuffer;
     tileExtentSegments: SegmentVector;
     tileExtentMesh: Mesh;
@@ -176,6 +177,7 @@ export class Painter {
         this._tileTextures = {};
         this._rttObjectRecyclePool = [];
         this._rttSharedFbo = null;
+        this.terrainSymbolElevationMode = 'exact';
         this.terrainFacilitator = {depthDirty: true, coordsDirty: false, matrix: mat4.identity(new Float64Array(16)), renderTime: 0};
 
         this.setup();
