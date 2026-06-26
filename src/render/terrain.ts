@@ -48,6 +48,7 @@ export class TerrainSamplingContext {
     offsetX: number;
     offsetY: number;
     exaggeration: number;
+    _elevationCache: Map<number, Map<number, number>>;
 
     constructor(
         terrain: Terrain,
@@ -67,18 +68,28 @@ export class TerrainSamplingContext {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.exaggeration = exaggeration;
+        this._elevationCache = new Map();
     }
 
     getElevation(x: number, y: number, extent: number = EXTENT): number {
-        if (x >= 0 && x < extent && y >= 0 && y < extent) {
-            return this._sample(x, y, extent);
+        if (extent === EXTENT) {
+            const cached = this._getCachedElevation(x, y);
+            if (cached !== undefined) return cached;
         }
 
-        const normalized = this.tileID.normalizeCoordinates(x, y, extent);
-        if (!normalized) return 0;
+        let elevation: number;
+        if (x >= 0 && x < extent && y >= 0 && y < extent) {
+            elevation = this._sample(x, y, extent);
+        } else {
+            const normalized = this.tileID.normalizeCoordinates(x, y, extent);
+            if (!normalized) return 0;
 
-        const sampler = this.terrain.getSamplingContext(normalized.tileID);
-        return sampler ? sampler._sample(normalized.x, normalized.y, extent) : 0;
+            const sampler = this.terrain.getSamplingContext(normalized.tileID);
+            elevation = sampler ? sampler._sample(normalized.x, normalized.y, extent) : 0;
+        }
+
+        if (extent === EXTENT) this._setCachedElevation(x, y, elevation);
+        return elevation;
     }
 
     getElevations(points: ArrayLike<{x: number; y: number}>, output: number[] = [], extent: number = EXTENT): number[] {
@@ -87,6 +98,19 @@ export class TerrainSamplingContext {
             output[i] = this.getElevation(point.x, point.y, extent);
         }
         return output;
+    }
+
+    _getCachedElevation(x: number, y: number): number | undefined {
+        return this._elevationCache.get(x)?.get(y);
+    }
+
+    _setCachedElevation(x: number, y: number, elevation: number): void {
+        let row = this._elevationCache.get(x);
+        if (!row) {
+            row = new Map();
+            this._elevationCache.set(x, row);
+        }
+        row.set(y, elevation);
     }
 
     _sample(x: number, y: number, extent: number): number {
@@ -323,6 +347,15 @@ export class Terrain {
             this._samplingContextCache.set(key, this._createSamplingContext(tileID, this.exaggeration));
         }
         return this._samplingContextCache.get(key);
+    }
+
+    sampleElevationsForTile(tileID: OverscaledTileID, points: ArrayLike<{x: number; y: number}>, output: number[] = [], extent: number = EXTENT): number[] {
+        const sampler = this.getSamplingContext(tileID);
+        if (!sampler) {
+            for (let i = 0; i < points.length; i++) output[i] = 0;
+            return output;
+        }
+        return sampler.getElevations(points, output, extent);
     }
 
     _createSamplingContext(tileID: OverscaledTileID, exaggeration: number): TerrainSamplingContext | null {

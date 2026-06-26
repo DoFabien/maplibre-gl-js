@@ -36,7 +36,7 @@ import type {IReadonlyTransform} from '../../geo/transform_interface.ts';
 import type {ColorMode} from '../color_mode.ts';
 import type {Program} from '../program.ts';
 import type {TextAnchor} from '../../style/style_layer/variable_text_anchor.ts';
-import {getGlCoordMatrix, getPerspectiveRatio, getPitchedLabelPlaneMatrix, hideGlyphs, projectWithMatrix, projectTileCoordinatesToClipSpace, projectTileCoordinatesToLabelPlane, type SymbolProjectionContext, updateLineLabels} from '../../symbol/projection.ts';
+import {type ElevationGetter, getGlCoordMatrix, getPerspectiveRatio, getPitchedLabelPlaneMatrix, hideGlyphs, projectWithMatrix, projectTileCoordinatesToClipSpace, projectTileCoordinatesToLabelPlane, type SymbolProjectionContext, updateLineLabels} from '../../symbol/projection.ts';
 import {translatePosition} from '../../util/util.ts';
 import type {ProjectionData} from '../../geo/projection/projection_data.ts';
 
@@ -155,7 +155,8 @@ function updateVariableAnchors(coords: OverscaledTileID[],
         if (size) {
             const tileScale = Math.pow(2, transform.zoom - tile.tileID.overscaledZ);
             const sampler = terrain?.getSamplingContext(coord);
-            const getElevation = sampler ? (x: number, y: number) => sampler.getElevation(x, y) : null;
+            const getElevation = sampler ? ((x: number, y: number) => sampler.getElevation(x, y)) as ElevationGetter : null;
+            if (getElevation) getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
             const translation = translatePosition(transform, tile, translate, translateAnchor);
             updateVariableAnchorsForBucket(bucket, rotateWithMap, pitchWithMap, variableOffsets,
                 transform, pitchedLabelPlaneMatrix, tileScale, size, updateTextFitIcon, translation, coord.toUnwrapped(), getElevation);
@@ -393,7 +394,8 @@ function drawLayerSymbols(
             fastInvertTransformMat4(pitchedLabelPlaneMatrixInverse, pitchedLabelPlaneMatrix);
 
             const sampler = painter.style.map.terrain?.getSamplingContext(coord);
-            const getElevation = sampler ? (x: number, y: number) => sampler.getElevation(x, y) : null;
+            const getElevation = sampler ? ((x: number, y: number) => sampler.getElevation(x, y)) as ElevationGetter : null;
+            if (getElevation) getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
             const rotateToLine = layer.layout.get('text-rotation-alignment') === 'map';
             updateLineLabels(bucket, painter, isText, pitchedLabelPlaneMatrix, pitchedLabelPlaneMatrixInverse, pitchWithMap, keepUpright, rotateToLine, coord.toUnwrapped(), transform.width, transform.height, translation, getElevation);
         }

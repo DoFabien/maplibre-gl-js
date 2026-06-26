@@ -16,7 +16,7 @@ import type {
 } from '../data/array_types.g.ts';
 import type {OverlapMode} from '../style/style_layer/overlap_mode.ts';
 import {type OverscaledTileID, type UnwrappedTileID} from '../tile/tile_id.ts';
-import {type PointProjection, type SymbolProjectionContext, getTileSkewVectors, pathSlicedToLongestUnoccluded, placeFirstAndLastGlyph, projectPathSpecialProjection, xyTransformMat4} from '../symbol/projection.ts';
+import {type ElevationGetter, type PointProjection, type SymbolProjectionContext, getTileSkewVectors, pathSlicedToLongestUnoccluded, placeFirstAndLastGlyph, projectPathSpecialProjection, xyTransformMat4} from '../symbol/projection.ts';
 import {clamp, getAABB} from '../util/util.ts';
 import {Bounds} from '../geo/bounds.ts';
 
@@ -110,7 +110,7 @@ export class CollisionIndex {
         rotateWithMap: boolean,
         translation: [number, number],
         collisionGroupPredicate?: (key: FeatureKey) => boolean,
-        getElevation?: (x: number, y: number) => number,
+        getElevation?: ElevationGetter,
         shift?: Point,
         simpleProjectionMatrix?: mat4,
     ): PlacedBox {
@@ -197,7 +197,7 @@ export class CollisionIndex {
         circlePixelDiameter: number,
         textPixelPadding: number,
         translation: [number, number],
-        getElevation: (x: number, y: number) => number
+        getElevation: ElevationGetter
     ): PlacedCircles {
         const placedCollisionCircles = [];
 
@@ -437,7 +437,7 @@ export class CollisionIndex {
         }
     }
 
-    projectAndGetPerspectiveRatio(x: number, y: number, unwrappedTileID: UnwrappedTileID, getElevation?: (x: number, y: number) => number, simpleProjectionMatrix?: mat4): {
+    projectAndGetPerspectiveRatio(x: number, y: number, unwrappedTileID: UnwrappedTileID, getElevation?: ElevationGetter, simpleProjectionMatrix?: mat4): {
         x: number;
         y: number;
         perspectiveRatio: number;
@@ -516,7 +516,7 @@ export class CollisionIndex {
         rotateWithMap: boolean,
         translation: [number, number],
         projectedPoint: {x: number; y: number; perspectiveRatio: number; signedDistanceFromCamera: number},
-        getElevation?: (x: number, y: number) => number,
+        getElevation?: ElevationGetter,
         shift?: Point,
         simpleProjectionMatrix?: mat4,
     ): ProjectedBox {
@@ -625,6 +625,7 @@ export class CollisionIndex {
         let anyPointVisible = false;
 
         if (pitchWithMap) {
+            getElevation?.getElevations?.(points);
             const projected = points.map(p => this.projectAndGetPerspectiveRatio(p.x, p.y, unwrappedTileID, getElevation, simpleProjectionMatrix));
 
             // Is at least one of the projected points NOT behind the horizon?

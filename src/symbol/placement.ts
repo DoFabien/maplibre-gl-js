@@ -209,6 +209,8 @@ export class Placement {
         text: number[];
         icon: number[];
     }>>;
+    _terrainAnchorScratch: Array<{x: number; y: number}>;
+    _terrainElevationScratch: number[];
 
     constructor(transform: ITransform, terrain: Terrain, fadeDuration: number, crossSourceCollisions: boolean, prevPlacement?: Placement) {
         this.transform = transform.clone();
@@ -227,6 +229,8 @@ export class Placement {
             text: number[];
             icon: number[];
         }>>();
+        this._terrainAnchorScratch = [];
+        this._terrainElevationScratch = [];
 
         this.prevPlacement = prevPlacement;
         if (prevPlacement) {
@@ -236,11 +240,31 @@ export class Placement {
         this.placedOrientations = {};
     }
 
-    private _getTerrainElevationFunc(tileID: OverscaledTileID) {
+    private _getTerrainElevationFunc(tileID: OverscaledTileID): projection.ElevationGetter | null {
         const terrain = this.terrain;
         if (!terrain) return null;
         const sampler = terrain.getSamplingContext(tileID);
-        return sampler ? (x: number, y: number) => sampler.getElevation(x, y) : null;
+        if (!sampler) return null;
+        const getElevation = ((x: number, y: number) => sampler.getElevation(x, y)) as projection.ElevationGetter;
+        getElevation.getElevations = (points, output = []) => sampler.getElevations(points, output);
+        return getElevation;
+    }
+
+    private _preloadTerrainAnchorElevations(tileID: OverscaledTileID, bucket: SymbolBucket, start: number, end: number): void {
+        const terrain = this.terrain;
+        if (!terrain) return;
+
+        const anchors = this._terrainAnchorScratch;
+        anchors.length = end - start;
+        for (let i = start; i < end; i++) {
+            const symbolInstance = bucket.symbolInstances.get(i);
+            const index = i - start;
+            anchors[index] ||= {x: 0, y: 0};
+            anchors[index].x = symbolInstance.anchorX;
+            anchors[index].y = symbolInstance.anchorY;
+        }
+
+        terrain.sampleElevationsForTile(tileID, anchors, this._terrainElevationScratch);
     }
 
     getBucketParts(results: BucketPart[], styleLayer: StyleLayer, tile: Tile, sortAcrossTiles: boolean): void {
@@ -457,6 +481,10 @@ export class Placement {
         }
 
         const tileID = this.retainedQueryData[bucket.bucketInstanceId].tileID;
+        // Preload anchor elevations for this bucket part. The main win came from
+        // TerrainSamplingContext; this batch step mainly reduces repeated residual
+        // samples during symbol placement and improves tail latency on dense styles.
+        this._preloadTerrainAnchorElevations(tileID, bucket, bucketPart.symbolInstanceStart, bucketPart.symbolInstanceEnd);
         const getElevation = this._getTerrainElevationFunc(tileID);
         const simpleProjectionMatrix = this.transform.getFastPathSimpleProjectionMatrix(tileID);
 
