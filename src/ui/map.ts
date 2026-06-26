@@ -400,6 +400,8 @@ export type MapOptions = {
      * If set to `"exact"`, symbol placement always uses exact bilinear DEM sampling.
      * If set to `"cached-while-moving"`, moving placement uses cached exact elevations when available and otherwise falls back to a nearest DEM sample.
      * If set to `"approximate-while-moving"`, moving placement uses nearest DEM samples.
+     * If set to `"flat-while-moving"`, moving placement ignores terrain elevation.
+     * If set to `"flat"`, symbol placement ignores terrain elevation.
      * Idle placement always uses exact bilinear DEM sampling.
      *
      * @defaultValue "exact"
@@ -570,8 +572,8 @@ function validateTerrainRenderToTextureMaxSize(value?: number): number | undefin
 function validateTerrainSymbolElevationMode(value?: TerrainSymbolElevationMode): TerrainSymbolElevationMode {
     if (value === undefined || value === null) return 'exact';
 
-    if (value !== 'exact' && value !== 'cached-while-moving' && value !== 'approximate-while-moving') {
-        throw new Error('terrainSymbolElevationMode must be "exact", "cached-while-moving", or "approximate-while-moving"');
+    if (value !== 'exact' && value !== 'cached-while-moving' && value !== 'approximate-while-moving' && value !== 'flat-while-moving' && value !== 'flat') {
+        throw new Error('terrainSymbolElevationMode must be "exact", "cached-while-moving", "approximate-while-moving", "flat-while-moving", or "flat"');
     }
 
     return value;

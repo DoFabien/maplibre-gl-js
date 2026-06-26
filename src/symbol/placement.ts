@@ -211,6 +211,7 @@ export class Placement {
     }>>;
     _terrainAnchorScratch: Array<{x: number; y: number}>;
     _terrainElevationScratch: number[];
+    _terrainElevationGetterCache: Map<string, projection.ElevationGetter>;
     terrainSymbolElevationMode: TerrainSymbolElevationMode;
     moving: boolean;
 
@@ -235,6 +236,7 @@ export class Placement {
         }>>();
         this._terrainAnchorScratch = [];
         this._terrainElevationScratch = [];
+        this._terrainElevationGetterCache = new Map();
 
         this.prevPlacement = prevPlacement;
         if (prevPlacement) {
@@ -247,6 +249,13 @@ export class Placement {
     private _getTerrainElevationFunc(tileID: OverscaledTileID): projection.ElevationGetter | null {
         const terrain = this.terrain;
         if (!terrain) return null;
+        const flatPlacement = this.terrainSymbolElevationMode === 'flat' ||
+            (this.moving && this.terrainSymbolElevationMode === 'flat-while-moving');
+        if (flatPlacement) return null;
+        const getterKey = tileID.key;
+        const cachedGetter = this._terrainElevationGetterCache.get(getterKey);
+        if (cachedGetter) return cachedGetter;
+
         const sampler = terrain.getSamplingContext(tileID);
         if (!sampler) return null;
         const approximateWhileMoving = this.moving && this.terrainSymbolElevationMode === 'approximate-while-moving';
@@ -261,13 +270,17 @@ export class Placement {
             if (cachedWhileMoving) return sampler.getElevationsCachedOrApproximate(points, output);
             return sampler.getElevations(points, output);
         };
+        this._terrainElevationGetterCache.set(getterKey, getElevation);
         return getElevation;
     }
 
     private _preloadTerrainAnchorElevations(tileID: OverscaledTileID, bucket: SymbolBucket, start: number, end: number): void {
         const terrain = this.terrain;
         if (!terrain) return;
-        if (this.moving && this.terrainSymbolElevationMode !== 'exact') return;
+        if (this.terrainSymbolElevationMode === 'flat' ||
+            (this.moving && this.terrainSymbolElevationMode === 'flat-while-moving')) return;
+        const sampler = terrain.getSamplingContext(tileID);
+        if (!sampler) return;
 
         const anchors = this._terrainAnchorScratch;
         anchors.length = end - start;
@@ -279,7 +292,40 @@ export class Placement {
             anchors[index].y = symbolInstance.anchorY;
         }
 
+        let cached = bucket.terrainElevationCache;
+        const validCache = cached?.key === sampler.cacheKey &&
+            cached.elevations.length === bucket.symbolInstances.length &&
+            cached.valid.length === bucket.symbolInstances.length;
+        let rangeCached = validCache;
+        if (rangeCached) {
+            for (let i = start; i < end; i++) {
+                if (!cached.valid[i]) {
+                    rangeCached = false;
+                    break;
+                }
+            }
+        }
+        if (rangeCached) {
+            sampler.seedElevations(anchors, cached.elevations, start);
+            return;
+        }
+
+        if (this.moving && this.terrainSymbolElevationMode !== 'exact') return;
+
+        if (!validCache) {
+            cached = {
+                key: sampler.cacheKey,
+                elevations: new Float32Array(bucket.symbolInstances.length),
+                valid: new Uint8Array(bucket.symbolInstances.length)
+            };
+            bucket.terrainElevationCache = cached;
+        }
         terrain.sampleElevationsForTile(tileID, anchors, this._terrainElevationScratch);
+        for (let i = 0; i < anchors.length; i++) {
+            cached.elevations[start + i] = this._terrainElevationScratch[i];
+            cached.valid[start + i] = 1;
+        }
+        sampler.seedElevations(anchors, cached.elevations, start);
     }
 
     getBucketParts(results: BucketPart[], styleLayer: StyleLayer, tile: Tile, sortAcrossTiles: boolean): void {

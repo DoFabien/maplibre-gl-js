@@ -32,6 +32,7 @@ export class DEMData {
     greenFactor: number;
     blueFactor: number;
     baseShift: number;
+    revision: number;
 
     /**
      * Constructs a `DEMData` object
@@ -46,6 +47,7 @@ export class DEMData {
      */
     constructor(uid: string | number, data: RGBAImage | ImageData, encoding: DEMEncoding, redFactor = 1.0, greenFactor = 1.0, blueFactor = 1.0, baseShift = 0.0) {
         this.uid = uid;
+        this.revision = 0;
         if (data.height !== data.width) throw new RangeError('DEM tiles must be square');
         if (encoding && !['mapbox', 'terrarium', 'custom'].includes(encoding)) {
             warnOnce(`"${encoding}" is not a valid encoding type. Valid types include "mapbox", "terrarium" and "custom".`);
@@ -197,6 +199,7 @@ export class DEMData {
                 this.data[this._idx(x, y)] = borderTile.data[this._idx(x + ox, y + oy)];
             }
         }
+        this.revision++;
     }
 
     private _getByteView(): Uint8Array {

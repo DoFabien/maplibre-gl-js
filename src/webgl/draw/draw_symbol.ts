@@ -62,6 +62,9 @@ const identityMat4 = mat4.identity(new Float32Array(16));
 
 function createTerrainElevationGetter(sampler: TerrainSamplingContext | null | undefined, painter: Painter): ElevationGetter | null {
     if (!sampler) return null;
+    const flatPlacement = painter.terrainSymbolElevationMode === 'flat' ||
+        (painter.options?.moving && painter.terrainSymbolElevationMode === 'flat-while-moving');
+    if (flatPlacement) return null;
     const approximateWhileMoving = painter.options?.moving && painter.terrainSymbolElevationMode === 'approximate-while-moving';
     const cachedWhileMoving = painter.options?.moving && painter.terrainSymbolElevationMode === 'cached-while-moving';
     const getElevation = ((x: number, y: number) => {

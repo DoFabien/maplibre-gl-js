@@ -39,7 +39,7 @@ export type TerrainData = {
     tile: Tile;
 };
 
-export type TerrainSymbolElevationMode = 'exact' | 'cached-while-moving' | 'approximate-while-moving';
+export type TerrainSymbolElevationMode = 'exact' | 'cached-while-moving' | 'approximate-while-moving' | 'flat-while-moving' | 'flat';
 
 export class TerrainSamplingContext {
     terrain: Terrain;
@@ -50,6 +50,7 @@ export class TerrainSamplingContext {
     offsetX: number;
     offsetY: number;
     exaggeration: number;
+    cacheKey: string;
     _elevationCache: Map<number, Map<number, number>>;
 
     constructor(
@@ -70,6 +71,7 @@ export class TerrainSamplingContext {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.exaggeration = exaggeration;
+        this.cacheKey = `${tileID.key}:${dem.uid}:${dem.revision}:${scaleX}:${scaleY}:${offsetX}:${offsetY}:${exaggeration}`;
         this._elevationCache = new Map();
     }
 
@@ -100,6 +102,14 @@ export class TerrainSamplingContext {
             output[i] = this.getElevation(point.x, point.y, extent);
         }
         return output;
+    }
+
+    seedElevations(points: ArrayLike<{x: number; y: number}>, elevations: ArrayLike<number>, start: number = 0, extent: number = EXTENT): void {
+        if (extent !== EXTENT) return;
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            this._setCachedElevation(point.x, point.y, elevations[start + i]);
+        }
     }
 
     getElevationCachedOrApproximate(x: number, y: number, extent: number = EXTENT): number {

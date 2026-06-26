@@ -94,6 +94,12 @@ export type SortKeyRange = {
     symbolInstanceEnd: number;
 };
 
+export type TerrainElevationCache = {
+    key: string;
+    elevations: Float32Array;
+    valid: Uint8Array;
+};
+
 // Opacity arrays are frequently updated but don't contain a lot of information, so we pack them
 // tight. Each Uint32 is actually four duplicate Uint8s for the four corners of a glyph
 // 7 bits are for the current opacity, and the lowest bit is the target opacity
@@ -358,6 +364,7 @@ export class SymbolBucket implements Bucket {
     writingModes: WritingMode[];
     allowVerticalPlacement: boolean;
     hasRTLText: boolean;
+    terrainElevationCache: TerrainElevationCache | null;
 
     constructor(options: BucketParameters<SymbolStyleLayer>) {
         this.collisionBoxArray = options.collisionBoxArray;
@@ -370,6 +377,7 @@ export class SymbolBucket implements Bucket {
         this.sourceLayerIndex = options.sourceLayerIndex;
         this.hasDependencies = false;
         this.hasRTLText = false;
+        this.terrainElevationCache = null;
         this.sortKeyRanges = [];
 
         this.collisionCircleArray = [];
