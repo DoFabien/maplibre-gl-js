@@ -1,0 +1,67 @@
+{
+  "version": 8,
+  "metadata": {
+    "test": {
+      "debug": true,
+      "width": 256,
+      "height": 256,
+      "timeout": 60000
+    }
+  },
+  "center": [
+    0,
+    0
+  ],
+  "zoom": 0,
+  "sources": {
+    "routes": {
+      "type": "vector",
+      "encoding": "mlt",
+      "tiles": [
+        "local://tiles/mlt/synthetic/0/0/line.mlt"
+      ],
+      "maxzoom": 0
+    }
+  },
+  "glyphs": "local://glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8fafc"
+      }
+    },
+    {
+      "id": "route-base",
+      "type": "line",
+      "source": "routes",
+      "source-layer": "layer1",
+      "paint": {
+        "line-color": "#94a3b8",
+        "line-width": 5
+      }
+    },
+    {
+      "id": "route-labels",
+      "type": "symbol",
+      "source": "routes",
+      "source-layer": "layer1",
+      "layout": {
+        "symbol-placement": "line",
+        "symbol-spacing": 140,
+        "text-field": "MLT ROUTE",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 18,
+        "text-allow-overlap": true
+      },
+      "paint": {
+        "text-color": "#0f172a",
+        "text-halo-color": "#f8fafc",
+        "text-halo-width": 1
+      }
+    }
+  ]
+}

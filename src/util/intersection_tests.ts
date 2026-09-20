@@ -1,13 +1,18 @@
 import {isCounterClockwise} from './util.ts';
 import Point from '@mapbox/point-geometry';
+import {
+    getGeometryPartCount,
+    getGeometryPartLength,
+    getGeometryX,
+    getGeometryY,
+    type FeatureGeometry,
+} from './geometry_view.ts';
 
-export {polygonIntersectsBufferedPoint, polygonIntersectsMultiPolygon, polygonIntersectsBufferedMultiLine, polygonIntersectsPolygon, distToSegmentSquared, polygonIntersectsBox};
+export {polygonIntersectsBufferedPoint, polygonIntersectsBufferedPointCoordinates, polygonIntersectsMultiPolygon, polygonIntersectsBufferedMultiLine, polygonIntersectsPolygon, distToSegmentSquared, polygonIntersectsBox};
 
 type Line = Point[];
-type MultiLine = Line[];
 type Ring = Point[];
 type Polygon = Point[];
-type MultiPolygon = Polygon[];
 
 function polygonIntersectsPolygon(polygonA: Polygon, polygonB: Polygon): boolean {
     for (const point of polygonA) {
@@ -22,62 +27,106 @@ function polygonIntersectsPolygon(polygonA: Polygon, polygonB: Polygon): boolean
 }
 
 function polygonIntersectsBufferedPoint(polygon: Polygon, point: Point, radius: number): boolean {
-    if (polygonContainsPoint(polygon, point)) return true;
-    return pointIntersectsBufferedLine(point, polygon, radius);
+    return polygonIntersectsBufferedPointCoordinates(polygon, point.x, point.y, radius);
 }
 
-function polygonIntersectsMultiPolygon(polygon: Polygon, multiPolygon: MultiPolygon): boolean {
+function polygonIntersectsBufferedPointCoordinates(polygon: Polygon, x: number, y: number, radius: number): boolean {
+    if (polygonContainsCoordinates(polygon, x, y)) return true;
+    return coordinatesIntersectBufferedLine(x, y, polygon, radius);
+}
+
+function polygonIntersectsMultiPolygon(polygon: Polygon, multiPolygon: FeatureGeometry): boolean {
 
     if (polygon.length === 1) {
-        return multiPolygonContainsPoint(multiPolygon, polygon[0]);
+        return geometryContainsCoordinates(multiPolygon, polygon[0].x, polygon[0].y);
     }
 
-    for (const ring of multiPolygon) {
-        for (const point of ring) {
-            if (polygonContainsPoint(polygon, point)) return true;
+    const partCount = getGeometryPartCount(multiPolygon);
+    for (let partIndex = 0; partIndex < partCount; partIndex++) {
+        const partLength = getGeometryPartLength(multiPolygon, partIndex);
+        for (let pointIndex = 0; pointIndex < partLength; pointIndex++) {
+            if (polygonContainsCoordinates(
+                polygon,
+                getGeometryX(multiPolygon, partIndex, pointIndex),
+                getGeometryY(multiPolygon, partIndex, pointIndex),
+            )) return true;
         }
     }
 
     for (const point of polygon) {
-        if (multiPolygonContainsPoint(multiPolygon, point)) return true;
+        if (geometryContainsCoordinates(multiPolygon, point.x, point.y)) return true;
     }
 
-    for (const ring of multiPolygon) {
-        if (lineIntersectsLine(polygon, ring)) return true;
+    for (let partIndex = 0; partIndex < partCount; partIndex++) {
+        if (lineIntersectsGeometryPart(polygon, multiPolygon, partIndex)) return true;
     }
 
     return false;
 }
 
-function polygonIntersectsBufferedMultiLine(polygon: Polygon, multiLine: MultiLine, radius: number): boolean {
-    for (const line of multiLine) {
+function polygonIntersectsBufferedMultiLine(polygon: Polygon, multiLine: FeatureGeometry, radius: number): boolean {
+    const partCount = getGeometryPartCount(multiLine);
+    for (let partIndex = 0; partIndex < partCount; partIndex++) {
+        const partLength = getGeometryPartLength(multiLine, partIndex);
 
         if (polygon.length >= 3) {
-            for (const point of line) {
-                if (polygonContainsPoint(polygon, point)) return true;
+            for (let pointIndex = 0; pointIndex < partLength; pointIndex++) {
+                if (polygonContainsCoordinates(
+                    polygon,
+                    getGeometryX(multiLine, partIndex, pointIndex),
+                    getGeometryY(multiLine, partIndex, pointIndex),
+                )) return true;
             }
         }
 
-        if (lineIntersectsBufferedLine(polygon, line, radius)) return true;
+        if (lineIntersectsBufferedGeometryPart(polygon, multiLine, partIndex, radius)) return true;
     }
     return false;
 }
 
-function lineIntersectsBufferedLine(lineA: Line, lineB: Line, radius: number) {
+function lineIntersectsBufferedGeometryPart(lineA: Line, lineB: FeatureGeometry, partIndex: number, radius: number) {
+    const partLength = getGeometryPartLength(lineB, partIndex);
 
     if (lineA.length > 1) {
-        if (lineIntersectsLine(lineA, lineB)) return true;
+        if (lineIntersectsGeometryPart(lineA, lineB, partIndex)) return true;
 
         // Check whether any point in either line is within radius of the other line
-        for (const point of lineB) {
-            if (pointIntersectsBufferedLine(point, lineA, radius)) return true;
+        for (let pointIndex = 0; pointIndex < partLength; pointIndex++) {
+            if (coordinatesIntersectBufferedLine(
+                getGeometryX(lineB, partIndex, pointIndex),
+                getGeometryY(lineB, partIndex, pointIndex),
+                lineA,
+                radius,
+            )) return true;
         }
     }
 
     for (const point of lineA) {
-        if (pointIntersectsBufferedLine(point, lineB, radius)) return true;
+        if (coordinatesIntersectBufferedGeometryPart(point.x, point.y, lineB, partIndex, radius)) return true;
     }
 
+    return false;
+}
+
+function lineIntersectsGeometryPart(lineA: Line, lineB: FeatureGeometry, partIndex: number): boolean {
+    const partLength = getGeometryPartLength(lineB, partIndex);
+    if (lineA.length === 0 || partLength === 0) return false;
+    for (let i = 0; i < lineA.length - 1; i++) {
+        const a0 = lineA[i];
+        const a1 = lineA[i + 1];
+        for (let j = 0; j < partLength - 1; j++) {
+            if (lineSegmentIntersectsCoordinates(
+                a0.x,
+                a0.y,
+                a1.x,
+                a1.y,
+                getGeometryX(lineB, partIndex, j),
+                getGeometryY(lineB, partIndex, j),
+                getGeometryX(lineB, partIndex, j + 1),
+                getGeometryY(lineB, partIndex, j + 1),
+            )) return true;
+        }
+    }
     return false;
 }
 
@@ -96,45 +145,115 @@ function lineIntersectsLine(lineA: Line, lineB: Line) {
 }
 
 function lineSegmentIntersectsLineSegment(a0: Point, a1: Point, b0: Point, b1: Point) {
-    return isCounterClockwise(a0, b0, b1) !== isCounterClockwise(a1, b0, b1) &&
-        isCounterClockwise(a0, a1, b0) !== isCounterClockwise(a0, a1, b1);
+    return lineSegmentIntersectsCoordinates(a0.x, a0.y, a1.x, a1.y, b0.x, b0.y, b1.x, b1.y);
 }
 
-function pointIntersectsBufferedLine(p: Point, line: Line, radius: number) {
+function lineSegmentIntersectsCoordinates(
+    a0x: number,
+    a0y: number,
+    a1x: number,
+    a1y: number,
+    b0x: number,
+    b0y: number,
+    b1x: number,
+    b1y: number,
+): boolean {
+    return isCounterClockwiseCoordinates(a0x, a0y, b0x, b0y, b1x, b1y) !==
+            isCounterClockwiseCoordinates(a1x, a1y, b0x, b0y, b1x, b1y) &&
+        isCounterClockwiseCoordinates(a0x, a0y, a1x, a1y, b0x, b0y) !==
+            isCounterClockwiseCoordinates(a0x, a0y, a1x, a1y, b1x, b1y);
+}
+
+function isCounterClockwiseCoordinates(
+    ax: number,
+    ay: number,
+    bx: number,
+    by: number,
+    cx: number,
+    cy: number,
+): boolean {
+    return (cy - ay) * (bx - ax) > (by - ay) * (cx - ax);
+}
+
+function coordinatesIntersectBufferedLine(x: number, y: number, line: Line, radius: number) {
     const radiusSquared = radius * radius;
 
-    if (line.length === 1) return p.distSqr(line[0]) < radiusSquared;
+    if (line.length === 1) return coordinatesDistanceSquared(x, y, line[0].x, line[0].y) < radiusSquared;
 
     for (let i = 1; i < line.length; i++) {
         // Find line segments that have a distance <= radius^2 to p
         // In that case, we treat the line as "containing point p".
         const v = line[i - 1], w = line[i];
-        if (distToSegmentSquared(p, v, w) < radiusSquared) return true;
+        if (distToSegmentSquaredCoordinates(x, y, v.x, v.y, w.x, w.y) < radiusSquared) return true;
+    }
+    return false;
+}
+
+function coordinatesIntersectBufferedGeometryPart(
+    x: number,
+    y: number,
+    geometry: FeatureGeometry,
+    partIndex: number,
+    radius: number,
+): boolean {
+    const radiusSquared = radius * radius;
+    const partLength = getGeometryPartLength(geometry, partIndex);
+    if (partLength === 1) {
+        return coordinatesDistanceSquared(
+            x,
+            y,
+            getGeometryX(geometry, partIndex, 0),
+            getGeometryY(geometry, partIndex, 0),
+        ) < radiusSquared;
+    }
+    for (let pointIndex = 1; pointIndex < partLength; pointIndex++) {
+        if (distToSegmentSquaredCoordinates(
+            x,
+            y,
+            getGeometryX(geometry, partIndex, pointIndex - 1),
+            getGeometryY(geometry, partIndex, pointIndex - 1),
+            getGeometryX(geometry, partIndex, pointIndex),
+            getGeometryY(geometry, partIndex, pointIndex),
+        ) < radiusSquared) return true;
     }
     return false;
 }
 
 // Code from https://stackoverflow.com/a/1501725/331379.
 function distToSegmentSquared(p: Point, v: Point, w: Point): number {
-    const l2 = v.distSqr(w);
-    if (l2 === 0) return p.distSqr(v);
-    const t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
-    if (t < 0) return p.distSqr(v);
-    if (t > 1) return p.distSqr(w);
-    return p.distSqr(w.sub(v)._mult(t)._add(v));
+    return distToSegmentSquaredCoordinates(p.x, p.y, v.x, v.y, w.x, w.y);
+}
+
+export function distToSegmentSquaredCoordinates(px: number, py: number, vx: number, vy: number, wx: number, wy: number): number {
+    const dx = wx - vx;
+    const dy = wy - vy;
+    const lengthSquared = dx * dx + dy * dy;
+    if (lengthSquared === 0) return coordinatesDistanceSquared(px, py, vx, vy);
+    const t = ((px - vx) * dx + (py - vy) * dy) / lengthSquared;
+    if (t < 0) return coordinatesDistanceSquared(px, py, vx, vy);
+    if (t > 1) return coordinatesDistanceSquared(px, py, wx, wy);
+    return coordinatesDistanceSquared(px, py, vx + t * dx, vy + t * dy);
+}
+
+function coordinatesDistanceSquared(ax: number, ay: number, bx: number, by: number): number {
+    const dx = ax - bx;
+    const dy = ay - by;
+    return dx * dx + dy * dy;
 }
 
 // point in polygon ray casting algorithm
-function multiPolygonContainsPoint(rings: Ring[], p: Point) {
-    let c = false,
-        ring, p1, p2;
+function geometryContainsCoordinates(geometry: FeatureGeometry, x: number, y: number): boolean {
+    let c = false;
+    const partCount = getGeometryPartCount(geometry);
 
-    for (const currentRing of rings) {
-        ring = currentRing;
-        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-            p1 = ring[i];
-            p2 = ring[j];
-            if (((p1.y > p.y) !== (p2.y > p.y)) && (p.x < (p2.x - p1.x) * (p.y - p1.y) / (p2.y - p1.y) + p1.x)) {
+    for (let partIndex = 0; partIndex < partCount; partIndex++) {
+        const partLength = getGeometryPartLength(geometry, partIndex);
+        for (let i = 0, j = partLength - 1; i < partLength; j = i++) {
+            const p1x = getGeometryX(geometry, partIndex, i);
+            const p1y = getGeometryY(geometry, partIndex, i);
+            const p2x = getGeometryX(geometry, partIndex, j);
+            const p2y = getGeometryY(geometry, partIndex, j);
+            if (((p1y > y) !== (p2y > y)) && (x < (p2x - p1x) * (y - p1y) / (p2y - p1y) + p1x)) {
                 c = !c;
             }
         }
@@ -143,11 +262,15 @@ function multiPolygonContainsPoint(rings: Ring[], p: Point) {
 }
 
 function polygonContainsPoint(ring: Ring, p: Point) {
+    return polygonContainsCoordinates(ring, p.x, p.y);
+}
+
+function polygonContainsCoordinates(ring: Ring, x: number, y: number) {
     let c = false;
     for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
         const p1 = ring[i];
         const p2 = ring[j];
-        if (((p1.y > p.y) !== (p2.y > p.y)) && (p.x < (p2.x - p1.x) * (p.y - p1.y) / (p2.y - p1.y) + p1.x)) {
+        if (((p1.y > y) !== (p2.y > y)) && (x < (p2.x - p1.x) * (y - p1.y) / (p2.y - p1.y) + p1.x)) {
             c = !c;
         }
     }

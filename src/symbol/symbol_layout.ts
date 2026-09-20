@@ -16,6 +16,11 @@ import {getIconPadding, type SymbolPadding} from '../style/style_layer/symbol_st
 import {getTextVariableAnchorOffset, evaluateVariableOffset, INVALID_TEXT_OFFSET, type TextAnchor, TextAnchorEnum} from '../style/style_layer/variable_text_anchor.ts';
 import {type VariableAnchorOffsetCollection, classifyRings} from '@maplibre/maplibre-gl-style-spec';
 import {subdivideVertexLine} from '../render/subdivision.ts';
+import {subdivideFlattenedVertexLine} from '../render/subdivision.ts';
+import {getColumnarGeometryView} from '../data/bucket/columnar/geometry_traversal.ts';
+import {forEachClippedColumnarSymbolLine, forEachColumnarSymbolLine, forEachColumnarSymbolPolygon} from './columnar_symbol_geometry.ts';
+import {getSymbolLinePointCount, getSymbolLineX, getSymbolLineY, isFlatSymbolLine, type SymbolLine} from './symbol_line.ts';
+import {recordParseProfile} from '../data/bucket.ts';
 
 import type Point from '@mapbox/point-geometry';
 import type {SymbolBucket} from '../data/bucket/symbol_bucket.ts';
@@ -30,6 +35,36 @@ import type {ImagePosition} from '../render/image_atlas.ts';
 import type {GlyphPosition} from '../render/glyph_atlas.ts';
 import type {PossiblyEvaluatedPropertyValue} from '../style/properties.ts';
 import type {SubdivisionGranularitySetting} from '../render/subdivision_granularity_settings.ts';
+
+const emptySymbolLine: Point[] = [];
+
+function recordLineSymbolProfile(bucket: SymbolBucket, phase: string, start: number, detail?: string): void {
+    if (!bucket.profile) return;
+    recordParseProfile(bucket.profile, {
+        phase,
+        duration: performance.now() - start,
+        encoding: bucket.isColumnar ? 'mlt' : 'mvt',
+        sourceLayerId: bucket.sourceID,
+        layerId: bucket.layers[0].id,
+        layerType: 'symbol',
+        featureCount: 1,
+        detail,
+    });
+}
+
+function recordLineSymbolProfileDuration(bucket: SymbolBucket, phase: string, duration: number, detail?: string): void {
+    if (!bucket.profile) return;
+    recordParseProfile(bucket.profile, {
+        phase,
+        duration,
+        encoding: bucket.isColumnar ? 'mlt' : 'mvt',
+        sourceLayerId: bucket.sourceID,
+        layerId: bucket.layers[0].id,
+        layerType: 'symbol',
+        featureCount: 1,
+        detail,
+    });
+}
 
 // The symbol layout process needs `text-size` evaluated at up to five different zoom levels, and
 // `icon-size` at up to three:
@@ -124,144 +159,151 @@ export function performSymbolLayout(args: {
     const textSize = layout.get('text-size');
 
     for (const feature of args.bucket.features) {
-        const fontstack = layout.get('text-font').evaluate(feature, {}, args.canonical).join(',');
-        const layoutTextSizeThisZoom = textSize.evaluate(feature, {}, args.canonical);
-        const layoutTextSize = sizes.layoutTextSize.evaluate(feature, {}, args.canonical);
-        const layoutIconSize = sizes.layoutIconSize.evaluate(feature, {}, args.canonical);
+        feature.activateColumnarEvaluationContext?.();
+        try {
+            const fontstack = layout.get('text-font').evaluate(feature, {}, args.canonical).join(',');
+            const layoutTextSizeThisZoom = textSize.evaluate(feature, {}, args.canonical);
+            const layoutTextSize = sizes.layoutTextSize.evaluate(feature, {}, args.canonical);
+            const layoutIconSize = sizes.layoutIconSize.evaluate(feature, {}, args.canonical);
 
-        const shapedTextOrientations: ShapedTextOrientations = {
-            horizontal: {} as Record<TextJustify, Shaping>,
-            vertical: undefined
-        };
-        const text = feature.text;
-        let textOffset: [number, number] = [0, 0];
-        if (text) {
-            const unformattedText = text.toString();
-            const spacing = layout.get('text-letter-spacing').evaluate(feature, {}, args.canonical) * ONE_EM;
-            const spacingIfAllowed = allowsLetterSpacing(unformattedText) ? spacing : 0;
+            const shapedTextOrientations: ShapedTextOrientations = {
+                horizontal: {} as Record<TextJustify, Shaping>,
+                vertical: undefined
+            };
+            const text = feature.text;
+            let textOffset: [number, number] = [0, 0];
+            if (text) {
+                const unformattedText = text.toString();
+                const spacing = layout.get('text-letter-spacing').evaluate(feature, {}, args.canonical) * ONE_EM;
+                const spacingIfAllowed = allowsLetterSpacing(unformattedText) ? spacing : 0;
 
-            const textAnchor = layout.get('text-anchor').evaluate(feature, {}, args.canonical);
-            const variableAnchorOffset = getTextVariableAnchorOffset(layer, feature, args.canonical);
+                const textAnchor = layout.get('text-anchor').evaluate(feature, {}, args.canonical);
+                const variableAnchorOffset = getTextVariableAnchorOffset(layer, feature, args.canonical);
 
-            if (!variableAnchorOffset) {
-                const radialOffset = layout.get('text-radial-offset').evaluate(feature, {}, args.canonical);
-                // Layers with variable anchors use the `text-radial-offset` property and the [x, y] offset vector
-                // is calculated at placement time instead of layout time
-                if (radialOffset) {
+                if (!variableAnchorOffset) {
+                    const radialOffset = layout.get('text-radial-offset').evaluate(feature, {}, args.canonical);
+                    // Layers with variable anchors use the `text-radial-offset` property and the [x, y] offset vector
+                    // is calculated at placement time instead of layout time
+                    if (radialOffset) {
                     // The style spec says don't use `text-offset` and `text-radial-offset` together
                     // but doesn't actually specify what happens if you use both. We go with the radial offset.
-                    textOffset = evaluateVariableOffset(textAnchor, [radialOffset * ONE_EM, INVALID_TEXT_OFFSET]);
-                } else {
-                    textOffset = (layout.get('text-offset').evaluate(feature, {}, args.canonical).map(t => t * ONE_EM) as [number, number]);
+                        textOffset = evaluateVariableOffset(textAnchor, [radialOffset * ONE_EM, INVALID_TEXT_OFFSET]);
+                    } else {
+                        textOffset = (layout.get('text-offset').evaluate(feature, {}, args.canonical).map(t => t * ONE_EM) as [number, number]);
+                    }
                 }
-            }
 
-            let textJustify = textAlongLine ?
-                'center' :
-                layout.get('text-justify').evaluate(feature, {}, args.canonical);
+                let textJustify = textAlongLine ?
+                    'center' :
+                    layout.get('text-justify').evaluate(feature, {}, args.canonical);
 
-            const symbolPlacement = layout.get('symbol-placement');
-            const maxWidth = symbolPlacement === 'point' ?
-                layout.get('text-max-width').evaluate(feature, {}, args.canonical) * ONE_EM :
-                Infinity;
+                const symbolPlacement = layout.get('symbol-placement');
+                const maxWidth = symbolPlacement === 'point' ?
+                    layout.get('text-max-width').evaluate(feature, {}, args.canonical) * ONE_EM :
+                    Infinity;
 
-            const addVerticalShapingForPointLabelIfNeeded = () => {
-                if (args.bucket.allowVerticalPlacement && allowsVerticalWritingMode(unformattedText)) {
+                const addVerticalShapingForPointLabelIfNeeded = () => {
+                    if (args.bucket.allowVerticalPlacement && allowsVerticalWritingMode(unformattedText)) {
                     // Vertical POI label placement is meant to be used for scripts that support vertical
                     // writing mode, thus, default left justification is used. If Latin
                     // scripts would need to be supported, this should take into account other justifications.
-                    shapedTextOrientations.vertical = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor,
-                        'left', spacingIfAllowed, textOffset, WritingMode.vertical, true, layoutTextSize, layoutTextSizeThisZoom);
-                }
-            };
-
-            // If this layer uses text-variable-anchor, generate shapings for all justification possibilities.
-            if (!textAlongLine && variableAnchorOffset) {
-                const justifications = new Set<TextJustify>();
-
-                if (textJustify === 'auto') {
-                    for (let i = 0; i < variableAnchorOffset.values.length; i += 2) {
-                        justifications.add(getAnchorJustification(variableAnchorOffset.values[i] as TextAnchor));
+                        shapedTextOrientations.vertical = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor,
+                            'left', spacingIfAllowed, textOffset, WritingMode.vertical, true, layoutTextSize, layoutTextSizeThisZoom);
                     }
-                } else {
-                    justifications.add(textJustify);
-                }
+                };
 
-                let singleLine = false;
-                for (const justification of justifications) {
-                    if (shapedTextOrientations.horizontal[justification]) continue;
-                    if (singleLine) {
+                // If this layer uses text-variable-anchor, generate shapings for all justification possibilities.
+                if (!textAlongLine && variableAnchorOffset) {
+                    const justifications = new Set<TextJustify>();
+
+                    if (textJustify === 'auto') {
+                        for (let i = 0; i < variableAnchorOffset.values.length; i += 2) {
+                            justifications.add(getAnchorJustification(variableAnchorOffset.values[i] as TextAnchor));
+                        }
+                    } else {
+                        justifications.add(textJustify);
+                    }
+
+                    let singleLine = false;
+                    for (const justification of justifications) {
+                        if (shapedTextOrientations.horizontal[justification]) continue;
+                        if (singleLine) {
                         // If the shaping for the first justification was only a single line, we
                         // can re-use it for the other justifications
-                        shapedTextOrientations.horizontal[justification] = shapedTextOrientations.horizontal[0];
-                    } else {
+                            shapedTextOrientations.horizontal[justification] = shapedTextOrientations.horizontal[0];
+                        } else {
                         // If using text-variable-anchor for the layer, we use a center anchor for all shapings and apply
                         // the offsets for the anchor in the placement step.
-                        const shaping = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, 'center',
-                            justification, spacingIfAllowed, textOffset, WritingMode.horizontal, false, layoutTextSize, layoutTextSizeThisZoom);
-                        if (shaping) {
-                            shapedTextOrientations.horizontal[justification] = shaping;
-                            singleLine = shaping.positionedLines.length === 1;
+                            const shaping = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, 'center',
+                                justification, spacingIfAllowed, textOffset, WritingMode.horizontal, false, layoutTextSize, layoutTextSizeThisZoom);
+                            if (shaping) {
+                                shapedTextOrientations.horizontal[justification] = shaping;
+                                singleLine = shaping.positionedLines.length === 1;
+                            }
                         }
                     }
-                }
 
-                addVerticalShapingForPointLabelIfNeeded();
-            } else {
-                if (textJustify === 'auto') {
-                    textJustify = getAnchorJustification(textAnchor);
-                }
+                    addVerticalShapingForPointLabelIfNeeded();
+                } else {
+                    if (textJustify === 'auto') {
+                        textJustify = getAnchorJustification(textAnchor);
+                    }
 
-                // Horizontal point or line label.
-                const shaping = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor, textJustify, spacingIfAllowed,
-                    textOffset, WritingMode.horizontal, false, layoutTextSize, layoutTextSizeThisZoom);
-                if (shaping) shapedTextOrientations.horizontal[textJustify] = shaping;
+                    // Horizontal point or line label.
+                    const shaping = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor, textJustify, spacingIfAllowed,
+                        textOffset, WritingMode.horizontal, false, layoutTextSize, layoutTextSizeThisZoom);
+                    if (shaping) shapedTextOrientations.horizontal[textJustify] = shaping;
 
-                // Vertical point label (if allowVerticalPlacement is enabled).
-                addVerticalShapingForPointLabelIfNeeded();
+                    // Vertical point label (if allowVerticalPlacement is enabled).
+                    addVerticalShapingForPointLabelIfNeeded();
 
-                // Verticalized line label.
-                if (allowsVerticalWritingMode(unformattedText) && textAlongLine && keepUpright) {
-                    shapedTextOrientations.vertical = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor, textJustify,
-                        spacingIfAllowed, textOffset, WritingMode.vertical, false, layoutTextSize, layoutTextSizeThisZoom);
-                }
-            }
-        }
-
-        let shapedIcon;
-        let isSDFIcon = false;
-        if (feature.icon?.name) {
-            const image = args.imageMap[feature.icon.name];
-            if (image) {
-                shapedIcon = shapeIcon(
-                    args.imagePositions[feature.icon.name],
-                    layout.get('icon-offset').evaluate(feature, {}, args.canonical),
-                    layout.get('icon-anchor').evaluate(feature, {}, args.canonical));
-                // null/undefined SDF property treated same as default (false)
-                isSDFIcon = !!image.sdf;
-                if (args.bucket.sdfIcons === undefined) {
-                    args.bucket.sdfIcons = isSDFIcon;
-                } else if (args.bucket.sdfIcons !== isSDFIcon) {
-                    warnOnce('Style sheet warning: Cannot mix SDF and non-SDF icons in one buffer');
-                }
-                if (image.pixelRatio !== args.bucket.pixelRatio) {
-                    args.bucket.iconsNeedLinear = true;
-                } else if (layout.get('icon-rotate').constantOr(1) !== 0) {
-                    args.bucket.iconsNeedLinear = true;
+                    // Verticalized line label.
+                    if (allowsVerticalWritingMode(unformattedText) && textAlongLine && keepUpright) {
+                        shapedTextOrientations.vertical = shapeText(text, args.glyphMap, args.glyphPositions, args.imagePositions, fontstack, maxWidth, lineHeight, textAnchor, textJustify,
+                            spacingIfAllowed, textOffset, WritingMode.vertical, false, layoutTextSize, layoutTextSizeThisZoom);
+                    }
                 }
             }
-        }
 
-        const shapedText = getDefaultHorizontalShaping(shapedTextOrientations.horizontal) || shapedTextOrientations.vertical;
-        args.bucket.iconsInText ||= shapedText ? shapedText.iconsInText : false;
-        if (shapedText || shapedIcon) {
-            addFeature(args.bucket, feature, shapedTextOrientations, shapedIcon, args.imageMap, sizes, layoutTextSize, layoutIconSize, textOffset, isSDFIcon, args.canonical, args.subdivisionGranularity, args.hasPromoteId);
+            let shapedIcon;
+            let isSDFIcon = false;
+            if (feature.icon?.name) {
+                const image = args.imageMap[feature.icon.name];
+                if (image) {
+                    shapedIcon = shapeIcon(
+                        args.imagePositions[feature.icon.name],
+                        layout.get('icon-offset').evaluate(feature, {}, args.canonical),
+                        layout.get('icon-anchor').evaluate(feature, {}, args.canonical));
+                    // null/undefined SDF property treated same as default (false)
+                    isSDFIcon = !!image.sdf;
+                    if (args.bucket.sdfIcons === undefined) {
+                        args.bucket.sdfIcons = isSDFIcon;
+                    } else if (args.bucket.sdfIcons !== isSDFIcon) {
+                        warnOnce('Style sheet warning: Cannot mix SDF and non-SDF icons in one buffer');
+                    }
+                    if (image.pixelRatio !== args.bucket.pixelRatio) {
+                        args.bucket.iconsNeedLinear = true;
+                    } else if (layout.get('icon-rotate').constantOr(1) !== 0) {
+                        args.bucket.iconsNeedLinear = true;
+                    }
+                }
+            }
+
+            const shapedText = getDefaultHorizontalShaping(shapedTextOrientations.horizontal) || shapedTextOrientations.vertical;
+            args.bucket.iconsInText ||= shapedText ? shapedText.iconsInText : false;
+            if (shapedText || shapedIcon) {
+                addFeature(args.bucket, feature, shapedTextOrientations, shapedIcon, args.imageMap, sizes, layoutTextSize, layoutIconSize, textOffset, isSDFIcon, args.canonical, args.subdivisionGranularity, args.hasPromoteId);
+            }
+        } finally {
+            feature.deactivateColumnarEvaluationContext?.();
         }
     }
 
     if (args.showCollisionBoxes) {
         args.bucket.generateCollisionDebugBuffers();
     }
+    args.bucket.prepareColumnarFeatureStateData();
+    args.bucket.releaseColumnarLayoutData();
 }
 
 // Choose the justification that matches the direction of the TextAnchor
@@ -339,7 +381,7 @@ function addFeature(bucket: SymbolBucket,
 
     const granularity = (canonical) ? subdivisionGranularity.line.getGranularityForZoomLevel(canonical.z) : 1;
 
-    const addSymbolAtAnchor = (line, anchor) => {
+    const addSymbolAtAnchor = (line: SymbolLine, anchor: Anchor) => {
         if (anchor.x < 0 || anchor.x >= EXTENT || anchor.y < 0 || anchor.y >= EXTENT) {
             // Symbol layers are drawn across tile boundaries, We filter out symbols
             // outside our tile boundaries (which may be included in vector tile buffers)
@@ -354,8 +396,8 @@ function addFeature(bucket: SymbolBucket,
     };
 
     if (symbolPlacement === 'line') {
-        for (const line of clipLine(feature.geometry, 0, 0, EXTENT, EXTENT)) {
-            const subdividedLine = subdivideVertexLine(line, granularity);
+        const placeAlongLine = (subdividedLine: SymbolLine) => {
+            const anchorsStart = bucket.profile ? performance.now() : 0;
             const anchors = getAnchors(
                 subdividedLine,
                 symbolMinDistance,
@@ -367,19 +409,56 @@ function addFeature(bucket: SymbolBucket,
                 bucket.overscaling,
                 EXTENT
             );
+            recordLineSymbolProfile(bucket, 'symbol.anchors', anchorsStart, 'line');
             for (const anchor of anchors) {
                 const shapedText = defaultHorizontalShaping;
                 if (!shapedText || !anchorIsTooClose(bucket, shapedText.text, textRepeatDistance, anchor)) {
                     addSymbolAtAnchor(subdividedLine, anchor);
                 }
             }
+        };
+
+        if (feature.columnarFeatureTable) {
+            const readClipStart = bucket.profile ? performance.now() : 0;
+            let visitorDuration = 0;
+            forEachClippedColumnarSymbolLine(feature, 0, 0, EXTENT, EXTENT, line => {
+                const visitorStart = bucket.profile ? performance.now() : 0;
+                const subdivisionStart = bucket.profile ? performance.now() : 0;
+                const subdividedLine = subdivideFlattenedVertexLine(line, granularity);
+                recordLineSymbolProfile(bucket, 'symbol.subdivision', subdivisionStart, 'line');
+                placeAlongLine(subdividedLine);
+                if (bucket.profile) visitorDuration += performance.now() - visitorStart;
+            });
+            if (bucket.profile) {
+                recordLineSymbolProfileDuration(
+                    bucket,
+                    'symbol.lineReadClip',
+                    Math.max(0, performance.now() - readClipStart - visitorDuration),
+                    'columnar-streaming',
+                );
+            }
+        } else {
+            const clipStart = bucket.profile ? performance.now() : 0;
+            const clippedLines = clipLine(feature.geometry, 0, 0, EXTENT, EXTENT);
+            recordLineSymbolProfile(bucket, 'symbol.lineReadClip', clipStart, 'legacy');
+            for (const line of clippedLines) {
+                const subdivisionStart = bucket.profile ? performance.now() : 0;
+                const subdividedLine = subdivideVertexLine(line, granularity);
+                recordLineSymbolProfile(bucket, 'symbol.subdivision', subdivisionStart, 'line');
+                placeAlongLine(subdividedLine);
+            }
         }
     } else if (symbolPlacement === 'line-center') {
         // No clipping, multiple lines per feature are allowed
         // "lines" with only one point are ignored as in clipLines
-        for (const line of feature.geometry) {
-            if (line.length > 1) {
-                const subdividedLine = subdivideVertexLine(line, granularity);
+        const placeAtCenter = (line: SymbolLine) => {
+            if (getSymbolLinePointCount(line) > 1) {
+                const subdivisionStart = bucket.profile ? performance.now() : 0;
+                const subdividedLine = isFlatSymbolLine(line)
+                    ? subdivideFlattenedVertexLine(line, granularity)
+                    : subdivideVertexLine(line, granularity);
+                recordLineSymbolProfile(bucket, 'symbol.subdivision', subdivisionStart, 'line-center');
+                const anchorsStart = bucket.profile ? performance.now() : 0;
                 const anchor = getCenterAnchor(
                     subdividedLine,
                     textMaxAngle,
@@ -387,12 +466,40 @@ function addFeature(bucket: SymbolBucket,
                     shapedIcon,
                     glyphSize,
                     textMaxBoxScale);
+                recordLineSymbolProfile(bucket, 'symbol.anchors', anchorsStart, 'line-center');
                 if (anchor) {
                     addSymbolAtAnchor(subdividedLine, anchor);
                 }
             }
+        };
+        if (feature.columnarFeatureTable) {
+            const readStart = bucket.profile ? performance.now() : 0;
+            let visitorDuration = 0;
+            forEachColumnarSymbolLine(feature, (line) => {
+                const visitorStart = bucket.profile ? performance.now() : 0;
+                placeAtCenter(line);
+                if (bucket.profile) visitorDuration += performance.now() - visitorStart;
+            });
+            if (bucket.profile) {
+                recordLineSymbolProfileDuration(
+                    bucket,
+                    'symbol.lineReadClip',
+                    Math.max(0, performance.now() - readStart - visitorDuration),
+                    'columnar-no-clip',
+                );
+            }
+        } else {
+            for (const line of feature.geometry) placeAtCenter(line);
         }
     } else if (feature.type === 'Polygon') {
+        if (feature.columnarFeatureTable) {
+            forEachColumnarSymbolPolygon(feature, (polygon, outer) => {
+                const poi = findPoleOfInaccessibility(polygon, 16);
+                const line = subdivideFlattenedVertexLine(outer, granularity, true);
+                addSymbolAtAnchor(line, new Anchor(poi.x, poi.y, 0));
+            });
+            return;
+        }
         for (const polygon of classifyRings(feature.geometry, 0)) {
             // 16 here represents 2 pixels
             const poi = findPoleOfInaccessibility(polygon, 16);
@@ -400,15 +507,36 @@ function addFeature(bucket: SymbolBucket,
             addSymbolAtAnchor(subdividedLine, new Anchor(poi.x, poi.y, 0));
         }
     } else if (feature.type === 'LineString') {
+        if (feature.columnarFeatureTable) {
+            forEachColumnarSymbolLine(feature, line => {
+                const subdividedLine = subdivideFlattenedVertexLine(line, granularity);
+                if (!getSymbolLinePointCount(subdividedLine)) return;
+                addSymbolAtAnchor(subdividedLine, new Anchor(getSymbolLineX(subdividedLine, 0), getSymbolLineY(subdividedLine, 0), 0));
+            });
+            return;
+        }
         // https://github.com/mapbox/mapbox-gl-js/issues/3808
         for (const line of feature.geometry) {
             const subdividedLine = subdivideVertexLine(line, granularity);
             addSymbolAtAnchor(subdividedLine, new Anchor(subdividedLine[0].x, subdividedLine[0].y, 0));
         }
     } else if (feature.type === 'Point') {
-        for (const points of feature.geometry) {
-            for (const point of points) {
-                addSymbolAtAnchor([point], new Anchor(point.x, point.y, 0));
+        if (feature.columnarFeatureTable) {
+            const geometry = getColumnarGeometryView(feature.columnarFeatureTable, feature.index);
+            for (let partIndex = 0; partIndex < geometry.partCount; partIndex++) {
+                for (let pointIndex = 0; pointIndex < geometry.getPartLength(partIndex); pointIndex++) {
+                    addSymbolAtAnchor(emptySymbolLine, new Anchor(
+                        geometry.getX(partIndex, pointIndex),
+                        geometry.getY(partIndex, pointIndex),
+                        0
+                    ));
+                }
+            }
+        } else {
+            for (const points of feature.geometry) {
+                for (const point of points) {
+                    addSymbolAtAnchor([point], new Anchor(point.x, point.y, 0));
+                }
             }
         }
     }
@@ -512,7 +640,7 @@ function getDefaultHorizontalShaping(
  */
 function addSymbol(bucket: SymbolBucket,
     anchor: Anchor,
-    line: Point[],
+    line: SymbolLine,
     shapedTextOrientations: ShapedTextOrientations,
     shapedIcon: PositionedIcon | undefined,
     imageMap: {[_: string]: StyleImage},
@@ -610,8 +738,8 @@ function addSymbol(bucket: SymbolBucket,
             lineArray.lineStartIndex,
             lineArray.lineLength,
             // The icon itself does not have an associated symbol since the text isn't placed yet
-            -1, 
-            canonical, 
+            -1,
+            canonical,
             elevation);
 
         placedIconSymbolIndex = bucket.icon.placedSymbolArray.length - 1;
@@ -631,8 +759,8 @@ function addSymbol(bucket: SymbolBucket,
                 lineArray.lineStartIndex,
                 lineArray.lineLength,
                 // The icon itself does not have an associated symbol since the text isn't placed yet
-                -1, 
-                canonical, 
+                -1,
+                canonical,
                 elevation);
 
             verticalPlacedIconSymbolIndex = bucket.icon.placedSymbolArray.length - 1;

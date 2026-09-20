@@ -38,6 +38,7 @@
   "exclude": [
     "node_modules",
     "dist",
+    "test/bench/baselines/**",
     "build/rolldown",
     "test/integration/bundler/vite-rollup-esbuild/**",
     "test/integration/bundler/vite-rolldown/**",

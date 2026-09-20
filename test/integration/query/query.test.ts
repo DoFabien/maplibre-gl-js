@@ -139,6 +139,12 @@ describe('query tests', () => {
             const actual = await page.evaluate(performQueryOnFixture, fixture);
 
             const isEqual = deepEqual(actual, fixture.expected);
+            if (!isEqual && process.env.QUERY_TEST_OUTPUT) {
+                await fs.promises.mkdir(process.env.QUERY_TEST_OUTPUT, {recursive: true});
+                const filename = `${caseName.replace(/[\\/]/g, '__')}.json`;
+                await fs.promises.writeFile(path.join(process.env.QUERY_TEST_OUTPUT, filename),
+                    JSON.stringify({caseName, actual, expected: fixture.expected}, null, 2));
+            }
             // update expected.json if UPDATE=true is passed and the test fails
             if (process.env.UPDATE && !isEqual) {
                 const expectedPath = path.join(testCaseRoot, 'expected.json');

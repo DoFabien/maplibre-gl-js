@@ -1,0 +1,70 @@
+{
+  "version": 8,
+  "metadata": {
+    "test": {
+      "debug": false,
+      "width": 512,
+      "height": 256,
+      "timeout": 60000
+    }
+  },
+  "center": [
+    0,
+    0
+  ],
+  "zoom": 1,
+  "sources": {
+    "maplibre": {
+      "type": "vector",
+      "encoding": "mlt",
+      "maxzoom": 1,
+      "tiles": [
+        "local://tiles/mlt/synthetic/{z}/{x}/{y}.mlt"
+      ]
+    }
+  },
+  "glyphs": "local://glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8fafc"
+      }
+    },
+    {
+      "id": "highway-line-base",
+      "type": "line",
+      "source": "maplibre",
+      "source-layer": "layer1",
+      "paint": {
+        "line-color": "#cbd5e1",
+        "line-width": 4
+      }
+    },
+    {
+      "id": "highway-name-other",
+      "type": "symbol",
+      "source": "maplibre",
+      "source-layer": "layer1",
+      "layout": {
+        "symbol-placement": "line",
+        "symbol-spacing": 220,
+        "text-field": "MLT MULTITILE",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-max-angle": 30,
+        "text-keep-upright": true,
+        "text-pitch-alignment": "viewport",
+        "text-rotation-alignment": "map",
+        "text-size": 18
+      },
+      "paint": {
+        "text-color": "#334155",
+        "text-halo-color": "#f8fafc",
+        "text-halo-width": 1.25
+      }
+    }
+  ]
+}

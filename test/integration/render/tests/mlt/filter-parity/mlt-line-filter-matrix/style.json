@@ -1,0 +1,688 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "height": 256
+        }
+    },
+    "center": [
+        13.418056,
+        52.499167
+    ],
+    "zoom": 14,
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/mlt/gl-js/{z}-{x}-{y}.mlt"
+            ],
+            "encoding": "mlt"
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8f7ef"
+            }
+        },
+        {
+            "id": "road-context",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "==",
+                [
+                    "geometry-type"
+                ],
+                "LineString"
+            ],
+            "paint": {
+                "line-width": 1,
+                "line-color": "#b9c1c7",
+                "line-opacity": 0.55
+            }
+        },
+        {
+            "id": "road-class-eq",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    "path"
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": -30,
+                "line-color": "#0057ff",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-match-type",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "match",
+                    [
+                        "get",
+                        "type"
+                    ],
+                    [
+                        "footway",
+                        "cycleway"
+                    ],
+                    true,
+                    false
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": -20,
+                "line-color": "#00a36c",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-has-not-eq",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "has",
+                        [
+                            "literal",
+                            "class"
+                        ]
+                    ],
+                    [
+                        "!=",
+                        [
+                            "get",
+                            "class"
+                        ],
+                        "service"
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": -10,
+                "line-color": "#9a4dff",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-coalesce-number",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    ">",
+                    [
+                        "coalesce",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        0
+                    ],
+                    100000000
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 0,
+                "line-color": "#ff7a00",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-modulo",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "%",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        3
+                    ],
+                    0
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 10,
+                "line-color": "#c90024",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-concat-length",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        [
+                            "concat",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            "-",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ],
+                        "path-footway"
+                    ],
+                    [
+                        "==",
+                        [
+                            "length",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ],
+                        7
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 20,
+                "line-color": "#006d8f",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-property-property",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    [
+                        "get",
+                        "type"
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 30,
+                "line-color": "#8b6b00",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-let-var",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "let",
+                    "kind",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    [
+                        "==",
+                        [
+                            "var",
+                            "kind"
+                        ],
+                        "main"
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 40,
+                "line-color": "#d100a7",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-step",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "step",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        0,
+                        100000000,
+                        1
+                    ],
+                    1
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 50,
+                "line-color": "#6f8f00",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-interpolate",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    ">",
+                    [
+                        "interpolate",
+                        [
+                            "linear"
+                        ],
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        0,
+                        0,
+                        100000000,
+                        100
+                    ],
+                    50
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 60,
+                "line-color": "#ff4f81",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-typeof-number",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        [
+                            "typeof",
+                            [
+                                "get",
+                                "oneway"
+                            ]
+                        ],
+                        "number"
+                    ],
+                    [
+                        "==",
+                        [
+                            "number",
+                            [
+                                "get",
+                                "oneway"
+                            ],
+                            0
+                        ],
+                        1
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 70,
+                "line-color": "#3a7d44",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-string-slice-case",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "slice",
+                        [
+                            "upcase",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ],
+                        0,
+                        4
+                    ],
+                    "FOOT"
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 80,
+                "line-color": "#7a4b00",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-index-downcase",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    ">=",
+                    [
+                        "index-of",
+                        "way",
+                        [
+                            "downcase",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ]
+                    ],
+                    0
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 90,
+                "line-color": "#007f9f",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-scalar-case",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "case",
+                        [
+                            "in",
+                            "way",
+                            [
+                                "downcase",
+                                [
+                                    "get",
+                                    "type"
+                                ]
+                            ]
+                        ],
+                        "way",
+                        [
+                            "==",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            "path"
+                        ],
+                        "path",
+                        "other"
+                    ],
+                    "way"
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 100,
+                "line-color": "#3346a8",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-scalar-match",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "match",
+                        [
+                            "get",
+                            "type"
+                        ],
+                        [
+                            "footway",
+                            "cycleway"
+                        ],
+                        "active",
+                        "other"
+                    ],
+                    "active"
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 110,
+                "line-color": "#d04b2f",
+                "line-opacity": 0.95
+            }
+        },
+        {
+            "id": "road-dynamic-in",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "case",
+                    [
+                        "in",
+                        [
+                            "literal",
+                            "way"
+                        ],
+                        [
+                            "downcase",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ]
+                    ],
+                    true,
+                    false
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 120,
+                "line-color": "#00724f",
+                "line-opacity": 0.95
+            }
+        }
+    ]
+}

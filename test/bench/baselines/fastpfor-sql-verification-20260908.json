@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-09-08T10:29:49.109Z",
+  "engine": "SQLite via node:sqlite",
+  "drawing": [
+    {
+      "variant": "fastpfor",
+      "phase": "native",
+      "dessin_ms": 67.75,
+      "requetes_ms": 69.97500000149012,
+      "min_mediane_ms": 65.54999999701977,
+      "max_mediane_ms": 77.09999999403954
+    },
+    {
+      "variant": "fastpfor",
+      "phase": "overzoom",
+      "dessin_ms": 62.05000000447035,
+      "requetes_ms": 33.42500000447035,
+      "min_mediane_ms": 56.3500000089407,
+      "max_mediane_ms": 73.54999999701977
+    },
+    {
+      "variant": "mvt",
+      "phase": "native",
+      "dessin_ms": 75.62499999254942,
+      "requetes_ms": 45.0249999910593,
+      "min_mediane_ms": 72.6000000089407,
+      "max_mediane_ms": 80.70000000298023
+    },
+    {
+      "variant": "mvt",
+      "phase": "overzoom",
+      "dessin_ms": 98.55000000447035,
+      "requetes_ms": 25.274999998509884,
+      "min_mediane_ms": 92.30000001192093,
+      "max_mediane_ms": 104.84999999403954
+    },
+    {
+      "variant": "varint",
+      "phase": "native",
+      "dessin_ms": 67.47499999403954,
+      "requetes_ms": 70.19999999552965,
+      "min_mediane_ms": 63.400000005960464,
+      "max_mediane_ms": 68.3999999910593
+    },
+    {
+      "variant": "varint",
+      "phase": "overzoom",
+      "dessin_ms": 60.399999998509884,
+      "requetes_ms": 33.775000005960464,
+      "min_mediane_ms": 57.29999999701977,
+      "max_mediane_ms": 66.84999999403954
+    }
+  ],
+  "costs": [
+    {
+      "variant": "fastpfor",
+      "allocations_worker_mio": 180.06112670898438,
+      "allocations_main_mio": 21.02977180480957,
+      "brut_ko": 1003.79,
+      "gzip_ko": 527.605
+    },
+    {
+      "variant": "mvt",
+      "allocations_worker_mio": 387.1123447418213,
+      "allocations_main_mio": 19.203588485717773,
+      "brut_ko": 1481.872,
+      "gzip_ko": 733.662
+    },
+    {
+      "variant": "varint",
+      "allocations_worker_mio": 181.49983978271484,
+      "allocations_main_mio": 20.50535774230957,
+      "brut_ko": 1055.493,
+      "gzip_ko": 509.665
+    }
+  ]
+}

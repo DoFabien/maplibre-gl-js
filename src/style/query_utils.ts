@@ -1,5 +1,6 @@
 import Point from '@mapbox/point-geometry';
-import {polygonIntersectsBufferedPoint} from '../util/intersection_tests.ts';
+import {polygonIntersectsBufferedPointCoordinates} from '../util/intersection_tests.ts';
+import {materializeGeometry, someGeometryVertex, type FeatureGeometry} from '../util/geometry_view.ts';
 
 import type {PossiblyEvaluatedPropertyValue} from './properties.ts';
 import type {StyleLayer} from '../style/style_layer.ts';
@@ -71,7 +72,8 @@ function _stripDuplicates(ring: Point[]): Point[] {
     return filteredRing;
 }
 
-export function offsetLine(rings: Point[][], offset: number): Point[][] {
+export function offsetLine(geometry: FeatureGeometry, offset: number): Point[][] {
+    const rings = materializeGeometry(geometry);
     const newRings: Point[][] = [];
     for (const rawRing of rings) {
         const ring = _stripDuplicates(rawRing);
@@ -107,24 +109,29 @@ type CircleIntersectionTestParams = {
     pitchScale?: 'map' | 'viewport';
 };
 
-function intersectionTestMapMap({queryGeometry, size}: CircleIntersectionTestParams, point: Point): boolean {
-    return polygonIntersectsBufferedPoint(queryGeometry, point, size);
+function intersectionTestMapMap({queryGeometry, size}: CircleIntersectionTestParams, x: number, y: number): boolean {
+    return polygonIntersectsBufferedPointCoordinates(queryGeometry, x, y, size);
 }
 
-function intersectionTestMapViewport({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, point: Point): boolean {
-    const w = transform.projectTileCoordinates(point.x, point.y, unwrappedTileID, getElevation?.(point.x, point.y)).signedDistanceFromCamera;
+function intersectionTestMapViewport({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, x: number, y: number): boolean {
+    const w = transform.projectTileCoordinates(x, y, unwrappedTileID, getElevation?.(x, y)).signedDistanceFromCamera;
     const adjustedSize = size * (w / transform.cameraToCenterDistance);
-    return polygonIntersectsBufferedPoint(queryGeometry, point, adjustedSize);
+    return polygonIntersectsBufferedPointCoordinates(queryGeometry, x, y, adjustedSize);
 }
 
-function intersectionTestViewportMap({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, point: Point): boolean {
-    const w = transform.projectTileCoordinates(point.x, point.y, unwrappedTileID, getElevation?.(point.x, point.y)).signedDistanceFromCamera;
-    const adjustedSize = size * (transform.cameraToCenterDistance / w);
-    return polygonIntersectsBufferedPoint(queryGeometry, projectPoint(point, transform, unwrappedTileID, getElevation), adjustedSize);
+function intersectionTestViewportMap({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, x: number, y: number): boolean {
+    const projected = transform.projectTileCoordinates(x, y, unwrappedTileID, getElevation?.(x, y));
+    const adjustedSize = size * (transform.cameraToCenterDistance / projected.signedDistanceFromCamera);
+    const screenX = (projected.point.x * 0.5 + 0.5) * transform.width;
+    const screenY = (-projected.point.y * 0.5 + 0.5) * transform.height;
+    return polygonIntersectsBufferedPointCoordinates(queryGeometry, screenX, screenY, adjustedSize);
 }
 
-function intersectionTestViewportViewport({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, point: Point): boolean {
-    return polygonIntersectsBufferedPoint(queryGeometry, projectPoint(point, transform, unwrappedTileID, getElevation), size);
+function intersectionTestViewportViewport({queryGeometry, size, transform, unwrappedTileID, getElevation}: CircleIntersectionTestParams, x: number, y: number): boolean {
+    const projected = transform.projectTileCoordinates(x, y, unwrappedTileID, getElevation?.(x, y)).point;
+    const screenX = (projected.x * 0.5 + 0.5) * transform.width;
+    const screenY = (-projected.y * 0.5 + 0.5) * transform.height;
+    return polygonIntersectsBufferedPointCoordinates(queryGeometry, screenX, screenY, size);
 }
 
 export function circleIntersection({
@@ -135,20 +142,13 @@ export function circleIntersection({
     getElevation,
     pitchAlignment = 'map',
     pitchScale = 'map'
-}: CircleIntersectionTestParams, geometry: Point[][]): boolean {
+}: CircleIntersectionTestParams, geometry: FeatureGeometry): boolean {
     const intersectionTest = pitchAlignment === 'map'
         ? (pitchScale === 'map' ? intersectionTestMapMap : intersectionTestMapViewport)
         : (pitchScale === 'map' ? intersectionTestViewportMap : intersectionTestViewportViewport);
 
     const param = {queryGeometry, size, transform, unwrappedTileID, getElevation} as CircleIntersectionTestParams;
-    for (const ring of geometry) {
-        for (const point of ring) {
-            if (intersectionTest(param, point)) {
-                return true;
-            }
-        }
-    }
-    return false;
+    return someGeometryVertex(geometry, (x, y) => intersectionTest(param, x, y));
 }
 
 function projectPoint(tilePoint: Point, transform: IReadonlyTransform, unwrappedTileID: UnwrappedTileID, getElevation: GetElevation | undefined): Point {

@@ -43,6 +43,8 @@ export type WorkerTileParameters = TileParameters & {
     returnDependencies?: boolean;
     subdivisionGranularity: SubdivisionGranularitySetting;
     encoding?: TileEncoding;
+    /** A parent held by the requester for this exact actor; permits omitting repeated query bytes. */
+    mltParentId?: number;
     /**
      * Provide this property when the requested tile has a higher canonical Z than source maxzoom.
      * This allows the worker to know that it needs to overzoom from a source tile.
@@ -82,6 +84,8 @@ export type WorkerTileWithData = ExpiryData & {
     featureIndex: FeatureIndex;
     collisionBoxArray: CollisionBoxArray;
     rawTileData?: ArrayBuffer;
+    /** Immutable parent version, scoped to the sending actor and source instance. */
+    mltParentId?: number;
     encoding?: TileEncoding;
     resourceTiming?: PerformanceResourceTiming[];
     // Only used for benchmarking:

@@ -1,0 +1,64 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [2.362061, 48.871941],
+    "zoom": 14.2,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/omt/{z}/{x}/{y}.mlt"],
+            "maxzoom": 14
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "omt-poi-circles",
+            "type": "circle",
+            "source": "openmaptiles",
+            "source-layer": "poi",
+            "filter": [
+                "any",
+                ["==", ["get", "class"], "railway"],
+                ["==", ["get", "class"], "bus"],
+                ["==", ["get", "class"], "hospital"]
+            ],
+            "paint": {
+                "circle-radius": [
+                    "match",
+                    ["get", "class"],
+                    "railway",
+                    9,
+                    "hospital",
+                    8,
+                    7
+                ],
+                "circle-color": [
+                    "match",
+                    ["get", "class"],
+                    "railway",
+                    "#2563eb",
+                    "hospital",
+                    "#ef4444",
+                    "#22c55e"
+                ],
+                "circle-stroke-width": 2,
+                "circle-stroke-color": "#0f172a",
+                "circle-opacity": 0.95
+            }
+        }
+    ]
+}

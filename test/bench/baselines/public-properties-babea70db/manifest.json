@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-09-06T08:38:19.533Z",
+  "campaigns": 3,
+  "iterationsPerCampaign": 30,
+  "warmupPerCampaign": 10,
+  "suite": "extended",
+  "reports": [
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-public-properties-after-node26/campaign-1.json",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-public-properties-after-node26/campaign-2.json",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-public-properties-after-node26/campaign-3.json"
+  ]
+}

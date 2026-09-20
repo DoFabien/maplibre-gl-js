@@ -1,0 +1,10 @@
+Cp: GPUInitializationError: WebGL2 is required to display this map. We are sorry, but it seems that your browser does not support WebGL2, a technology for rendering 3D graphics on the web. Read more on https://wiki.openstreetmap.org/wiki/This_map_requires_WebGL
+    at installScenario (evaluate at main (file:///data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-overzoom-diagnostic.ts:61:41), <anonymous>:61:16)
+    at #evaluate (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/ExecutionContext.js:402:19)
+    at async ExecutionContext.evaluate (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/ExecutionContext.js:288:16)
+    at async IsolatedWorld.evaluate (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/IsolatedWorld.js:104:16)
+    at async CdpFrame.evaluate (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:364:20)
+    at async CdpPage.evaluate (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:832:20)
+    at async main (file:///data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-overzoom-diagnostic.ts:61:30)
+    at Rm (http://127.0.0.1:40509/dist/maplibre-gl.mjs:809:151435)
+    at _setupPainter (http://127.0.0.1:40509/dist/maplibre-gl.mjs:809:176582)

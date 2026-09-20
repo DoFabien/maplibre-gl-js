@@ -4,11 +4,14 @@ import {fromVectorTileJs, type VectorTileLayerLike, type VectorTileLike} from '@
 import {type ExpiryData, getArrayBuffer} from '../util/ajax.ts';
 import {WorkerTile} from './worker_tile.ts';
 import {WorkerTileState} from './worker_tile_state.ts';
-import {BoundedLRUCache} from '../tile/tile_cache.ts';
+import {ByteBoundedLRUCache} from '../tile/tile_cache.ts';
 import {ensureError, extend} from '../util/util.ts';
 import {RequestPerformance} from '../util/request_performance.ts';
 import {VectorTileOverzoomed, sliceVectorTileLayer} from './vector_tile_overzoomed.ts';
-import {MLTVectorTile} from './vector_tile_mlt.ts';
+import {getMltFeatureTable, MLTVectorTile, type MLTVectorTileOptions} from './vector_tile_mlt.ts';
+import {collectLayerPropertyDependencies} from '../data/bucket/columnar/property_dependencies.ts';
+import {recordMltMaterialization} from '../util/mlt_materialization_stats.ts';
+import {MltTileData, mltPayloadKey, equalMltPayload} from './mlt_tile_data.ts';
 
 import type {
     WorkerSource,
@@ -23,7 +26,10 @@ import type {StyleLayerIndex} from '../style/style_layer_index.ts';
 export type LoadVectorTileResult = {
     vectorTile: VectorTileLike;
     rawData: ArrayBufferLike;
+    mltParent?: MltTileData;
 };
+
+export const OVERZOOM_CACHE_MAX_BYTES: number = 64 * 1024 * 1024;
 
 /**
  * The {@link WorkerSource} implementation that supports {@link VectorTileSource}. This class is
@@ -34,14 +40,17 @@ export class VectorTileWorkerSource implements WorkerSource {
     layerIndex: StyleLayerIndex;
     availableImages: string[];
     tileState: WorkerTileState;
-    overzoomedTileResultCache: BoundedLRUCache<string, LoadVectorTileResult>;
+    overzoomedTileResultCache: ByteBoundedLRUCache<string, ArrayBuffer | MltTileData>;
 
     constructor(actor: IActor, layerIndex: StyleLayerIndex, availableImages: string[]) {
         this.actor = actor;
         this.layerIndex = layerIndex;
         this.availableImages = availableImages;
         this.tileState = new WorkerTileState();
-        this.overzoomedTileResultCache = new BoundedLRUCache<string, LoadVectorTileResult>(1000);
+        this.overzoomedTileResultCache = new ByteBoundedLRUCache<string, ArrayBuffer | MltTileData>(
+            OVERZOOM_CACHE_MAX_BYTES,
+            (rawData) => rawData.byteLength,
+        );
     }
 
     /**
@@ -49,9 +58,13 @@ export class VectorTileWorkerSource implements WorkerSource {
      */
     loadVectorTile(params: WorkerTileParameters, rawData: ArrayBuffer): LoadVectorTileResult {
         try {
+            if (params.encoding === 'mlt' && params.overzoomParameters) return this.loadMltOverzoomTile(params, rawData);
+            const mltDecodeOptions = params.encoding === 'mlt'
+                ? createMltDecodeOptions(params, this.layerIndex)
+                : undefined;
             const vectorTile = params.encoding !== 'mlt'
                 ? new VectorTile(new PbfReader(rawData))
-                : new MLTVectorTile(rawData);
+                : new MLTVectorTile(rawData, mltDecodeOptions);
 
             return {vectorTile, rawData};
         } catch (ex) {
@@ -93,13 +106,14 @@ export class VectorTileWorkerSource implements WorkerSource {
                 return this._getEtagUnmodifiedResult(tileResponse, timing);
             }
 
+            const directMlt = params.encoding === 'mlt' && overzoomParameters;
             const tileResult = this.loadVectorTile(params, tileResponse.data);
             this.tileState.finishLoading(uid);
             if (!tileResult) return null;
 
             let {vectorTile, rawData} = tileResult;
-            if (overzoomParameters) {
-                ({vectorTile, rawData} = this._getOverzoomTile(params, vectorTile));
+            if (overzoomParameters && !directMlt) {
+                ({vectorTile, rawData} = this._getOverzoomTile(params, vectorTile, rawData));
             }
 
             const cacheControl = this._getExpiryData(tileResponse);
@@ -108,7 +122,7 @@ export class VectorTileWorkerSource implements WorkerSource {
             workerTile.vectorTile = vectorTile;
             workerTile.etag = tileResponse.etag;
             this.tileState.markLoaded(uid, workerTile);
-            const parsingState = {rawData, cacheControl, resourceTiming};
+            const parsingState = {rawData, cacheControl, resourceTiming, mltParent: tileResult.mltParent};
             this.tileState.setParsing(uid, parsingState);
 
             return await this._parseWorkerTile(workerTile, params);
@@ -134,11 +148,14 @@ export class VectorTileWorkerSource implements WorkerSource {
         // After the main thread has successfully received and stored rawTileData,
         // we no longer need to store it in the worker or transfer additional copies of it.
         if (parseState) {
-            const {rawData, cacheControl, resourceTiming} = parseState;
-            // Overzoomed tiles are always re-encoded to MVT protobuf by _getOverzoomTile
-            const encoding = params.overzoomParameters ? 'mvt' : params.encoding;
+            const {rawData, cacheControl, resourceTiming, mltParent} = parseState;
+            const encoding = params.encoding;
             // Return a copy of rawData to the main thread to avoid clearing the worker's buffer
-            result = extend({rawTileData: rawData.slice(0), encoding}, result, cacheControl, resourceTiming);
+            const rawTileData = mltParent?.id !== undefined && params.mltParentId === mltParent.id ? undefined : rawData.slice(0);
+            if (params.encoding === 'mlt' && rawTileData) {
+                recordMltMaterialization('rawTileBytesCopied', rawData.byteLength, {detail: 'worker to main thread'});
+            }
+            result = extend({rawTileData, encoding, ...(mltParent ? {mltParentId: mltParent.id} : {})}, result, cacheControl, resourceTiming);
             this.tileState.removeParsing(workerTile.uid);
         } else if (workerTile.etag) {
             // Reload: return the stored etag since the main thread overwrites the tile's etag with every
@@ -174,23 +191,27 @@ export class VectorTileWorkerSource implements WorkerSource {
 
     /**
      * If we are seeking a tile deeper than the source's max available canonical tile, get the overzoomed tile
+     * MLT shares parent bytes/columns and style-independent clipping plans for rendering and lazy queries.
      * @param params - the worker tile parameters
      * @param maxZoomVectorTile - the original vector tile at the source's max available canonical zoom
      * @returns the overzoomed tile and its raw data
      */
-    private _getOverzoomTile(params: WorkerTileParameters, maxZoomVectorTile: VectorTileLike): LoadVectorTileResult {
+    private _getOverzoomTile(params: WorkerTileParameters, maxZoomVectorTile: VectorTileLike, rawData: ArrayBufferLike): LoadVectorTileResult {
+        if (params.encoding === 'mlt') return this.loadMltOverzoomTile(params, rawData as ArrayBuffer);
         const {tileID, source, overzoomParameters} = params;
         const {maxZoomTileID} = overzoomParameters;
+        const layerFamilies: Record<string, StyleLayer[][]> = this.layerIndex.familiesBySource[source] ?? {};
+        const layerSignature = JSON.stringify(Object.keys(layerFamilies).sort());
 
-        const cacheKey = `${maxZoomTileID.key}_${tileID.key}_${params.request?.url}`;
-        const cachedOverzoomTile = this.overzoomedTileResultCache.get(cacheKey);
+        const cacheKey = `${params.encoding ?? 'mvt'}_${maxZoomTileID.key}_${tileID.key}_${params.request?.url}_${layerSignature}`;
+        const cachedRawData = this.overzoomedTileResultCache.get(cacheKey);
 
-        if (cachedOverzoomTile) {
-            return cachedOverzoomTile;
+        if (cachedRawData instanceof ArrayBuffer) {
+            const vectorTile = new VectorTile(new PbfReader(cachedRawData));
+            return {vectorTile, rawData: cachedRawData};
         }
 
         const overzoomedVectorTile = new VectorTileOverzoomed();
-        const layerFamilies: Record<string, StyleLayer[][]> = this.layerIndex.familiesBySource[source];
 
         for (const sourceLayerId in layerFamilies) {
             const sourceLayer: VectorTileLayerLike = maxZoomVectorTile.layers[sourceLayerId];
@@ -205,11 +226,24 @@ export class VectorTileWorkerSource implements WorkerSource {
         }
         const overzoomedVectorTileResult = {
             vectorTile: overzoomedVectorTile,
-            rawData: fromVectorTileJs(overzoomedVectorTile).buffer
+            rawData: fromVectorTileJs(overzoomedVectorTile).buffer as ArrayBuffer
         };
-        this.overzoomedTileResultCache.set(cacheKey, overzoomedVectorTileResult);
+        this.overzoomedTileResultCache.set(cacheKey, overzoomedVectorTileResult.rawData);
 
         return overzoomedVectorTileResult;
+    }
+
+    /** Shares payload/decoded columns across children, styles and URLs only after exact content validation. */
+    private loadMltOverzoomTile(params: WorkerTileParameters, rawData: ArrayBuffer): LoadVectorTileResult {
+        const key = mltPayloadKey(rawData);
+        const cached = this.overzoomedTileResultCache.get(key);
+        const parent = cached instanceof MltTileData && equalMltPayload(cached.rawData, rawData) ? cached :
+            new MltTileData(rawData, () => this.overzoomedTileResultCache.refresh(key, parent));
+        const view = parent.createView(params.overzoomParameters.maxZoomTileID, params.tileID.canonical,
+            createMltDecodeOptions(params, this.layerIndex));
+        const tables = Object.values(view.layers).map(getMltFeatureTable).filter(table => table.numFeatures > 0);
+        this.overzoomedTileResultCache.set(key, parent);
+        return {vectorTile: MLTVectorTile.fromFeatureTables(tables), rawData: parent.rawData, mltParent: parent};
     }
 
     /**
@@ -242,4 +276,38 @@ export class VectorTileWorkerSource implements WorkerSource {
     async removeTile(params: TileParameters): Promise<void> {
         this.tileState.removeLoaded(params.uid);
     }
+}
+
+export function createMltDecodeOptions(params: WorkerTileParameters, layerIndex: StyleLayerIndex): MLTVectorTileOptions {
+    const sourceLayerFamilies = layerIndex.familiesBySource[params.source] ?? {};
+    const layerNames = Object.keys(sourceLayerFamilies);
+    const propertyColumnNamesByLayer = new Map<string, Set<string> | null>();
+
+    for (const sourceLayerId of layerNames) {
+        const neededProperties = new Set<string>();
+        let canFilterProperties = true;
+
+        for (const family of sourceLayerFamilies[sourceLayerId]) {
+            for (const layer of family) {
+                const layerDependencies = collectLayerPropertyDependencies(layer);
+                if (layerDependencies === null) {
+                    canFilterProperties = false;
+                    break;
+                }
+                for (const propertyName of layerDependencies) {
+                    neededProperties.add(propertyName);
+                }
+            }
+            if (!canFilterProperties) break;
+        }
+
+        const promoteId = typeof params.promoteId === 'string' ? params.promoteId : params.promoteId?.[sourceLayerId];
+        if (typeof promoteId === 'string') {
+            neededProperties.add(promoteId);
+        }
+
+        propertyColumnNamesByLayer.set(sourceLayerId, canFilterProperties ? neededProperties : null);
+    }
+
+    return {layerNames, propertyColumnNamesByLayer};
 }

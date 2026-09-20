@@ -7,16 +7,24 @@ import {TransferableGridIndex} from '../util/transferable_grid_index.ts';
 import {DictionaryCoder} from '../util/dictionary_coder.ts';
 import {PbfReader} from 'pbf';
 import {GeoJSONFeature} from '../util/vectortile_to_geojson.ts';
-import {mapObject, extend} from '../util/util.ts';
 import {register} from '../util/web_worker_transfer.ts';
 import {EvaluationParameters} from '../style/evaluation_parameters.ts';
 import {polygonIntersectsBox} from '../util/intersection_tests.ts';
 import {PossiblyEvaluated} from '../style/properties.ts';
 import {FeatureIndexArray} from './array_types.g.ts';
-import {MLTVectorTile} from '../source/vector_tile_mlt.ts';
+import {getMltFeatureTable, MLTVectorTile} from '../source/vector_tile_mlt.ts';
 import {Bounds} from '../geo/bounds.ts';
 import {VectorTile} from '@mapbox/vector-tile';
+import {sliceFeatureTable, type FeatureTable, type Vector, type TileLike} from '@maplibre/mlt';
+import {forEachFeatureGeometryPart} from './bucket/columnar/geometry_traversal.ts';
+import VectorUtils from './bucket/columnar/vectorUtils.ts';
+import {isMltMaterializationStatsActive, MLT_ESTIMATED_GEOJSON_QUERY_RESULT_BYTES, MLT_ESTIMATED_RENDERED_QUERY_WRAPPER_BYTES, recordMltMaterialization} from '../util/mlt_materialization_stats.ts';
+import {createMltFilterEvaluator, getMltFilterSupport, type MltFilterEvaluator} from './filter/mlt/filter.ts';
+import {ColumnarEvaluationFeature, getColumnarEvaluationFeature} from './bucket/columnar/evaluation_feature.ts';
+import {getColumnarPropertyValue, normalizeColumnarValue} from './bucket/columnar/feature_properties.ts';
+import {normalizeMltFeatureId} from '../util/mlt_feature_id.ts';
 
+import type {MltTileData} from '../source/mlt_tile_data.ts';
 import type Point from '@mapbox/point-geometry';
 import type {OverscaledTileID} from '../tile/tile_id.ts';
 import type {SourceFeatureState} from '../source/source_state.ts';
@@ -24,11 +32,14 @@ import type {PossiblyEvaluatedPropertyValue} from '../style/properties.ts';
 import type {mat4} from 'gl-matrix';
 import type {MapGeoJSONFeature} from '../util/vectortile_to_geojson.ts';
 import type {StyleLayer} from '../style/style_layer.ts';
-import type {Feature, FeatureFilter, FeatureState, FilterSpecification, PromoteIdSpecification} from '@maplibre/maplibre-gl-style-spec';
+import type {ExpressionSpecification, FeatureFilter, FeatureState, FilterSpecification, PromoteIdSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {IReadonlyTransform, GetElevation} from '../geo/transform_interface.ts';
 import type {TileEncoding} from '../source/worker_source.ts';
+import type {FeatureGeometry} from '../util/geometry_view.ts';
 
 export {GEOJSON_TILE_LAYER_NAME};
+
+export type FeatureIndexBBox = [number, number, number, number];
 
 type QueryParameters = {
     scale: number;
@@ -57,6 +68,39 @@ export type QueryResultsItem = {
     intersectionZ?: boolean | number;
 };
 
+export type MltIdResolver = (featureIndex: number) => string | number | undefined;
+
+type PreparedQueryProperty = {
+    key: string;
+    property: any;
+};
+
+type PreparedQueryLayer = {
+    styleLayer?: StyleLayer;
+    serializedEntries: Array<[string, any]>;
+    paint: PreparedQueryProperty[];
+    layout: PreparedQueryProperty[];
+};
+
+type MltQuerySourceLayer = {
+    sourceLayerName: string;
+    sourceLayer: VectorTileLayerLike;
+    featureTable: FeatureTable;
+    evaluationFeature: ColumnarEvaluationFeature;
+    resolveId: MltIdResolver;
+};
+
+type QueryExecutionContext = {
+    collectMltStats: boolean;
+    evaluationParameters: EvaluationParameters;
+    styleLayers: {[_: string]: StyleLayer};
+    serializedLayers: {[_: string]: any};
+    sourceLayers: Map<number, MltQuerySourceLayer>;
+    layers: Map<string, PreparedQueryLayer>;
+};
+
+const emptyFeatureState: FeatureState = Object.freeze({});
+
 /**
  * An in memory index class to allow fast interaction with features
  */
@@ -71,10 +115,16 @@ export class FeatureIndex {
     promoteId?: PromoteIdSpecification;
     encoding: TileEncoding;
     rawTileData: ArrayBuffer;
+    /** When present, rawTileData holds the parent MLT; clipped query geometry is constructed only on demand. */
+    mltOverzoom?: TileLike;
+    /** Main-thread owner shared by sibling tiles; never serialized back to a worker. */
+    mltTileData?: MltTileData;
     bucketLayerIDs: string[][];
 
     vtLayers: {[_: string]: VectorTileLayerLike};
     sourceLayerCoder: DictionaryCoder;
+    /** Worker index order when layer projection differs from the complete raw tile decoded for public queries. */
+    sourceLayerNames?: string[];
 
     constructor(tileID: OverscaledTileID, promoteId?: PromoteIdSpecification | null) {
         this.tileID = tileID;
@@ -112,19 +162,99 @@ export class FeatureIndex {
         }
     }
 
+    insertFeatureTable(featureTable: FeatureTable, featureIndex: number, sourceLayerIndex: number, bucketIndex: number, is3D?: boolean): void {
+        const key = this.featureIndexArray.length;
+        this.featureIndexArray.emplaceBack(featureIndex, sourceLayerIndex, bucketIndex);
+
+        const grid = is3D ? this.grid3D : this.grid;
+        const scale = EXTENT / featureTable.extent;
+        const geometryVector = featureTable.geometryVector;
+
+        forEachFeatureGeometryPart(featureTable, featureIndex, (_partIndex, start, end) => {
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+
+            for (let vertexIndex = start; vertexIndex < end; vertexIndex++) {
+                const rawX = VectorUtils.getVertexX(geometryVector, vertexIndex);
+                const rawY = VectorUtils.getVertexY(geometryVector, vertexIndex);
+                const x = rawX * scale;
+                const y = rawY * scale;
+                minX = Math.min(minX, x);
+                minY = Math.min(minY, y);
+                maxX = Math.max(maxX, x);
+                maxY = Math.max(maxY, y);
+            }
+
+            if (minX < EXTENT &&
+                minY < EXTENT &&
+                maxX >= 0 &&
+                maxY >= 0) {
+                grid.insert(key, minX, minY, maxX, maxY);
+            }
+        });
+    }
+
+    insertBBoxes(featureIndex: number, sourceLayerIndex: number, bucketIndex: number, bboxes: FeatureIndexBBox[], is3D?: boolean): void {
+        const key = this.featureIndexArray.length;
+        this.featureIndexArray.emplaceBack(featureIndex, sourceLayerIndex, bucketIndex);
+
+        const grid = is3D ? this.grid3D : this.grid;
+        for (const bbox of bboxes) {
+            if (bbox[0] < EXTENT &&
+                bbox[1] < EXTENT &&
+                bbox[2] >= 0 &&
+                bbox[3] >= 0) {
+                grid.insert(key, bbox[0], bbox[1], bbox[2], bbox[3]);
+            }
+        }
+    }
+
+    insertBBox(featureIndex: number, sourceLayerIndex: number, bucketIndex: number, bbox: FeatureIndexBBox, is3D?: boolean): void {
+        const key = this.featureIndexArray.length;
+        this.featureIndexArray.emplaceBack(featureIndex, sourceLayerIndex, bucketIndex);
+
+        if (bbox[0] < EXTENT &&
+            bbox[1] < EXTENT &&
+            bbox[2] >= 0 &&
+            bbox[3] >= 0) {
+            const grid = is3D ? this.grid3D : this.grid;
+            grid.insert(key, bbox[0], bbox[1], bbox[2], bbox[3]);
+        }
+    }
+
     loadVTLayers(): {[_: string]: VectorTileLayerLike} {
         if (!this.vtLayers) {
             switch (this.encoding) {
                 case 'mlt':
-                    this.vtLayers = new MLTVectorTile(this.rawTileData).layers;
+                    recordMltMaterialization('rawTileMainThreadDecodes', 1, {detail: 'FeatureIndex.loadVTLayers'});
+                    this.vtLayers = this.loadMltQueryLayers();
                     break;
                 case 'mvt':
                 default:
                     this.vtLayers = new VectorTile(new PbfReader(this.rawTileData)).layers;
             }
-            this.sourceLayerCoder = new DictionaryCoder(this.vtLayers ? Object.keys(this.vtLayers).sort() : [GEOJSON_TILE_LAYER_NAME]);
+            this.sourceLayerCoder = new DictionaryCoder(this.sourceLayerNames ?? (this.vtLayers ? Object.keys(this.vtLayers).sort() : [GEOJSON_TILE_LAYER_NAME]));
         }
         return this.vtLayers;
+    }
+
+    /** Keeps synchronous query semantics without putting child-tile encoding on the rendering path. */
+    private loadMltQueryLayers(): Record<string, VectorTileLayerLike> {
+        if (this.mltOverzoom && this.mltTileData) {
+            return this.mltTileData.createView(this.mltOverzoom, this.tileID.canonical, {
+                deferPropertyColumns: true, layerNames: this.sourceLayerNames,
+            }).layers;
+        }
+        const tile = new MLTVectorTile(this.rawTileData, {
+            deferPropertyColumns: true,
+            ...(this.mltOverzoom ? {layerNames: this.sourceLayerNames} : {}),
+        });
+        if (!this.mltOverzoom) return tile.layers;
+        return MLTVectorTile.fromFeatureTableResolver(Object.keys(tile.layers), name => sliceFeatureTable(
+            getMltFeatureTable(tile.layers[name]), this.mltOverzoom, this.tileID.canonical, {deferProperties: true},
+        )).layers;
     }
 
     // Finds non-symbol features in this tile at a particular position.
@@ -137,8 +267,21 @@ export class FeatureIndex {
         this.loadVTLayers();
 
         const params = args.params;
+        const executionContext = createQueryExecutionContext(
+            this.tileID.overscaledZ,
+            styleLayers,
+            serializedLayers,
+        );
         const pixelsToTileUnits = EXTENT / args.tileSize / args.scale;
-        const filter = featureFilter(params.filter, 'queryRenderedFeatures filter', params.globalState);
+        const mltFilterSupport = this.encoding === 'mlt' && params.filter
+            ? getMltFilterSupport(params.filter, params.globalState)
+            : undefined;
+        const mltFilterEvaluator = mltFilterSupport?.supported && params.filter
+            ? createMltFilterEvaluator(params.filter as ExpressionSpecification, params.globalState, this.tileID.canonical, executionContext.evaluationParameters)
+            : undefined;
+        const filter = mltFilterEvaluator
+            ? undefined
+            : featureFilter(params.filter, 'queryRenderedFeatures filter', params.globalState);
 
         const queryGeometry = args.queryGeometry;
         const queryPadding = args.queryPadding * pixelsToTileUnits;
@@ -168,7 +311,7 @@ export class FeatureIndex {
             previousIndex = index;
 
             const match = this.featureIndexArray.get(index);
-            let featureGeometry = null;
+            let featureGeometry: FeatureGeometry | null = null;
             this.loadMatchingFeature(
                 result,
                 match.bucketIndex,
@@ -180,8 +323,17 @@ export class FeatureIndex {
                 styleLayers,
                 serializedLayers,
                 sourceFeatureState,
-                (feature: VectorTileFeatureLike, styleLayer: StyleLayer, featureState: FeatureState) => {
-                    featureGeometry ||= loadGeometry(feature);
+                mltFilterEvaluator,
+                (feature: VectorTileFeatureLike, styleLayer: StyleLayer, featureState: FeatureState, _id, filteredGeometry) => {
+                    if (!featureGeometry) {
+                        if (filteredGeometry) {
+                            featureGeometry = filteredGeometry;
+                        } else {
+                            featureGeometry = feature instanceof ColumnarEvaluationFeature
+                                ? feature.getGeometryView(executionContext.collectMltStats)
+                                : loadGeometry(feature);
+                        }
+                    }
 
                     return styleLayer.queryIntersectsFeature({
                         queryGeometry,
@@ -195,7 +347,8 @@ export class FeatureIndex {
                         unwrappedTileID: this.tileID.toUnwrapped(),
                         getElevation: args.getElevation
                     });
-                }
+                },
+                executionContext,
             );
         }
 
@@ -207,66 +360,109 @@ export class FeatureIndex {
         bucketIndex: number,
         sourceLayerIndex: number,
         featureIndex: number,
-        filter: FeatureFilter,
+        filter: FeatureFilter | undefined,
         filterLayerIDs: Set<string> | undefined,
         availableImages: string[],
         styleLayers: {[_: string]: StyleLayer},
         serializedLayers: {[_: string]: any},
         sourceFeatureState?: SourceFeatureState,
+        mltFilterEvaluator?: MltFilterEvaluator,
         intersectionTest?: (
             feature: VectorTileFeatureLike,
             styleLayer: StyleLayer,
             featureState: any,
-            id: string | number | void
-        ) => boolean | number): void {
+            id: string | number | void,
+            filteredGeometry?: FeatureGeometry,
+        ) => boolean | number,
+        executionContext?: QueryExecutionContext): void {
 
         const layerIDs = this.bucketLayerIDs[bucketIndex];
         if (filterLayerIDs && !layerIDs.some(id => filterLayerIDs.has(id)))
             return;
 
-        const sourceLayerName = this.sourceLayerCoder.decode(sourceLayerIndex);
-        const sourceLayer = this.vtLayers[sourceLayerName];
-        const feature = sourceLayer.feature(featureIndex);
+        const context = executionContext ?? createQueryExecutionContext(
+            this.tileID.overscaledZ,
+            styleLayers,
+            serializedLayers,
+        );
+        if (this.encoding === 'mlt' && context.collectMltStats) {
+            recordMltMaterialization('queryCandidates');
+        }
 
-        if (filter.needGeometry) {
+        const mltSourceLayer = this.encoding === 'mlt'
+            ? getMltQuerySourceLayer(this, context, sourceLayerIndex, featureIndex)
+            : undefined;
+        const sourceLayerName = mltSourceLayer?.sourceLayerName ?? this.sourceLayerCoder.decode(sourceLayerIndex);
+        const sourceLayer = mltSourceLayer?.sourceLayer ?? this.vtLayers[sourceLayerName];
+        const featureTable = mltSourceLayer?.featureTable;
+        if (featureTable && mltFilterEvaluator && !mltFilterEvaluator.matches(featureTable, featureIndex)) {
+            return;
+        }
+        const feature = mltSourceLayer
+            ? mltSourceLayer.evaluationFeature.setIndex(featureIndex)
+            : sourceLayer.feature(featureIndex);
+
+        let filteredGeometry: FeatureGeometry | undefined;
+        if (filter?.needGeometry) {
+            if (this.encoding === 'mlt' && context.collectMltStats) {
+                recordMltMaterialization('queryGeometriesLoaded');
+            }
             const evaluationFeature = toEvaluationFeature(feature, true);
-            if (!filter.filter(new EvaluationParameters(this.tileID.overscaledZ), evaluationFeature, this.tileID.canonical)) {
+            filteredGeometry = evaluationFeature.geometry;
+            if (!filter.filter(context.evaluationParameters, evaluationFeature, this.tileID.canonical)) {
                 return;
             }
-        } else if (!filter.filter(new EvaluationParameters(this.tileID.overscaledZ), feature)) {
+        } else if (filter && !filter.filter(context.evaluationParameters, feature)) {
             return;
         }
 
-        const id = this.getId(feature, sourceLayerName);
-
+        let id: string | number | undefined;
+        let idResolved = false;
         for (const layerID of layerIDs) {
 
             if (filterLayerIDs && !filterLayerIDs.has(layerID)) {
                 continue;
             }
 
-            const styleLayer = styleLayers[layerID];
+            const layerContext = getPreparedQueryLayer(context, layerID);
+            const styleLayer = layerContext.styleLayer;
 
             if (!styleLayer) continue;
 
-            let featureState = {};
-            if (id && sourceFeatureState) {
+            if (!idResolved) {
+                id = mltSourceLayer
+                    ? (this.promoteId ? mltSourceLayer.resolveId(featureIndex) : feature.id)
+                    : this.getId(feature, sourceLayerName);
+                idResolved = true;
+            }
+
+            let featureState = emptyFeatureState;
+            if (id !== undefined && sourceFeatureState) {
                 // `feature-state` expression evaluation requires feature state to be available
                 featureState = sourceFeatureState.getState(styleLayer.sourceLayer || GEOJSON_TILE_LAYER_NAME, id);
             }
 
-            const serializedLayer = extend({}, serializedLayers[layerID]);
-
-            serializedLayer.paint = evaluateProperties(serializedLayer.paint, styleLayer.paint, feature, featureState, availableImages);
-            serializedLayer.layout = evaluateProperties(serializedLayer.layout, styleLayer.layout, feature, featureState, availableImages);
-
-            const intersectionZ = !intersectionTest || intersectionTest(feature, styleLayer, featureState);
+            const intersectionZ = !intersectionTest || intersectionTest(feature, styleLayer, featureState, id, filteredGeometry);
             if (!intersectionZ) {
                 // Only applied for non-symbol features
                 continue;
             }
 
-            const geojsonFeature = new GeoJSONFeature(feature, this.z, this.x, this.y, id) as MapGeoJSONFeature;
+            const serializedLayer = clonePreparedObject(layerContext.serializedEntries);
+            serializedLayer.paint = evaluatePreparedProperties(layerContext.paint, feature, featureState, availableImages);
+            serializedLayer.layout = evaluatePreparedProperties(layerContext.layout, feature, featureState, availableImages);
+
+            const geojsonFeature = (featureTable
+                ? GeoJSONFeature.fromFeatureTable(featureTable, featureIndex, this.z, this.x, this.y, id)
+                : new GeoJSONFeature(feature, this.z, this.x, this.y, id)) as MapGeoJSONFeature;
+            if (this.encoding === 'mlt' && context.collectMltStats) {
+                recordMltMaterialization('queryResults');
+                recordMltMaterialization(
+                    'estimatedQueryResultBytes',
+                    MLT_ESTIMATED_GEOJSON_QUERY_RESULT_BYTES + MLT_ESTIMATED_RENDERED_QUERY_WRAPPER_BYTES,
+                    {sourceLayerId: sourceLayerName, layerId: layerID, detail: 'shallow rendered query result estimate'},
+                );
+            }
             geojsonFeature.layer = serializedLayer;
             let layerResult = result[layerID];
             if (layerResult === undefined) {
@@ -292,7 +488,21 @@ export class FeatureIndex {
         const result: QueryResults = {};
         this.loadVTLayers();
 
-        const filter = featureFilter(filterParams.filterSpec, 'queryRenderedFeatures symbol filter', filterParams.globalState);
+        const executionContext = createQueryExecutionContext(
+            this.tileID.overscaledZ,
+            styleLayers,
+            serializedLayers,
+        );
+
+        const mltFilterSupport = this.encoding === 'mlt' && filterParams.filterSpec
+            ? getMltFilterSupport(filterParams.filterSpec, filterParams.globalState)
+            : undefined;
+        const mltFilterEvaluator = mltFilterSupport?.supported && filterParams.filterSpec
+            ? createMltFilterEvaluator(filterParams.filterSpec as ExpressionSpecification, filterParams.globalState, this.tileID.canonical, executionContext.evaluationParameters)
+            : undefined;
+        const filter = mltFilterEvaluator
+            ? undefined
+            : featureFilter(filterParams.filterSpec, 'queryRenderedFeatures symbol filter', filterParams.globalState);
 
         for (const symbolFeatureIndex of symbolFeatureIndexes) {
             this.loadMatchingFeature(
@@ -304,7 +514,11 @@ export class FeatureIndex {
                 filterLayerIDs,
                 availableImages,
                 styleLayers,
-                serializedLayers
+                serializedLayers,
+                undefined,
+                mltFilterEvaluator,
+                undefined,
+                executionContext,
             );
 
         }
@@ -321,8 +535,8 @@ export class FeatureIndex {
         return false;
     }
 
-    getId(feature: VectorTileFeatureLike, sourceLayerId: string): string | number {
-        let id: string | number = feature.id;
+    getId(feature: VectorTileFeatureLike, sourceLayerId: string): string | number | undefined {
+        let id: string | number | undefined = feature.id;
         if (this.promoteId) {
             const propName = typeof this.promoteId === 'string' ? this.promoteId : this.promoteId[sourceLayerId];
             id = feature.properties[propName] as string | number;
@@ -335,13 +549,182 @@ export class FeatureIndex {
         }
         return id;
     }
+
+    /**
+     * Resolves all id/promoteId columns once, so high-cardinality query output
+     * loops only perform indexed vector reads.
+     */
+    createMltIdResolver(featureTable: FeatureTable, sourceLayerId: string): MltIdResolver {
+        if (!this.promoteId) {
+            const idVector = featureTable.idVector;
+            return idVector
+                ? (featureIndex) => normalizeMltFeatureId(idVector.getValue(featureIndex), featureIndex)
+                : (featureIndex) => featureIndex;
+        }
+
+        const propertyName = typeof this.promoteId === 'string'
+            ? this.promoteId
+            : this.promoteId[sourceLayerId];
+        const promotedIdVector = propertyName === undefined
+            ? undefined
+            : featureTable.getPropertyVector(propertyName);
+        const clusterVector = featureTable.getPropertyVector('cluster');
+        const clusterIdVector = featureTable.getPropertyVector('cluster_id');
+
+        return (featureIndex) => {
+            const promotedId = readColumnarVector(promotedIdVector, featureIndex);
+            if (promotedId !== undefined) {
+                return typeof promotedId === 'boolean'
+                    ? Number(promotedId)
+                    : promotedId as string | number;
+            }
+
+            if (readColumnarVector(clusterVector, featureIndex)) {
+                return Number(readColumnarVector(clusterIdVector, featureIndex));
+            }
+            return undefined;
+        };
+    }
+
+    getMltId(featureTable: FeatureTable, featureIndex: number, sourceLayerId: string): string | number | undefined {
+        let id: string | number | undefined = normalizeMltFeatureId(
+            featureTable.idVector?.getValue(featureIndex),
+            featureIndex,
+        );
+
+        if (!this.promoteId) return id;
+
+        const propertyName = typeof this.promoteId === 'string'
+            ? this.promoteId
+            : this.promoteId[sourceLayerId];
+        const promotedId = propertyName === undefined
+            ? undefined
+            : getColumnarPropertyValue(featureTable, featureIndex, propertyName);
+        id = typeof promotedId === 'boolean'
+            ? Number(promotedId)
+            : promotedId as string | number | undefined;
+
+        // GeoJSON cluster sources use cluster_id even when promoteId is set.
+        if (id === undefined && getColumnarPropertyValue(featureTable, featureIndex, 'cluster')) {
+            id = Number(getColumnarPropertyValue(featureTable, featureIndex, 'cluster_id'));
+        }
+
+        return id;
+    }
 }
 
 register(
     'FeatureIndex',
     FeatureIndex,
-    {omit: ['rawTileData', 'sourceLayerCoder']}
+    {omit: ['rawTileData', 'sourceLayerCoder', 'mltTileData']}
 );
+
+function createQueryExecutionContext(
+    overscaledZ: number,
+    styleLayers: {[_: string]: StyleLayer},
+    serializedLayers: {[_: string]: any},
+): QueryExecutionContext {
+    return {
+        collectMltStats: isMltMaterializationStatsActive(),
+        evaluationParameters: new EvaluationParameters(overscaledZ),
+        styleLayers,
+        serializedLayers,
+        sourceLayers: new Map(),
+        layers: new Map(),
+    };
+}
+
+function getMltQuerySourceLayer(
+    featureIndex: FeatureIndex,
+    context: QueryExecutionContext,
+    sourceLayerIndex: number,
+    initialFeatureIndex: number,
+): MltQuerySourceLayer | undefined {
+    const cached = context.sourceLayers.get(sourceLayerIndex);
+    if (cached) return cached;
+
+    const sourceLayerName = featureIndex.sourceLayerCoder.decode(sourceLayerIndex);
+    const sourceLayer = featureIndex.vtLayers[sourceLayerName];
+    const featureTable = getMltFeatureTable(sourceLayer);
+    if (!featureTable) return undefined;
+
+    const sourceContext = {
+        sourceLayerName,
+        sourceLayer,
+        featureTable,
+        evaluationFeature: getColumnarEvaluationFeature(featureTable, initialFeatureIndex),
+        resolveId: featureIndex.createMltIdResolver(featureTable, sourceLayerName),
+    };
+    context.sourceLayers.set(sourceLayerIndex, sourceContext);
+    return sourceContext;
+}
+
+function getPreparedQueryLayer(context: QueryExecutionContext, layerID: string): PreparedQueryLayer {
+    let prepared = context.layers.get(layerID);
+    if (prepared) return prepared;
+
+    const styleLayer = context.styleLayers[layerID];
+    const serializedLayer = context.serializedLayers[layerID];
+    prepared = {
+        styleLayer,
+        serializedEntries: prepareObjectEntries(serializedLayer),
+        paint: prepareQueryProperties(serializedLayer?.paint, styleLayer?.paint),
+        layout: prepareQueryProperties(serializedLayer?.layout, styleLayer?.layout),
+    };
+    context.layers.set(layerID, prepared);
+    return prepared;
+}
+
+function prepareObjectEntries(input: any): Array<[string, any]> {
+    const entries: Array<[string, any]> = [];
+    for (const key in input) entries.push([key, input[key]]);
+    return entries;
+}
+
+function clonePreparedObject(entries: Array<[string, any]>): any {
+    const output = {};
+    for (const entry of entries) {
+        output[entry[0]] = entry[1];
+    }
+    return output;
+}
+
+function prepareQueryProperties(serializedProperties: any, styleLayerProperties: any): PreparedQueryProperty[] {
+    const properties: PreparedQueryProperty[] = [];
+    for (const key in serializedProperties) {
+        properties.push({
+            key,
+            property: styleLayerProperties instanceof PossiblyEvaluated
+                ? styleLayerProperties.get(key)
+                : serializedProperties[key],
+        });
+    }
+    return properties;
+}
+
+function evaluatePreparedProperties(
+    properties: PreparedQueryProperty[],
+    feature: VectorTileFeatureLike,
+    featureState: FeatureState,
+    availableImages: string[],
+): any {
+    const output = {};
+    for (const {key, property} of properties) {
+        output[key] = needsEvaluating(property)
+            ? property.evaluate(feature, featureState, undefined, availableImages)
+            : property;
+    }
+    return output;
+}
+
+function readColumnarVector(vector: Vector | undefined, featureIndex: number): unknown {
+    if (!vector) return undefined;
+    if (typeof (vector as any).has === 'function' && !(vector as any).has(featureIndex)) {
+        return undefined;
+    }
+    const value = vector.getValue(featureIndex);
+    return value === null || value === undefined ? undefined : normalizeColumnarValue(value);
+}
 
 /**
  * Whether a possibly-evaluated property still has to be evaluated against a feature, as a
@@ -353,29 +736,6 @@ register(
  */
 function needsEvaluating(value: unknown): value is PossiblyEvaluatedPropertyValue<unknown> {
     return typeof value === 'object' && value !== null && 'evaluate' in value;
-}
-
-/**
- * Evaluates a serialized layer's paint or layout properties against one feature, so that a queried
- * feature reports the values it was actually drawn with.
- *
- * A property the layer does not carry as a possibly-evaluated value, or one that is already a plain
- * value, is passed through as it is.
- */
-
-function evaluateProperties<Props, PossiblyEvaluatedProps>(
-    serializedProperties: Record<string, unknown>,
-    styleLayerProperties: PossiblyEvaluated<Props, PossiblyEvaluatedProps> | unknown,
-    feature: Feature,
-    featureState: FeatureState,
-    availableImages: string[]
-): Record<string, unknown> {
-    return mapObject(serializedProperties, (_property, key) => {
-        const value = styleLayerProperties instanceof PossiblyEvaluated ?
-            styleLayerProperties.get(key as keyof PossiblyEvaluatedProps) :
-            null;
-        return needsEvaluating(value) ? value.evaluate(feature, featureState, undefined, availableImages) : value;
-    });
 }
 
 function topDownFeatureComparator(a: number, b: number) {

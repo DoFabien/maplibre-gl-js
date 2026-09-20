@@ -1,0 +1,102 @@
+MLT budget check: ff84d746697d772efab8f07e4a55f59ab5c2072c (v26.7.0, 12th Gen Intel(R) Core(TM) i7-1260P)
+Baseline: a236ec257dc7899fe6af6288c47111af124262d2 (v26.7.0, 12th Gen Intel(R) Core(TM) i7-1260P)
+
+Normalized MLT/MVT duration ratios:
+- synthetic all buckets: median 0.872 (baseline 0.891), p95 0.941 (baseline 0.991), absolute p95 0.802
+- synthetic line bucket: median 0.772 (baseline 0.699), p95 0.855 (baseline 0.865), absolute p95 0.928
+- synthetic fill bucket: median 0.743 (baseline 0.817), p95 0.858 (baseline 1.165), absolute p95 0.797
+- synthetic circle bucket: median 0.978 (baseline 0.992), p95 1.206 (baseline 1.218), absolute p95 0.943
+- synthetic fill extrusion bucket: median 0.704 (baseline 0.722), p95 0.785 (baseline 0.858), absolute p95 0.752
+- real scan: median 0.091 (baseline 0.084), p95 0.109 (baseline 0.143), absolute p95 0.103
+- real projected decode: median 0.228 (baseline 0.249), p95 0.337 (baseline 0.350), absolute p95 0.335
+- real properties one: median 3.344 (baseline 3.510), p95 3.646 (baseline 4.841), absolute p95 2.218
+- real properties enumerate: median 1.665 (baseline 1.554), p95 1.829 (baseline 1.937), absolute p95 1.094
+- real public geometry: median 1.033 (baseline 1.067), p95 1.529 (baseline 1.504), absolute p95 1.646
+- real public toGeoJSON: median 1.359 (baseline 1.439), p95 1.695 (baseline 1.899), absolute p95 1.308
+- real full-access decode: median 1.225 (baseline 1.210), p95 1.274 (baseline 1.706), absolute p95 0.888
+- real parse-only: median 0.712 (baseline 0.707), p95 0.847 (baseline 0.820), absolute p95 0.657
+- real end-to-end: median 0.653 (baseline 0.677), p95 0.726 (baseline 0.847), absolute p95 0.633
+- OMT buildings: median 0.288 (baseline 0.296), p95 0.345 (baseline 0.354), absolute p95 0.228
+- OMT roads and labels: median 0.750 (baseline 0.808), p95 0.875 (baseline 1.006), absolute p95 0.754
+- OMT low-zoom labels: median 0.251 (baseline 0.285), p95 0.413 (baseline 0.517), absolute p95 0.268
+- OMT line symbols: median 0.878 (baseline 0.956), p95 0.916 (baseline 1.165), absolute p95 0.760
+- Bing standard full decode: median 0.254 (baseline 0.223), p95 0.384 (baseline 0.378), absolute p95 0.252
+- point symbols: median 1.068 (baseline 1.048), p95 1.120 (baseline 1.100), absolute p95 1.021
+- line symbols: median 0.917 (baseline 0.987), p95 0.955 (baseline 1.235), absolute p95 0.841
+- line symbols matrix sparse: median 1.024 (baseline 1.049), p95 1.131 (baseline 1.160), absolute p95 0.761
+- line symbols matrix dense: median 0.915 (baseline 0.946), p95 0.982 (baseline 1.152), absolute p95 0.927
+- line symbols matrix multipart: median 0.539 (baseline 0.868), p95 0.651 (baseline 0.939), absolute p95 0.588
+- line symbols matrix vertex-dense: median 0.542 (baseline 0.885), p95 0.673 (baseline 0.941), absolute p95 0.645
+- line symbols matrix clipped-half: median 0.726 (baseline 0.941), p95 0.828 (baseline 1.009), absolute p95 0.823
+- line symbols matrix merge-short: median 0.939 (baseline 1.017), p95 1.131 (baseline 1.137), absolute p95 1.108
+- line symbols matrix merge-long: median 0.688 (baseline 0.720), p95 0.796 (baseline 0.865), absolute p95 0.833
+- rendered query 0: median 0.536 (baseline 0.523), p95 0.589 (baseline 0.562), absolute p95 0.515
+- rendered query 1: median 0.520 (baseline 0.521), p95 0.598 (baseline 0.592), absolute p95 0.522
+- rendered query 10: median 0.511 (baseline 0.517), p95 0.568 (baseline 0.579), absolute p95 0.525
+- rendered query many: median 0.573 (baseline 0.561), p95 0.654 (baseline 0.648), absolute p95 0.633
+- source query 1 percent: median 0.086 (baseline 0.088), p95 0.152 (baseline 0.122), absolute p95 0.117
+- source query 10 percent: median 0.175 (baseline 0.177), p95 0.211 (baseline 0.214), absolute p95 0.152
+- source query 100 percent: median 0.330 (baseline 0.307), p95 0.414 (baseline 0.375), absolute p95 0.433
+- rendered query 10000 results: median 0.464 (baseline 0.465), p95 0.503 (baseline 0.651), absolute p95 0.479
+- rendered query 10000 real intersection: median 0.834 (baseline 0.846), p95 0.909 (baseline 0.903), absolute p95 0.919
+- source query 10000 results: median 0.312 (baseline 0.321), p95 0.319 (baseline 0.333), absolute p95 0.296
+- real full-access reverse: median 1.239 (baseline 1.185), p95 1.467 (baseline 1.638), absolute p95 1.136
+- real full-access pseudo-random: median 1.225 (baseline 1.775), p95 1.528 (baseline 1.947), absolute p95 1.122
+
+Materialization invariants:
+- MltWorkerParseOnlyMLTNative: checked
+- MltWorkerParseOnlySyntheticLineMLT: checked
+- MltWorkerParseOnlySyntheticFillMLT: checked
+- MltWorkerParseOnlySyntheticCircleMLT: checked
+- MltWorkerParseOnlySyntheticFillExtrusionMLT: checked
+- MltBingDecodeMLT: checked
+- MltFastPforDecodeMLT: checked
+- MltRealTileParseOnlyMLTNative: checked
+- MltRealTileEndToEndMLT: checked
+- MltWorkerParseOnlySyntheticSymbolMLT: checked
+- MltWorkerParseOnlySyntheticLineSymbolMLT: checked
+- MltLineSymbolMatrixSparseMLT: checked
+- MltLineSymbolMatrixDenseMLT: checked
+- MltLineSymbolMatrixMultipartMLT: checked
+- MltLineSymbolMatrixVertexDenseMLT: checked
+- MltLineSymbolMatrixClippedHalfMLT: checked
+- MltLineSymbolMatrixMergeShortMLT: checked
+- MltLineSymbolMatrixMergeLongMLT: checked
+- MltQueryRendered0MLT: checked
+- MltQueryRendered1MLT: checked
+- MltQueryRendered10MLT: checked
+- MltQueryRenderedManyMLT: checked
+- MltQuerySource1PctMLT: checked
+- MltQuerySource10PctMLT: checked
+- MltQuerySource100PctMLT: checked
+- MltQueryRenderedMany10000NoneMLT: checked
+- MltQuerySource100Pct10000NoneMLT: checked
+- MltFeatureStateRepeatedMLT: checked
+- MltOverzoomZPlus1MLT: checked
+- MltOverzoomZPlus2MLT: checked
+- MltOverzoomZPlus4MLT: checked
+- MltColumns5ReadFew: checked
+- MltColumns5ReadMany: checked
+- MltColumns50ReadFew: checked
+- MltColumns50ReadMany: checked
+- MltColumns200ReadFew: checked
+- MltColumns200ReadMany: checked
+- MltMemoryLifecycleMLT: checked
+
+Observability, memory, and transfer budgets:
+- MltQueryRenderedManyMLT: exact observability metrics checked
+- MltQuerySource100PctMLT: exact observability metrics checked
+- MltPublicRenderedAggregation10000: exact observability metrics checked
+- MltPublicSourceAggregation10000: exact observability metrics checked
+- MltRealTileEndToEndMLT: checked
+- MltFeatureStateRepeatedMLT: checked
+- MltOverzoomZPlus1MLT: checked
+- MltOverzoomZPlus2MLT: checked
+- MltOverzoomZPlus4MLT: checked
+- MltMemoryLifecycleMLT: checked
+
+MLT budgets failed (4):
+- real properties enumerate median ratio=1.6652313207263678 exceeds 1.6
+- real public geometry absolute p95 ratio=1.6459558902420492 exceeds 1.35
+- source query 1 percent p95 normalized ratio 0.151589 exceeds 0.128039 (1.05x baseline ratio)
+- MltMemoryLifecycleMLT.measurements.phaseMemoryBytes.reload.heapUsed.p95=81396532.4 exceeds 77000000

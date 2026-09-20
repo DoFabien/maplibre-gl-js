@@ -1,0 +1,5006 @@
+{
+  "status": "passed",
+  "createdAt": "2026-09-08T12:30:03.017Z",
+  "database": {
+    "path": "/data/Projet/maplibre/maplibre-tile-spec/test/omt-ref.mbtiles",
+    "sha256": "643ede28df82476ed54a36163fce3bd95dd370c7ca520ce99b00175e78c11a37",
+    "bytes": 34312192,
+    "gzip": 16041422
+  },
+  "encoder": {
+    "path": "/data/Projet/maplibre/maplibre-tile-spec/java/mlt-cli/build/libs/encode.jar",
+    "snapshot": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/encoder.jar",
+    "sha256": "f2d8872f189961b5c19a4798910b43ea65eae3d9cfc969ad4b819c7f6c851b42",
+    "bytes": 171320141,
+    "gzip": 160611574,
+    "sourceCommit": "ddf2840008e833b3dc5f0fbbd41668e74820b7a3"
+  },
+  "arguments": [
+    "--tessellate",
+    "--outlines",
+    "ALL",
+    "--nomorton"
+  ],
+  "coordinates": "MBTiles tile_row is TMS; filenames and browser URLs use XYZ y = 2**z - 1 - tile_row",
+  "selectionSQL": "SELECT zoom_level, tile_column, tile_row, tile_data FROM tiles WHERE zoom_level BETWEEN 10 AND 13 ORDER BY zoom_level, tile_column, tile_row",
+  "tiles": [
+    {
+      "name": "10-530-341",
+      "z": 10,
+      "x": 530,
+      "y": 341,
+      "tmsY": 682,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-341.mvt",
+        "sha256": "523f7f354478d1d681ea37b5d62d102f197891b29903326b121c92acd0728998",
+        "bytes": 146023,
+        "gzip": 77199
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 59,
+          "triangles": 393,
+          "signature": "3131e5919ebd4b120b6e23ff46bf3ddc56ee5dc34f155f294e92b5fde0d2b0e7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 3,
+          "triangles": 0,
+          "signature": "b4c2c203060ea65ad36bd61e6c98b4985627d9adc70a1bd2a24cbfc9c06592d2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 326,
+          "triangles": 1847,
+          "signature": "a4b48f3c9bd6a04292e673d12c778b2d57ad03d836090bbd4468ffa89e3f4d31",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 179,
+          "triangles": 1202,
+          "signature": "e7c40c894b923f8e343f4d61d6af107a04238422c0b2c829e992c37374f0cf11",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 14,
+          "triangles": 0,
+          "signature": "1cfc38ba68bdd990cf6e3a22d3d2fac604d186f20d774dea7846ef86a781ed57",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 27,
+          "triangles": 481,
+          "signature": "b55753107e1a0317a50b6553ba59ad70dff9aedbaa58f917aafedb9915ffc0ae",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 55,
+          "triangles": 0,
+          "signature": "d70ca77c84bd6da72b08ce1e2b2abafe249d8b224dacbbd358915b07302c8a51",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 4078,
+          "triangles": 0,
+          "signature": "810dbe8bff897eafb1133991df27e4c9f73c47df485ecbc142fed2e6f7392b2e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 6,
+          "triangles": 0,
+          "signature": "c474bebf680008961c5cca02c0a50c1a2e8966bb27221cc4d9158ff237167a5b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 332,
+          "triangles": 0,
+          "signature": "810a1799f028df5ef83026facbb7b4505ef5c1ccf40dd0458cf576cf43fd1424",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 5,
+          "triangles": 0,
+          "signature": "b4bd70e4abfbd23f5f6192268b6217973eff82c6f7bf7788ded0e3b0fa4daca2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-341.mlt",
+        "sha256": "4f7bcbf8f11b6861c2eb083d02aaf4b4b9d61bf774b62a45e11390d6f5671a3d",
+        "bytes": 82860,
+        "gzip": 49880
+      },
+      "streams": {
+        "NONE": 240,
+        "VARINT": 207,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-530-340",
+      "z": 10,
+      "x": 530,
+      "y": 340,
+      "tmsY": 683,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-340.mvt",
+        "sha256": "8a828ee7cd9c972b8707437498d3ade563c8efe2e42f01b65a2aea72fa57ab90",
+        "bytes": 107230,
+        "gzip": 63668
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 78,
+          "triangles": 667,
+          "signature": "3f888862fcd33bb94bc3cbc7163f7ff756a31d151848ddc4a04ccb0f029b1d72",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 11,
+          "triangles": 0,
+          "signature": "4f5452339f1d7440c3e430a1fd2db614431a7f5e3124003a2832ffdbd9ac0fb8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 548,
+          "triangles": 3880,
+          "signature": "774f0b8fa213e73823bddec0787debd9000f7042ba2c53324fdf3797f3ffbf36",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 148,
+          "triangles": 1087,
+          "signature": "d8738e2f480a0bb95368534f5b4b3b5710d4385a70c09e677fc976e9d621fb9a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 26,
+          "triangles": 0,
+          "signature": "4bedb52831637cd3724213b62fa96572060eef19b099adb0406701aba9bce907",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 24,
+          "triangles": 529,
+          "signature": "3b63cd44b5cc52d09c095a8aa6350b49abbb07b2096829f5f0b396c9cb4ddac7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 13,
+          "triangles": 0,
+          "signature": "a9ba3259c65eb72ed5cde7a1bbf921986be4ad08df76d120053dc36b01d735a3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2220,
+          "triangles": 0,
+          "signature": "ec0c85afa8fed63972c197b82cc2b12963f2d2374b9ebc790444cdf7b37a18d8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 6,
+          "triangles": 0,
+          "signature": "8727390c4f848eb448c63a6c0d4d2dac1c926e45c972c2b4b74f4c28b358b6be",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 286,
+          "triangles": 0,
+          "signature": "b554b527cc6e31f44283c2b8095d2f710c22b9b5d04453f4a31beaff2a4c9f00",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 4,
+          "triangles": 0,
+          "signature": "9fea36b8d508ff9bf9252499a559987c5edde244d00b4c3547e49f48b6614073",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-340.mlt",
+        "sha256": "f69a52c108734399c72ad388690a26ab0737c9e31ba83c7b43b242da9935c206",
+        "bytes": 82413,
+        "gzip": 49118
+      },
+      "streams": {
+        "NONE": 182,
+        "VARINT": 183,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-530-339",
+      "z": 10,
+      "x": 530,
+      "y": 339,
+      "tmsY": 684,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-339.mvt",
+        "sha256": "7a2180518cadd20c1e18a073b56327e9f9aa8e80d95ade80b5d6f7e890eabc81",
+        "bytes": 90577,
+        "gzip": 56729
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 126,
+          "triangles": 1374,
+          "signature": "05d87e9a22697745b71cde531fd7d4245bf54a0ee7793b56f8c827ca7ff6cfe2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 7,
+          "triangles": 0,
+          "signature": "23dbcb1240d4c5bc3e3e4ae93b65764c74bc2b6bf6455c08308ec1f6e77e72c4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 435,
+          "triangles": 3442,
+          "signature": "c420cdabbae001a86fcb31014144b7597cc4861c8432bea6a66971bdd850e96f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 106,
+          "triangles": 797,
+          "signature": "86b7d4e9db3add3ffcece7139ef127e53d15a9325617d6a4d4ac0e2d23afef80",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 16,
+          "triangles": 0,
+          "signature": "2d0871c4198005b54adc34b681fb1a9cb7c49b87603120a7611d9143eaf7840a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 53,
+          "triangles": 1609,
+          "signature": "258c6c660e57da581ce801d10c3e8119fa78591ed1ca6837eeeca8275106f7df",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 2,
+          "triangles": 0,
+          "signature": "9e4c24f6b630a6fa312cd24a323941aaaec894000bfbe62537c66fc76b7c4130",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1562,
+          "triangles": 0,
+          "signature": "ba2c3cf9ea73dc79c94d19d746244312bce6aadbef513919fa0f216694cc014a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 6,
+          "triangles": 0,
+          "signature": "e0d76b1c784a2b184286e80d958c8a726d2abeb8152020cd8c5edc75b98544e7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 277,
+          "triangles": 0,
+          "signature": "369ba6992141ec32d47e6904fc06939db657e2a1ec8a395fe45ce3f9a0b69aab",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 2,
+          "triangles": 0,
+          "signature": "9cb93164db94e965561b975e95baabe7177e4ebfbe5f84a720eb4e0bb7d5bceb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-530-339.mlt",
+        "sha256": "8a1ebab23cb5af18cc055e336b5a32e7cff219d19265fa503fc97f80f3f13061",
+        "bytes": 82769,
+        "gzip": 48941
+      },
+      "streams": {
+        "NONE": 173,
+        "VARINT": 171,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-531-341",
+      "z": 10,
+      "x": 531,
+      "y": 341,
+      "tmsY": 682,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-341.mvt",
+        "sha256": "493dc09108af12a48b9f84700f038f57ab60ab67bfb0fe972f3a7a5958507531",
+        "bytes": 223788,
+        "gzip": 117020
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 69,
+          "triangles": 721,
+          "signature": "ddea5f7b46918e4c44d4189504151b8f04399e8e79996f553093d702e1677924",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 13,
+          "triangles": 0,
+          "signature": "57321bfdb27d7d82ee6a10dbb10e9fc954a522e514fcc2d00457dab73cae3d4b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 461,
+          "triangles": 4806,
+          "signature": "9ee92cac137ce95522b52d9ad183a8604ba2e5b52970bb69d1e7ef27bb20325d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 334,
+          "triangles": 2374,
+          "signature": "669650a36b4727bb93fb76b14b801f61c0c8aea5078555a7452dc631187fc934",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 29,
+          "triangles": 0,
+          "signature": "aa7ad6b93d7349e27d1f4977af4fa3876552eb509239136773b79c2bac818a05",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 45,
+          "triangles": 889,
+          "signature": "18a55bb5daa0eb1f271cdd94d450bb91ccd80031587219d951290b0abe3cb230",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 167,
+          "triangles": 0,
+          "signature": "5f536a2ef778fb58fd7bfc3607cfc86d4fec4ebff8bb0680259644a4eb11ece0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 6390,
+          "triangles": 0,
+          "signature": "e33effd4384daeb761d1a52ada913c6b0173ea537041170a8976dfcbd39ee061",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 10,
+          "triangles": 0,
+          "signature": "a85fb249e4a1b141db0e2285c931d1d4915535736ccf900804834e9b6674dbc3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 281,
+          "triangles": 0,
+          "signature": "70ae2cf81b477c3438285709cffbe1758adbc743d65ef14775086bdee7930958",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 5,
+          "triangles": 0,
+          "signature": "cbe0b90b62e6326ee9da1701e71b09aa419576228d301bab8b6c2484156604ab",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-341.mlt",
+        "sha256": "51fdce31e2c5917bd91a6b18e57b3305a18bcc25270db78cc70728f7d356e09a",
+        "bytes": 126585,
+        "gzip": 82635
+      },
+      "streams": {
+        "NONE": 240,
+        "VARINT": 216,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-531-340",
+      "z": 10,
+      "x": 531,
+      "y": 340,
+      "tmsY": 683,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-340.mvt",
+        "sha256": "7dd18a95ed43f8f9a9b079eb1af70fd7317b679a150692a9f7b298cefaab1fa0",
+        "bytes": 258438,
+        "gzip": 127874
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 63,
+          "triangles": 593,
+          "signature": "3dc6a58bfdfa1ff0fc5bf7f35b0d57a73c5817bbc231c51ea21728ca5023339c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 8,
+          "triangles": 0,
+          "signature": "5af322b5f32f172b4ca0123b095e9f9384b0fda5f18fcbe4a3dee6fdb86fb29a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 290,
+          "triangles": 3127,
+          "signature": "ee51cfd4612bb13541df91c6b0ce48b75d0080c9849b0e2f1375579c62ab58ef",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 409,
+          "triangles": 3093,
+          "signature": "ea1fed78c66a4ffc291abca6e481da61f3fb3413ddcc13371a848d110ab09592",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 30,
+          "triangles": 0,
+          "signature": "b9dde3e2230351fd04106e21c421d6da52a67c3e9717c9a469e4ee731809d385",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 49,
+          "triangles": 801,
+          "signature": "40628b991e5861b891de62e50543127ec595d626160ce8395f2ab5e7cc9567d1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 75,
+          "triangles": 0,
+          "signature": "e8b80b4d864db0e792b0752fa106e5dc119527d8cbf0602cfe8271e765197b9a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 8462,
+          "triangles": 0,
+          "signature": "414e7b22530ddbaadc5f7c5ced67c9b2c06c654df88bbdd0f0579fce4aaebe78",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 14,
+          "triangles": 0,
+          "signature": "93d7bee4737c9a2a83d9b6573811cd06a3e9a82ab1bfed329d2e2b1d0ccc0d40",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 212,
+          "triangles": 0,
+          "signature": "96765c061324c053eb783632f384b559ca58f7cae72151adeab487d4751620f7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 4,
+          "triangles": 0,
+          "signature": "bcf273bd2ae96cef1481d6413f4f4fc3edd338ab8d820f63c8beb49ec75f4501",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-340.mlt",
+        "sha256": "87ffa16c72e225554a86a26aaa8fe19041cb9eff53a7ded971a3590e013147ac",
+        "bytes": 124169,
+        "gzip": 83991
+      },
+      "streams": {
+        "NONE": 176,
+        "VARINT": 178,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-531-339",
+      "z": 10,
+      "x": 531,
+      "y": 339,
+      "tmsY": 684,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-339.mvt",
+        "sha256": "a0fa2f3402ca51ac923acabaa6f7bef51a935afd9b1061b7e2d4db92e50b14c9",
+        "bytes": 80654,
+        "gzip": 51617
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 22,
+          "triangles": 255,
+          "signature": "e994526bcf1818bb0c8dc166114fdb8012e131b4ef4b19c8ba634b1866e9ace6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 4,
+          "triangles": 0,
+          "signature": "373b3b844d7bcd9368bd854bce3444b7137608f5660e4e3005e4e98f7138749b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 546,
+          "triangles": 5314,
+          "signature": "21c19daaa98794126184f003ed932b1d51889da26defc1e63281987e7330ca35",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 70,
+          "triangles": 529,
+          "signature": "b82c5dae413a1ca7fa5dea3dedde8af52287960379c56930da48739b1d128352",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 14,
+          "triangles": 0,
+          "signature": "960ac4b82df62d6b7b927d4ec5b6af69612a81b16045192750d85d19b511d170",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 47,
+          "triangles": 0,
+          "signature": "d5cfa7c8ba650ca2a59a12555a70040d0fb964859bdec9b2b51eb9270636df13",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 55,
+          "triangles": 0,
+          "signature": "24464fe63d3d1d0df519a9aee0df520da8b5d3d44c8716b2f7c1db8a85327628",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1325,
+          "triangles": 0,
+          "signature": "f60589a94fbd3a518255b6766e7560993a06c2faf8441389436b96d2e9feb55c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 12,
+          "triangles": 0,
+          "signature": "1dd1d02247b2d7dd0e3d367ed13241f81dd64e44152b0034a9c508d5427f9d22",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 183,
+          "triangles": 0,
+          "signature": "3306fa0fedae2f2e28c8524f583a0f2e35e39f09d6633ef0d735b5c34e8c92ea",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 5,
+          "triangles": 0,
+          "signature": "ea41cc99712c4ee18039a0a71c7e07696afc7f1c3256926df1c4afc0cd8128eb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-531-339.mlt",
+        "sha256": "63dbf5af8f43cb864321b9d67b99f7e719476d6313f91283393aceb8da0d78f1",
+        "bytes": 71966,
+        "gzip": 44183
+      },
+      "streams": {
+        "NONE": 148,
+        "VARINT": 160,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-532-341",
+      "z": 10,
+      "x": 532,
+      "y": 341,
+      "tmsY": 682,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-341.mvt",
+        "sha256": "6c6c093e2397976494b04b69d19b0b5cbb03f7952fc71a6d75b8122a0dc3089b",
+        "bytes": 175250,
+        "gzip": 100030
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 22,
+          "triangles": 295,
+          "signature": "d50850d546a4bcbdf25d274427c6fe165ead9dd9e08fc14a2400c66b3bfad140",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 9,
+          "triangles": 0,
+          "signature": "4c3c71440a158e429144e1500f9a719dde856ad7f33120743fce24409547ece6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 483,
+          "triangles": 6951,
+          "signature": "4a42f1033aa0a22f99ad40bad1ca7033a43d9cdf8c623e9096385cd503618ade",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 216,
+          "triangles": 2663,
+          "signature": "39e7e5a709e8862790871ef201d429dd0501bf3ae2bbb69255f90b0c51ea004d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 80,
+          "triangles": 0,
+          "signature": "09b9ae9cafaf3c41066825b0c406ca9b8e14276c0554a2f717f73b16e9f58bc4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 69,
+          "triangles": 1346,
+          "signature": "db6595ffa0420bab5a65a97c897173ab6173b9759246efd5ae74d395d7408f55",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 2,
+          "triangles": 0,
+          "signature": "de9d7cd73349f85ce758d3bdea4c81a7b0b9d489f876de4164526e7c9f40139c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 4557,
+          "triangles": 0,
+          "signature": "cd255a0b95dc8e74789d0b9b2b6c79184716ef1863966c55caa4c700c6bdaa64",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "c30fbdaef36173525334eeee13c865e058259c3e5942c82c5f94b0945806c8bf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 276,
+          "triangles": 0,
+          "signature": "4379c64b5d820a0442f7540197b30a3ec84af4678bd6402bd425fee62d7cd49b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 5,
+          "triangles": 0,
+          "signature": "53c5e993cdc343325ac825072bf2c495039e33892d0590bb276bbceb0c5a1abd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-341.mlt",
+        "sha256": "d967f0429fdbad60c1609f2836c28b5c8a99c98483fd926fdd5616ac25c40bae",
+        "bytes": 129169,
+        "gzip": 84405
+      },
+      "streams": {
+        "NONE": 160,
+        "VARINT": 167,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-532-340",
+      "z": 10,
+      "x": 532,
+      "y": 340,
+      "tmsY": 683,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-340.mvt",
+        "sha256": "8f6197be286cc3c8423f2fb429b13d535d3394c9e3f4887e97bc3c88084f1c0a",
+        "bytes": 253749,
+        "gzip": 129613
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 37,
+          "triangles": 428,
+          "signature": "a3779695602d70fbe5eca94c17f1dbcca4cf1e65f149da2a4a21d03aa7aee8d3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "signature": "f8413da29ddce0365493d2ffa69175e1f698bbfae00513fb96b866172f32fecb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 326,
+          "triangles": 3292,
+          "signature": "9c5aacc575aad263c767a70a7247c79d99f175aeb52b1fb46308040daada9711",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 469,
+          "triangles": 4554,
+          "signature": "cbc85e5fe62bd3ef91a9a75b2ba812f1b7bcdd7bf64132d8d4764a3c7577a295",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 67,
+          "triangles": 0,
+          "signature": "5da62bcb65d2acc3a46a661dfd79579d48f67656071a624a8cd786363826683f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 54,
+          "triangles": 583,
+          "signature": "322d3d48eaf1e31437fcce9f186489b6aae0150d36da4809621da44b48dbf4d0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 8171,
+          "triangles": 0,
+          "signature": "d51dcab2c3882bb200c41925cf079eaaf9089795ca4a1f7a4de3912185c08225",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 4,
+          "triangles": 0,
+          "signature": "8f18a86cc8c9a3e38af14e3b70fa0492075f64994bcb1d2b1bd9490f37d2c5e7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 196,
+          "triangles": 0,
+          "signature": "cb70a5f24ac83ae611f555bdd0213802da5a9e10b4fe501704c15f1b8a3e438c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 3,
+          "triangles": 0,
+          "signature": "bfc5c03de600c27cfb9c3ae607e08666cbed7cc23ddb24355803a4d50d1cef38",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-340.mlt",
+        "sha256": "028a48a939c80d02de315be5206510122ac3ea1640be62b4d983114fd40ee174",
+        "bytes": 130761,
+        "gzip": 87140
+      },
+      "streams": {
+        "NONE": 156,
+        "VARINT": 167,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-532-339",
+      "z": 10,
+      "x": 532,
+      "y": 339,
+      "tmsY": 684,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-339.mvt",
+        "sha256": "93d4dd0ee464c058625a6198e93b18b29178700e5042f27a8283ffe3c52c86f7",
+        "bytes": 91047,
+        "gzip": 56242
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 41,
+          "triangles": 619,
+          "signature": "0b7b627708efb173d077856318406a9a871df9977c7ab2ad1e21f37035272537",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 4,
+          "triangles": 0,
+          "signature": "54a64f8e0b6cc521e67f4f541c686b5fb4ac874973df630c51711db3339b24e8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 467,
+          "triangles": 4931,
+          "signature": "8729e823a38729979e8315f382df241d36a970735b38b3b5069b90743defb2e8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 141,
+          "triangles": 963,
+          "signature": "49001735e46f9a5470bdff15a3b49411acc8aea20969b1a63090707e1055d3c3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 28,
+          "triangles": 0,
+          "signature": "80e8f8f52dbbfcd2e6806a9575c94ba0f6e02eabad46352f386fe64f84c66dc1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 54,
+          "triangles": 1429,
+          "signature": "194f1aa4ae5bba1534dacd783fed4ff0093ba21fc485ae109ea31ad368b63559",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 53,
+          "triangles": 0,
+          "signature": "9f5aed9069b43617f8ae5454f5744a48717be6ea6c0a669abc09e861317ef92a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1758,
+          "triangles": 0,
+          "signature": "a6ded55a5d643759e24a4b3b45fabc8acc44f15a32118ceee4e4493fa7d0831c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "a211d6ca81485b17317a901e8c07d0859f7c587a75dfd19accb7d21281d42eb1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 147,
+          "triangles": 0,
+          "signature": "1e7fcb3e0d59104b5995f30cb6cb6902a0427a3efd18ce47171e4d3463f75fc6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 4,
+          "triangles": 0,
+          "signature": "8fe17d7d3d32c8fbb41cf1384ba37e19f2c8b3e7479518964a602184c61aa8bf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-532-339.mlt",
+        "sha256": "17fd2b0bc958aefa9db90e08153f90e153893918451f147dea0bb221f289305b",
+        "bytes": 80336,
+        "gzip": 50459
+      },
+      "streams": {
+        "NONE": 151,
+        "VARINT": 160,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-533-341",
+      "z": 10,
+      "x": 533,
+      "y": 341,
+      "tmsY": 682,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-341.mvt",
+        "sha256": "771c71678b859cfb2766618012b8d22cc183b5971ad49b38df5e1b83e78a2f18",
+        "bytes": 130454,
+        "gzip": 77491
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 31,
+          "triangles": 407,
+          "signature": "c338f5c1232447fde8ad7e59a8bce189a0d20e568f8abe81c2071a16ce504786",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 11,
+          "triangles": 0,
+          "signature": "e01fe38c6c6391e024e1d2b867b89c010dd9930c17bd68e61ca57d5aaa5e00c7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 383,
+          "triangles": 7589,
+          "signature": "a6f6f3f62bcada4e1364636e82564f12ec7462202b509b0e4ce560ad0f047572",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 143,
+          "triangles": 1302,
+          "signature": "e91e50b08f14175d93b736fbd8053d07f0cd5b5b36ddc61a1eb5d4182a382cff",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 91,
+          "triangles": 0,
+          "signature": "99ff957348929462f231d3e0cffac567e60a691fece7060552c034f65e4d884d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 44,
+          "triangles": 626,
+          "signature": "ca53575d39d652c31e9463f4c7c01e1d121c5f43558c066c3e728c3705fce1a9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 8,
+          "triangles": 0,
+          "signature": "ae305a7fbd2371fa1e89679f0036ae4019d30dfad20754ee4918ffdb54650bca",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2782,
+          "triangles": 0,
+          "signature": "c4538fb07566647db443f1fe33758799aa28c325e530539f4787601f51b10058",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "1103874a47e9613d2dc87c0f0b14cd99d6047d0af6950f8b8e4c2907397e5833",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 315,
+          "triangles": 0,
+          "signature": "06ee9050ec0dfc28485abd17ab180fbd7adddbb2d61ea8cb3f4810fc821a413d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 9,
+          "triangles": 0,
+          "signature": "3e1edef42d8d04adf59f022fc8a7f2def0756c2175b5786510e6f9a75fd253cf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-341.mlt",
+        "sha256": "9630b06c1bbf42fe80a4bdcdfa155d0395ec23804358a121a1ae787537898501",
+        "bytes": 112055,
+        "gzip": 66388
+      },
+      "streams": {
+        "NONE": 137,
+        "VARINT": 158,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-533-340",
+      "z": 10,
+      "x": 533,
+      "y": 340,
+      "tmsY": 683,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-340.mvt",
+        "sha256": "f1c806ecbd0e8cf76fc46ea02100b9dae7a8886635e8ed857a1889325bb33555",
+        "bytes": 205742,
+        "gzip": 107705
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 42,
+          "triangles": 299,
+          "signature": "455f14fca9f46c922211d4509ab15e3278c4454290bfee8a550e5cd0ddee5aa3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 8,
+          "triangles": 0,
+          "signature": "fd400c255842b72bc4258772761fdcd51a11f22efa5faeec03997da218323dc1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 471,
+          "triangles": 4398,
+          "signature": "cd528b697a796170854a3e7c6f8f88cddb01ea7678f8f796713c4d3bbbc04632",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 343,
+          "triangles": 2555,
+          "signature": "7e4dc8163d5fb3a8203b1a3681f0e5a4478049ed8d88fbca72d70e64a3f34a05",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 51,
+          "triangles": 0,
+          "signature": "4b797deefcd4b5f21cfe6f7a4479a18a7a26f1a05e1f04428693f807ed922f3d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 52,
+          "triangles": 669,
+          "signature": "1a803bc7e229e7b429079ed3d8a926bec0c7c3c2b542ea5b9cd947de9949ba5d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 27,
+          "triangles": 0,
+          "signature": "5b8aee32d6925f9114e35f282ad8ea9e70ef8c4aad22214a2e3b3249200d03da",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 6030,
+          "triangles": 0,
+          "signature": "c802f6ed232ca780ee72734dc27aa392a45b91a1cc90931752103f1ebbf55a3f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 6,
+          "triangles": 0,
+          "signature": "87936d9ef0776af08420414b81d1a43ad6f8b03fc4f50dfc5b250769dfbf526d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 227,
+          "triangles": 0,
+          "signature": "a8cb38cf74de1452eb44fdc59577f3f1caf19424a7f58d954a62892b20fa840a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 7,
+          "triangles": 0,
+          "signature": "a8b9feea60c2b1f138333ea034cec985186575a3668e4bca19401cf138840aa5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-340.mlt",
+        "sha256": "298f31899c965f575f23d0723673b01fe3acd5db1f066981af9a4c7f3c9cee85",
+        "bytes": 115348,
+        "gzip": 74244
+      },
+      "streams": {
+        "NONE": 169,
+        "VARINT": 172,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "10-533-339",
+      "z": 10,
+      "x": 533,
+      "y": 339,
+      "tmsY": 684,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-339.mvt",
+        "sha256": "dd6a4a16f7b5e40366befb5fb64dc77f302c1a09a96e4af5ddd03a3ae9279326",
+        "bytes": 82371,
+        "gzip": 51386
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 50,
+          "triangles": 382,
+          "signature": "097a06632d33e3ea502b1c8c02cfde4facd9584ca390367f65a51713d554e9d1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "signature": "20013322e61b962b6940135ad163b66b96de7768d0c6df3e27baad4420d21755",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 622,
+          "triangles": 4734,
+          "signature": "2f35a805b59785a19e6a93ac2e2ebf6b06450fe0e2e21c2a4164c29d3daa4546",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 105,
+          "triangles": 737,
+          "signature": "2fe522fb8b571a9d1fb4024088b232607fbb24e0855534fe7b71ff4cbc9cba85",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 17,
+          "triangles": 0,
+          "signature": "de3b393da2686fa2cf7abaaec77c8dfcd097ca1cc85029185bc7cb13dfa28386",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 44,
+          "triangles": 959,
+          "signature": "6e86ae9d6294f78baceaf52538e801373e4f6369681d6d055d80fb24b5666a01",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 3,
+          "triangles": 0,
+          "signature": "1355857ea9d4469c26884d7261411d47ec1597c51fbdfe5bf91b14f8019e5dd5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1471,
+          "triangles": 0,
+          "signature": "74d44c563534af871e4c69c5dacf8255593e34bdf4f53622cd6c072227853a08",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "4df3a1966edee3170afa318ffd46c1f7b36626fedbd85e27fc1d8357df54476d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 168,
+          "triangles": 0,
+          "signature": "f3e36603e28b926b8fe2bcc5ff05a7b99b3c105a7f7103fd5d5c29d7932578a9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 5,
+          "triangles": 0,
+          "signature": "4600faa1989c5e1fa0d26203ac240e47947ccec0bedb47f0cb676f39221af593",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/10-533-339.mlt",
+        "sha256": "f2675705ca0a91ffb47bde2783078a1d02ecd76de29088f5be6a91b10def5f82",
+        "bytes": 71697,
+        "gzip": 43481
+      },
+      "streams": {
+        "NONE": 147,
+        "VARINT": 158,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1062-681",
+      "z": 11,
+      "x": 1062,
+      "y": 681,
+      "tmsY": 1366,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-681.mvt",
+        "sha256": "bec9ea36fcbcce5bb31e81f575e7fc0a9a75ab64fe439c0b9998b868fc5c9162",
+        "bytes": 152727,
+        "gzip": 78873
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 56,
+          "triangles": 583,
+          "signature": "ce09f077da262f3a1e946364b4f98cb0e1f1bd90e77e3b05323204ddb042fbf9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 8,
+          "triangles": 0,
+          "signature": "dfc4869dcad307f28b2ab67d4623494a0169beb335aff653549b21e1f1fbf588",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 62,
+          "triangles": 1125,
+          "signature": "84371b73e9aff491bb3db347f61c585a37fdf370111ec5140c732cfa637a4e98",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 285,
+          "triangles": 1957,
+          "signature": "46c5fa0087a3b6ada6333716a79f37006c5e7ab4f45d0d87e3c6ff189d538302",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 5,
+          "triangles": 0,
+          "signature": "dce8206b7d76c8f464d6e217c0425a06fc1ecf5ed16ee493244d59982de10f6b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 7,
+          "triangles": 60,
+          "signature": "df9811111c578c5e56e24e7378bc547577389030a3b8adf845dc00da41baef4c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 4850,
+          "triangles": 0,
+          "signature": "a3d259eb4e83b0962626d0fe54d6e933f07a8a280db291223ede4a5978d6564f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 6,
+          "triangles": 0,
+          "signature": "3933075906851bb19d91e0c7de59de297da451efbc81aaacd30ccaf321fd2651",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 292,
+          "triangles": 0,
+          "signature": "521ad21ea33ab577d9d9bea421cc5b95326610ded1425036c6bb01ab2ead0757",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-681.mlt",
+        "sha256": "0c46dd63f881e653c230b67702a0076d3a1bda5106aef332d37e9dad6e979911",
+        "bytes": 76307,
+        "gzip": 48873
+      },
+      "streams": {
+        "NONE": 145,
+        "VARINT": 152,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1062-680",
+      "z": 11,
+      "x": 1062,
+      "y": 680,
+      "tmsY": 1367,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-680.mvt",
+        "sha256": "43cef95613b0f85ce2de8c8963132a77049d1415825182eb9ebd6322e671527d",
+        "bytes": 69588,
+        "gzip": 41570
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 39,
+          "triangles": 291,
+          "signature": "c1a08212ee8055d2047e6e04fd3bac90e541dfd1fce735cdcecc98c3cfc0b492",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "signature": "7c4103950715522bee8dbf2f2908b9905d39d3495ca5759a172d4fbda4b33a58",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 75,
+          "triangles": 2010,
+          "signature": "d1e6b30155eae6e7a4cdf4aa7746d3bf75473e1e46c796d6a07f0616e86478d8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 139,
+          "triangles": 1189,
+          "signature": "3cc9c69590a5ac0746c2609e5958b3dec01e018653c22f47d63a11e514408ff2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 5,
+          "triangles": 0,
+          "signature": "6f92695f007194d914978fc670bc26edc08215cbf9c07576f1908d31cdde5f6f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 25,
+          "triangles": 328,
+          "signature": "55d8a7dea6af36097604464837b92a8b8bf9d5e0524c3ea38cb6745ae7fe3957",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 15,
+          "triangles": 0,
+          "signature": "ce37502b1a3434f7a54822e4700c86083b724147c3e6c4f2740fcb0abb8b3423",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1678,
+          "triangles": 0,
+          "signature": "7d2c8c3bd030aed455e12e4da99ffbdc9bbd99f6698556e55f270b477c9a09d3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "af9341f1a533631a165c72d617f3cbce5db26738a5aba3759ab0e4ecb7972d41",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 236,
+          "triangles": 0,
+          "signature": "9911d58177df5b93cd044f417e7ce234ff7d4bb77ffcf983c2d20fc74b2455a4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "fca1620afa8bdfdbff89e7d8ce26ef6e38a2075031d323e9b211add4f249fd9f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-680.mlt",
+        "sha256": "4cf3ab797b6e445b0a10dcac3e7164536c26493042362b3b178cbc2008f8c0b0",
+        "bytes": 54618,
+        "gzip": 32776
+      },
+      "streams": {
+        "NONE": 165,
+        "VARINT": 170,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1062-679",
+      "z": 11,
+      "x": 1062,
+      "y": 679,
+      "tmsY": 1368,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-679.mvt",
+        "sha256": "a6bcecac6757c3fd668fb8006891f9b556b1dfe2ddd58f9d1a4a22089fcca895",
+        "bytes": 32739,
+        "gzip": 23274
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 17,
+          "triangles": 206,
+          "signature": "da823ca8d00480024e595bc803a296c05cadcc7fbce767bd55e3099ecad7a887",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 2,
+          "triangles": 0,
+          "signature": "36171c441a7d7f76d8ea7fe83a315391527f2f8b3f537a60102302bfc804cfd9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 123,
+          "triangles": 3065,
+          "signature": "7e0776d8ccd8d020831ca18c7e742d56deb866cfd2af33f6cde38e4787e9cfdd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 40,
+          "triangles": 327,
+          "signature": "8c3446a71cb794c66b2110e44597b5fe16bcdfd246bf2112a36545e1c075ad13",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 1,
+          "triangles": 0,
+          "signature": "4702d89b8715a677d5f0ef90e1c19153e02468a6b1f730320b0c05e4d4304c08",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 27,
+          "triangles": 0,
+          "signature": "9128fb7cbcd1bcff584c3d0870be61c0809fe39ed72af782ce8c4332984f5558",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 1,
+          "triangles": 1,
+          "signature": "cd6342ade4eef56b952645b21737948ec4aebdc682b2c09210e83ad0298edd52",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 318,
+          "triangles": 0,
+          "signature": "17b5c4d8f1417bc18b5264294eaeae98a6cb0b35fde9499ea1e679d95471d0a3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "1f28295d265b78ec7362b49b7cfd4a0b0a57754e5600c54ede1e553bcc0a28af",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 167,
+          "triangles": 0,
+          "signature": "4d38df5f8b4cf583eace18ea9653ef1d034d8079f049f135d686bf0a84ba9aa6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "144f7f53fba6a03d9b87f5b63f35b2f99ca2153293e179dccacb28f7c0628ee1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1062-679.mlt",
+        "sha256": "5b5b65e3e8aee44f772a73ab337d7b21c6847e9e3eb26a7dd0ab03913a9d7e3a",
+        "bytes": 40226,
+        "gzip": 23917
+      },
+      "streams": {
+        "NONE": 108,
+        "VARINT": 131,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1063-681",
+      "z": 11,
+      "x": 1063,
+      "y": 681,
+      "tmsY": 1366,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-681.mvt",
+        "sha256": "b357a2938de82887cd952958384fd64e45423fe265f0f08f1d2b3c1b62bc87b1",
+        "bytes": 171994,
+        "gzip": 90995
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 17,
+          "triangles": 251,
+          "signature": "799447f7e4de1a764ac8dab0500ac1dcbbe3573be8dbb783c0fa3a9c7f6cfc0a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 4,
+          "triangles": 0,
+          "signature": "632660809d59e3f9e76c5de59239002cd3a169cb8daa243a3b888fefd496678c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 77,
+          "triangles": 1406,
+          "signature": "6291082d1a883d5f3a7d03375737fb0935a5490244a289c73b83c7e5b7971869",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 346,
+          "triangles": 3045,
+          "signature": "1cc47f6b36c8c67b70c07adfc3d3de9e9093c1559e9bebae8f0b5d0e223498c6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 8,
+          "triangles": 0,
+          "signature": "74747acb1ebc3ef6bdd76add6fb3b24ffea441625effaed2cc8778a0d726e2ce",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 12,
+          "triangles": 248,
+          "signature": "451ac20a7b3d1e1a4e1915b813d62e7d5d3eb8ae4c167048e5e302a084d8ddb5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 21,
+          "triangles": 0,
+          "signature": "3fa9e73d628cf5a48878dd374ff05e9d0273e3c7c392c5b772ce6c0fbbad27c4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 5628,
+          "triangles": 0,
+          "signature": "ac84757b2eef777bd49ae06f6ce1d9d02c4e3a80729645a19d76babcc895a5d3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "4e27dba803fcaef19d594f34c5f92c66003d49923e48e6330a381edc1a3b21b9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 326,
+          "triangles": 0,
+          "signature": "b7c60821ff5288ff385f5b9ecf0afd5dd0d59130c2f8b6187eaf9272707a0a54",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "4c803fd7a289eaef6acbe92e33cbbca7fda3df5a0ef980bda077855a100115b9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-681.mlt",
+        "sha256": "dfe86034dad2cfa687e93cc0b1bc7602c00b125d9cdc9f3ea63ed348bd3246c5",
+        "bytes": 90851,
+        "gzip": 58936
+      },
+      "streams": {
+        "NONE": 141,
+        "VARINT": 156,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1063-680",
+      "z": 11,
+      "x": 1063,
+      "y": 680,
+      "tmsY": 1367,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-680.mvt",
+        "sha256": "9483664f331895bc64d7a0b76ed27fb729a684a39d9c4ae6a6ae877e069a22ac",
+        "bytes": 86155,
+        "gzip": 49987
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 28,
+          "triangles": 228,
+          "signature": "da60814ba2d292bac3c0e0affeaa077777463e700deb9bdb3af983fc35262b34",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "6b217b56af391478c9e973a1fbb20a02bdedb3ada68cdd3e03b7b5081c065517",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 86,
+          "triangles": 2035,
+          "signature": "514dd79e14f51d26c1e8e57dd2629c8d5ac96dafdd6ee8fdbd4a8aeab46fd543",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 226,
+          "triangles": 1696,
+          "signature": "888240c87e6d4c51119e2927d9ff20275547602078bb8233094060459d6bab66",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 15,
+          "triangles": 0,
+          "signature": "7d493ce1b8409efcb2d08baaf88da51c49b4943d8842e66f0c6715d91a127742",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 14,
+          "triangles": 180,
+          "signature": "679e913861aa65d81001d6ca6d16f2a549ce65211cd9d85c208e09192e7ce738",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 53,
+          "triangles": 0,
+          "signature": "90e949a7153444f8e01963db95e17a77dbd21112830f23a39083126c88f9250e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2191,
+          "triangles": 0,
+          "signature": "f155bed2fb41f3c75b7b412e34da5fb2b0fdd4d4d441ca63f0140a459717dd81",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 4,
+          "triangles": 0,
+          "signature": "1feecbd15f8bb67f2aec0cd3f3f8d8ccfd316327aca4d49e00c645e63e444165",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 256,
+          "triangles": 0,
+          "signature": "b8f793f9e058b17b10eef4e94a118350f62199c0e2b701697e42244d64c16580",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "778e4feb64c0ba39a89b5936d9322474e3eced7aaabd873b4bd276b7e7ea895e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-680.mlt",
+        "sha256": "8ffb47e820aeac0eb214ea228653e9251a2c111cb37b69b0348b3c3a28fbe879",
+        "bytes": 61638,
+        "gzip": 36996
+      },
+      "streams": {
+        "NONE": 141,
+        "VARINT": 158,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1063-679",
+      "z": 11,
+      "x": 1063,
+      "y": 679,
+      "tmsY": 1368,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-679.mvt",
+        "sha256": "ae0b5de0b8c0e990506ce614848a89dad4c17c54273e274e5d2b14266bcf9bb2",
+        "bytes": 46246,
+        "gzip": 29471
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 24,
+          "triangles": 254,
+          "signature": "e3784697fd4f0e6e919032b64ba1618703a89f33bd4b398895fd3433f975fc81",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "b8ef77a895ea4df8f45d06333e08de9705f570d70cc692ea3943b4933df1ab8c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 122,
+          "triangles": 2284,
+          "signature": "a073792768d41760f40129f9fcd9596fbeeae94ceada15f7210012d71fc734a7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 81,
+          "triangles": 651,
+          "signature": "2c724b58fd5d86b96eb805ca631d0642d39fee03a2f03d02427533f4c6ed043a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 4,
+          "triangles": 0,
+          "signature": "8ab1eba67058945e9205506e9d23a5dd0d98e55498a2e6a75573b026cc8daf56",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 14,
+          "triangles": 518,
+          "signature": "6443fc102a3068b08e55eccf7263687c9a91b96184e67a24bc29d96c732230d6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 10,
+          "triangles": 0,
+          "signature": "21c31c7f8903793d3588dccbc4b10cfb3b7fd879bce6a6dc0b84f069fa2028d4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 868,
+          "triangles": 0,
+          "signature": "0c2a5f43befc3130bf20edd15720c3ad1c4682b12ba7aefa3364a76171922a90",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 4,
+          "triangles": 0,
+          "signature": "69f9e16affeb005b97e2ea839e44ef382119dce81609d24932644ccadd1d2880",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 177,
+          "triangles": 0,
+          "signature": "286d791aa47872ec297504bd9a41ae52339f9703f02bf41c0baee0c73b6efb41",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 2,
+          "triangles": 0,
+          "signature": "acefe05c4dc510b112d3940b0e05694c38cf85a849c6d83e9c67d987582d9be2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1063-679.mlt",
+        "sha256": "d7076b4e0f3d2223ec0e6b91003d157742f0476122e3a95b25b1b6befb8cfb3b",
+        "bytes": 43784,
+        "gzip": 26323
+      },
+      "streams": {
+        "NONE": 109,
+        "VARINT": 139,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1064-681",
+      "z": 11,
+      "x": 1064,
+      "y": 681,
+      "tmsY": 1366,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-681.mvt",
+        "sha256": "13fecd05440d44b50e659f65b46c96a62e2f8bae4013629623de42936e4118ca",
+        "bytes": 126179,
+        "gzip": 72297
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 52,
+          "triangles": 366,
+          "signature": "bd35cb72629e9ce1a71bb59eca56483ea0bae60656741a368644e217725c82f9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "signature": "fc05134010e70f344c214d34e506653c86b73aa615dde5889581c33bfebb53c2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 76,
+          "triangles": 1509,
+          "signature": "9d545fee8fd16c8548ef0b8c2a2ed9eb254cb73a2203b1cd7d8a7a413cca1fb0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 386,
+          "triangles": 3747,
+          "signature": "2e4ccf8c1686e7a4412f9f7529c5fda71793b8bd296eadc0a26d743b76a84a63",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 27,
+          "triangles": 0,
+          "signature": "f91f1fc23d89625b463b8c0ab54a92507700a0c213d8959cd7d3a5be74f2bd6d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 18,
+          "triangles": 227,
+          "signature": "77b094bc475441e323a5db7e6285e5e81e87aa9aa0449a74109ed31a902600f7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 3384,
+          "triangles": 0,
+          "signature": "2d999d24f788c187e4972c56817034c61bed94c97fb6c23b85f7f204495a14f4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 351,
+          "triangles": 0,
+          "signature": "92252ee37ce8433aa65133138842f0df882412f432288ce7ec280573ec2e5566",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-681.mlt",
+        "sha256": "d7a46b14dffe323819ed74eff07d112c5b81cca866446a335867a63dd65f0529",
+        "bytes": 86203,
+        "gzip": 52484
+      },
+      "streams": {
+        "NONE": 114,
+        "VARINT": 131,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1064-680",
+      "z": 11,
+      "x": 1064,
+      "y": 680,
+      "tmsY": 1367,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-680.mvt",
+        "sha256": "d1e68d249262a9e1c537b86b88625cadeee7acdf360d40ae4a8917933068d2bc",
+        "bytes": 127395,
+        "gzip": 68966
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 20,
+          "triangles": 215,
+          "signature": "a3228e2e42924c39496592b4d45499406fc7e1aabe4a46896ef678002f558aa8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "a5bd7669c7f38dbe6f349146625a8942b74462026d6e3e425e1fb23293bfd9f9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 79,
+          "triangles": 1537,
+          "signature": "a75b7ef721d4d1ab5937069cfc455d8787694160c9a4c1f2c3a0343f45dc003b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 295,
+          "triangles": 2173,
+          "signature": "a7546ab2b0524b755baedaf9bf59d40d3bbcb533ebe87e3bed8811f02e01a2ab",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 28,
+          "triangles": 0,
+          "signature": "d85cc1a4d9665e0ce554e50d06b46307277586a5656a28cd3b48821c519f65d6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 20,
+          "triangles": 85,
+          "signature": "7d133e135a17319c5e5f331dc0446f05a34c13fd636693da53a76478a08f3de8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 3857,
+          "triangles": 0,
+          "signature": "23a306c745d9f61c17cbcdba05978c1dd63a3d8c5c21d4a6b9da13bdd74aaedd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "26288fead7c7b5e0dd0b4a7499062ad78642befdc3c7167e9c261f44d7f37d5c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 274,
+          "triangles": 0,
+          "signature": "4c5d3d011411417e5b44e9d9ebf724ebcb2e644a501f985a904fcf8fe0e92aa8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-680.mlt",
+        "sha256": "a1b3f3ba170e927ca46104990c5eb37e74112e978c6aad9e0dbbaebf46e3fa7e",
+        "bytes": 72753,
+        "gzip": 44958
+      },
+      "streams": {
+        "NONE": 121,
+        "VARINT": 137,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1064-679",
+      "z": 11,
+      "x": 1064,
+      "y": 679,
+      "tmsY": 1368,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-679.mvt",
+        "sha256": "b4439132fe06d453103ae1315ce56c70dbab0041d86d1eba8d2c70000d9bf580",
+        "bytes": 62542,
+        "gzip": 38041
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 28,
+          "triangles": 308,
+          "signature": "2b6ab134a2c50ef5c29374e4aa39edf909aee551c9e9dbe84410d1e7e105ddf9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "d59fbaed105bc1c36f7d58338474fabdd58a4b324e37c9437e3eeb1e9e1fd42b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 116,
+          "triangles": 2237,
+          "signature": "cc3fb7231e55ddb3ae458d2c321008b42967e4b0b5a75a8c3e9249fedf218258",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 151,
+          "triangles": 924,
+          "signature": "422644c02b64b6fcf3daaedd9e1dc386c5246e14621719de9cafd9d02a90a6dc",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 16,
+          "triangles": 0,
+          "signature": "74b87f897f201a1fdb5fde28d777eaf2ff1e39f01c258663765af8c2f3272f02",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 19,
+          "triangles": 0,
+          "signature": "f22df1a59785987dab26dff53eb523dedf28ad07b649843653355d513b01d159",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 23,
+          "triangles": 0,
+          "signature": "bfbe11e375bc75641730563ed9fa6d9c2ac77060baab260038c1594fd7a9c185",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1422,
+          "triangles": 0,
+          "signature": "e2d3ff02b38497f7c3d262203f84460c4479bcb07ce2f970af0746180f875bf1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "b7797deb0a7e57d3728f4afe12cb907f7a77e38a487c65b872e4ebfacb74249a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 192,
+          "triangles": 0,
+          "signature": "1fcbb96cb961950b3bc3c8f1d160094da334b4d4b7335375068e15618ca87be4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "a4d695dfdd7a65e46ad4bbd424c94ed70ba12387442617fb7bd13957c96af4b0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1064-679.mlt",
+        "sha256": "723a0d39b1865bd9ccd4560830f249c72fd3c459e704a2d3ddff710f678b3d4a",
+        "bytes": 49605,
+        "gzip": 29927
+      },
+      "streams": {
+        "NONE": 114,
+        "VARINT": 143,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1065-681",
+      "z": 11,
+      "x": 1065,
+      "y": 681,
+      "tmsY": 1366,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-681.mvt",
+        "sha256": "ec0f0650d2e4b5e2badfc04ae7fffa50e7c50c522adb82ba94e4bd1cb7218f6a",
+        "bytes": 141869,
+        "gzip": 79353
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 42,
+          "triangles": 380,
+          "signature": "b4678f11a8c7419d1a1eea65941c9ed078872b0ee3136ec1981b366ddc94836f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "6decb55b62ae6b4a5ec98eb8fad8db7fee989f912ce7ccd516bf9df0c13e805c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 87,
+          "triangles": 1947,
+          "signature": "8b0622d5b6911024a76d67f80ed50335db5f3841a82838918c6f99f255f919e1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 355,
+          "triangles": 3639,
+          "signature": "91e4d36133138543dad908aa0bea0ce017c38f22276ce9ddbf5ecf051c7156ed",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 42,
+          "triangles": 0,
+          "signature": "aa2631d72d8c8ef674ea07e37f6abd6eeb34e9b4f9ff3c2bc5168ed288cad0df",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 14,
+          "triangles": 136,
+          "signature": "8901835b1da8bceb380b6c97d1f86d876bdeb87a53273785473d3a90b026a085",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 3866,
+          "triangles": 0,
+          "signature": "fc5b34cd3c131c73b3a8be45842a69dd026e6d087738abd4a5829374289a2c78",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 2,
+          "triangles": 0,
+          "signature": "01f12f934f287b40f60f3b60a21ae1a1e992d1e491f34d43114cb024b3e4cf8d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 388,
+          "triangles": 0,
+          "signature": "1caf15fe473fe03b593dc4b9eb6146b535f171dc7dbd48bc9853eb7fab3aaed0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-681.mlt",
+        "sha256": "54c597e592746c376ed007bee459cbc34b1830a9867957185cb8707131165ff5",
+        "bytes": 93892,
+        "gzip": 56684
+      },
+      "streams": {
+        "NONE": 127,
+        "VARINT": 143,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1065-680",
+      "z": 11,
+      "x": 1065,
+      "y": 680,
+      "tmsY": 1367,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-680.mvt",
+        "sha256": "4b3710c6b2a5214a83f3c1becf4c16d1f6d81fa3cf6915d49f79270e62770d36",
+        "bytes": 95265,
+        "gzip": 55070
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 23,
+          "triangles": 175,
+          "signature": "50c6787c936063ee800540f8338b23d86d6e4f4f8acb48acaf2658e795db22a6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "fbe78ed4d85b80c0fac67dc437de0d8061221c2194a4d6e4650b91752611fecf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 97,
+          "triangles": 2114,
+          "signature": "adc7401e72fb5dcdf943cc9fe40ea649e326b8d4f7330fdf0bdb5c6c57a05002",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 233,
+          "triangles": 1995,
+          "signature": "26354c522d044e1a638cd3436fd5edef1c6a2a484610f710b88ce0b53d322424",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 18,
+          "triangles": 0,
+          "signature": "2f526ba2e0039844f9b834f58663956a9a86fca6f6675b14d08742d1e2f51931",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 19,
+          "triangles": 207,
+          "signature": "5c3d7a5d7a4189ae273ef388c720ed2a1f7ed5831823c2bf8fbee3079733675a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2491,
+          "triangles": 0,
+          "signature": "f002f9a446c8b064c9e29e3b49a6c90c4e3f14188758de9d40c6b569f6a58de1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 298,
+          "triangles": 0,
+          "signature": "588f000ca743cacab477fa4e8823c591c944937972b315e42bd75abdba5f45b7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "0b3f5ef1d32e069bad1f7d84701526a88712e7347bf9d10ce7509962976a2d7e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-680.mlt",
+        "sha256": "cde7dbcc85c409943c26ae3823ebdb8e5daf8f470310032699a23856cffaa4cb",
+        "bytes": 67777,
+        "gzip": 40522
+      },
+      "streams": {
+        "NONE": 120,
+        "VARINT": 135,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "11-1065-679",
+      "z": 11,
+      "x": 1065,
+      "y": 679,
+      "tmsY": 1368,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-679.mvt",
+        "sha256": "756a97a27ffde80c24f3732301a781d15802111cf6c301c59308758d8e35beda",
+        "bytes": 41734,
+        "gzip": 27373
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 37,
+          "triangles": 462,
+          "signature": "588c1186ccf7255e8343189272a7f765c4682f920c74261353f7ae06ab0d04a0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 2,
+          "triangles": 0,
+          "signature": "095133490f4b847691a6b26b3b1afd0f5bf5d8d3b2642ed1d3a00d165f77769a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 100,
+          "triangles": 1787,
+          "signature": "d0d1588c2c7778c19d343d6f9e4f85f9bc8ffdc842b445a369657efa7a027b57",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 58,
+          "triangles": 573,
+          "signature": "ed06187fea5aeaeb6ce0ed0877dfb1c84d991bf525f96dfa550275340e41d923",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 14,
+          "triangles": 0,
+          "signature": "23f2882913d010643f5e4d6c74d736cbc044f98fb031695c88776f4a0350612f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 14,
+          "triangles": 482,
+          "signature": "c56c99bf7300bc228bf4a1c92969bcf0e6a4bba860c35c780edbb9668f034e8f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 685,
+          "triangles": 0,
+          "signature": "e5dff85f864ea891a4941b7f3c298bf1e603a41d6e77529e225de0288906cc20",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 209,
+          "triangles": 0,
+          "signature": "d321e64699cc2f6076f2966ef05285102bcd8b7d37bed63c8e6cda71e2b54a3e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "6fae24019ccbe79ba1e5feb2d8fe6465c4496cb35f7a373c016ef097c926131c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/11-1065-679.mlt",
+        "sha256": "da4eec4415ac41f6635c23427a7370cb54f7404161b59594466c5e4ee0ec9b95",
+        "bytes": 42849,
+        "gzip": 24563
+      },
+      "streams": {
+        "NONE": 108,
+        "VARINT": 124,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2130-1362",
+      "z": 12,
+      "x": 2130,
+      "y": 1362,
+      "tmsY": 2733,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2130-1362.mvt",
+        "sha256": "f284c3e7d3a3ceac3fdc364a2ecc8375af1bb2a76568f834cbac472b410b3630",
+        "bytes": 285775,
+        "gzip": 131956
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 62,
+          "triangles": 335,
+          "signature": "0083c4dae5a3283c63b99a0fd9d482f8404d53baa060d1c5e8458d599e4d87ea",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 105,
+          "triangles": 1501,
+          "signature": "18dedef131d8321882fb2aa319113cf9cbf2604f8bef4e431a6cbb56d4f0b038",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 326,
+          "triangles": 2712,
+          "signature": "0907805a672cd724612d33fc5c07f8eb893739b27af71c20b6eb5905eb6e4af7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 18,
+          "triangles": 0,
+          "signature": "756254a6a2e8b257acc361980615f5e8c4f5c9b85418ff038e6770224eb25522",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 2,
+          "triangles": 7,
+          "signature": "642ec5e72bb785d40d154592cad5d3c480c70b7f938d06049b846b7a1daece66",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 8973,
+          "triangles": 0,
+          "signature": "5c0cc6c052dc4e06e4c58c29b665fad7841e77459cda3891feb1dfeb55bb0c15",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 23,
+          "triangles": 0,
+          "signature": "380c268276db4eac9b4d58f8e3b7849622d627c19a782cd6b2b9e9c8592fbfc2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 84,
+          "triangles": 0,
+          "signature": "a482502d59d5a10882cdff0ce0eb96a88fb6d95b2f31f476d26c0ef5539124e2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 6,
+          "triangles": 0,
+          "signature": "0df5ccc14d86e2610b6c15bb0bf563dfbbeaf2be0961c40359a6fc9d94a1794a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2130-1362.mlt",
+        "sha256": "b11411c8da81962596efe44d721a6f38d76bc430d8033815db9d8c94fead7877",
+        "bytes": 115438,
+        "gzip": 84330
+      },
+      "streams": {
+        "NONE": 132,
+        "VARINT": 145,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2130-1361",
+      "z": 12,
+      "x": 2130,
+      "y": 1361,
+      "tmsY": 2734,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2130-1361.mvt",
+        "sha256": "66c407abb76508f6a1baa793c2e3cee03e6aaade732940f5baf21b2d2f370150",
+        "bytes": 165920,
+        "gzip": 82561
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 52,
+          "triangles": 249,
+          "signature": "e1d867facfac8253b76a75ed692544053decd04b276885b3aa7cc8d4ff5d0053",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 7,
+          "triangles": 0,
+          "signature": "dad463cc37d8ac7c70c951f3d93d2c89f5ded1306bf060c68cbd65f4d1cee4b8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 138,
+          "triangles": 2092,
+          "signature": "abbe9b8a997c413bef28b154d2313e5a0f9c61cc74fb6aaaa42d4a9149c35fcf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 268,
+          "triangles": 1841,
+          "signature": "5269bea72c1e70c8c68e1958af8aa4a211b3414637c1a3e13963e7d6600440ef",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 13,
+          "triangles": 0,
+          "signature": "10a571617af356af6d9c82d493809bbd1398bbb233b3d26c0820f4f5e1e11cfb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 8,
+          "triangles": 113,
+          "signature": "82ee057a8ffc1f0a6e04934dedf5d4d38160935c8c7e864e088d4bb72a61998a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 4844,
+          "triangles": 0,
+          "signature": "db5762aa12f0a6cf597bdba0693de0b25766d0640b49bf0b36323408aec36b7a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 21,
+          "triangles": 0,
+          "signature": "e9ec2b95b81906b7091f3814f13fc3e32fc4b41487f0392dee2b6e03b60fd872",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 83,
+          "triangles": 0,
+          "signature": "e39a568ee91f0211e376d1ab8e3d974b9ad64d1b783e6194ba0f1c8d8d9b34f9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 6,
+          "triangles": 0,
+          "signature": "3e617627705be007c247893ec68833acb1496a8cb19904b1bc5c24906c459ec7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2130-1361.mlt",
+        "sha256": "28cfe09d3508acd890bd48a75c9308df0b0eb1e4f510a38f4eb0aae9b6faaedc",
+        "bytes": 81943,
+        "gzip": 58645
+      },
+      "streams": {
+        "NONE": 131,
+        "VARINT": 156,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2131-1362",
+      "z": 12,
+      "x": 2131,
+      "y": 1362,
+      "tmsY": 2733,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2131-1362.mvt",
+        "sha256": "ee0c4dffe3c2b7803971654272665182a470b103eaaa58011f4df9cbc0313a8c",
+        "bytes": 194836,
+        "gzip": 94099
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 68,
+          "triangles": 175,
+          "signature": "4f7d409eda75f18c754eef450b81bdc40630be259c85bc090a687c6aab7ff0a3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 125,
+          "triangles": 2010,
+          "signature": "2daf6a9271646927bbc5ef09f15552e71656b1ef7a70bf435da76b33899c8be9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 219,
+          "triangles": 2107,
+          "signature": "39d430974220dc08dc1770c5741f9ec8cde482dce7e26f1abe0766743177a8c1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 10,
+          "triangles": 0,
+          "signature": "cda8e13be603b6c9a590d9a97f2e917fc866cd63eb04f6d680df20c7aebabb87",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 5,
+          "triangles": 63,
+          "signature": "8804bc09eb6f79ca7288afa4d483ca0c08ca0faf9024480e08f24ad760fbf383",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 5844,
+          "triangles": 0,
+          "signature": "ddfb5fbefe4de0ea2cff1f4ad800f25fe79f5c6ad2b7dce9ce9f41f76a7efc1e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 17,
+          "triangles": 0,
+          "signature": "8be9b2ec6aa7758f2caf4d10995b5904c3d7c5614ebcd4a589b7192b47848c6c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 88,
+          "triangles": 0,
+          "signature": "585e010e5b03d2f993619d2abe9edf813c9be32b4c69c71c60c961f44ef3373c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 12,
+          "triangles": 0,
+          "signature": "103e696d0c8a940b076a23323889c504c98fd56fe3353023449040c11396e3fc",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2131-1362.mlt",
+        "sha256": "527f7c84e7342fd67e5ef50bac55ffcf646d9b2abf47a4e4a76ae98c2b92688f",
+        "bytes": 90057,
+        "gzip": 64482
+      },
+      "streams": {
+        "NONE": 138,
+        "VARINT": 149,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2131-1361",
+      "z": 12,
+      "x": 2131,
+      "y": 1361,
+      "tmsY": 2734,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2131-1361.mvt",
+        "sha256": "11ecf493df3c812cdd78b72bca54c10dc52fa0b34fbb5ea500fa9b048ab72dd2",
+        "bytes": 120961,
+        "gzip": 62045
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 56,
+          "triangles": 211,
+          "signature": "790b171fcccdb617636fde1a0f98d5e955fed6acfceff996f96535f2a8e2b7d7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 141,
+          "triangles": 2338,
+          "signature": "92efdc438cd31200b24cc2250f06b105d0dd09beceb098d1b6b9d628c50ff14d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 127,
+          "triangles": 1160,
+          "signature": "55685a7407715c930915c48bb48801fd3fb5ab06fc892f43ba22397b9f1f5f20",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 4,
+          "triangles": 0,
+          "signature": "80aeee1bb1fa2d881da7cc9c545b72847f9f343ed762603414b9a0c7b0ffb156",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 6,
+          "triangles": 165,
+          "signature": "f036528a8a5d98b323de4305eea8c62b928581b1b9cbf58f98537d1526c43349",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 3358,
+          "triangles": 0,
+          "signature": "b668898f2446294fba45065614ddb94451c83fbb5ede78d0e11f3c8197e0bc53",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 16,
+          "triangles": 0,
+          "signature": "f3f43eab657c64e02118a60ae0d669b03735db8600a95521ec958367163cb89a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 94,
+          "triangles": 0,
+          "signature": "b622baee92fcf1c450023e6e5baeec931a1e9e228209f0dadf5d3cf55bd63d68",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 15,
+          "triangles": 0,
+          "signature": "229f4f763c76587c860a024f189e1852c9b4d5d0fc073579ed7eb7fec880dcc7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2131-1361.mlt",
+        "sha256": "8dd636fe18a8411dd61bc94bd58798786eb05a059a72807e03c68f5b3e4c1920",
+        "bytes": 67091,
+        "gzip": 46651
+      },
+      "streams": {
+        "NONE": 128,
+        "VARINT": 139,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2132-1362",
+      "z": 12,
+      "x": 2132,
+      "y": 1362,
+      "tmsY": 2733,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2132-1362.mvt",
+        "sha256": "fe8040da14dfa1f737ef51002adfeb43e41f65358da7a5471582ad03d5ca7df9",
+        "bytes": 193463,
+        "gzip": 92711
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 49,
+          "triangles": 170,
+          "signature": "6dd8e98035dcaf708d0c2657bb0e97a06aea5c864305a5c119a57384264ad0cf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 16,
+          "triangles": 0,
+          "signature": "ce709d0b895c215c8e36252b3a2b338e1916d144362609326bd9c24262a4e9ed",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 124,
+          "triangles": 1757,
+          "signature": "d2b2d763a3b780c0d2adcc1c4c66e64a7fcf76895597814787d4d37d311e65ba",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 148,
+          "triangles": 1233,
+          "signature": "4283e8d9134800443f30123a39632e3943530c6c0afc391f6cf9ac320d3d9e59",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 2,
+          "triangles": 0,
+          "signature": "8ab09273f16b7bb6341254a1d7e0f6f38727d5dfa188fde53c0ecd5362ea7578",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 4,
+          "triangles": 73,
+          "signature": "e27e25af7fd7720f55d6f889d5aaec01da30cd0701b398f31664b847ded44798",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 5961,
+          "triangles": 0,
+          "signature": "7098d8aa5b130b9bced96f07f1f7735c4c1da05c7ca0fcee363c1ed2dc67caf9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 25,
+          "triangles": 0,
+          "signature": "158914a7fbcd4453f4ac550c8a684ed41643f8063f2e628f3e9fe11d66e14357",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 97,
+          "triangles": 0,
+          "signature": "8db97a208b4f0f94d2558b6c2426e26690b18853fca67486e67f884832414e12",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 29,
+          "triangles": 0,
+          "signature": "6546ed92ca7698eb57aa56b4db39e09adeb1c7239820165fef49abe872588af0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2132-1362.mlt",
+        "sha256": "680e6f05f8c2cbf5317fecf3f01caf517dca873159822d7f76b85e5525f9c85e",
+        "bytes": 86104,
+        "gzip": 61025
+      },
+      "streams": {
+        "NONE": 149,
+        "VARINT": 171,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2132-1361",
+      "z": 12,
+      "x": 2132,
+      "y": 1361,
+      "tmsY": 2734,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2132-1361.mvt",
+        "sha256": "2cd28d975ca50ecaeb8ea16126aab3c46d9314d7f8c10a819ddda97c44cb12f4",
+        "bytes": 194322,
+        "gzip": 92501
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 48,
+          "triangles": 383,
+          "signature": "3aadfec3160c03eeefa5a10b912dc00eb9b14c01d697946f2662f5024f3b349e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 18,
+          "triangles": 0,
+          "signature": "cc05f3fe365c8817d4687607eb19add5544cb5a76d1e0ed4fea714d5fa4a7b90",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 88,
+          "triangles": 1327,
+          "signature": "131caebabd27d4e4bba902f02fd7ab786dc54c7f7edb914e25a272a9f7925ea8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 164,
+          "triangles": 1095,
+          "signature": "be6b0b7df4c0b85944f102378a016bbc922f345ab232731f4cf4193418e6fe50",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 1,
+          "triangles": 0,
+          "signature": "e1114c5caa4bee512754c070f20191aae6cca902c5540f1acaf531cc55976962",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 6,
+          "triangles": 69,
+          "signature": "694b9441b23539c199c23ea923b8ef3a07f070b44bc754b5b686da6546928b49",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 6085,
+          "triangles": 0,
+          "signature": "33ef5de1431b9fd720026897f363256800c19ef2fa1aae5431317381a56c3033",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 10,
+          "triangles": 0,
+          "signature": "c7e38b1042f2895bc026020cd1f08d61b9ff1fd71acea02be7aa5b99b6563b9a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 102,
+          "triangles": 0,
+          "signature": "721719efb6323eaf38e9207374001c5ed2c63d5c0070bf40ce2c2f0e4be7def6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 22,
+          "triangles": 0,
+          "signature": "c7d21c02163433f5cd860fb5144ff3c23171bf53e42c9aa9f959a04bffcb92ed",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2132-1361.mlt",
+        "sha256": "97f5767c51bab8419feb082349b42705d097c804714466931eab1e0beb09f400",
+        "bytes": 82839,
+        "gzip": 59045
+      },
+      "streams": {
+        "NONE": 141,
+        "VARINT": 169,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2133-1362",
+      "z": 12,
+      "x": 2133,
+      "y": 1362,
+      "tmsY": 2733,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2133-1362.mvt",
+        "sha256": "6e23fbc31675c45077cb84cacd789d4fbad04895b5c530c072d531152c596b3a",
+        "bytes": 183154,
+        "gzip": 88142
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 68,
+          "triangles": 252,
+          "signature": "544a8c0f6a8fb1341d39d941797066884b93b22f0f7ca5876fcd6ae91b5b9f07",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 11,
+          "triangles": 0,
+          "signature": "b56052e46a1d2502fb9deb843b1faa4411ebd08f79b21e2a02b34ac41fa31362",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 73,
+          "triangles": 1380,
+          "signature": "661b13b6dcc2835b9467ca3be712e06195370063158fb6c21424ddb88b0293d2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 151,
+          "triangles": 1450,
+          "signature": "8b80c3cf6076ef032507e99e0195d84e53375402ac762b26c621dc1ebe55e6a8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 3,
+          "triangles": 0,
+          "signature": "290c6d4418948c8b69c82aff95d89518d847b05e4eef0c144ac5d865be05c184",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 1,
+          "triangles": 14,
+          "signature": "5e019a954f8a88cc7e8a84ec6878d8c46a9ca1f9070ed5e1d901e6962969ec16",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 5688,
+          "triangles": 0,
+          "signature": "c7af7cc6d102eab624c5086465bd3d6bb4ca9b6f402a820c0ea35a4a1d4badfa",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 25,
+          "triangles": 0,
+          "signature": "096c19c384d6c96742f15161ddee302fd149a2a97bc318ad596afc0000bc4a55",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 92,
+          "triangles": 0,
+          "signature": "ae38af93f9902cb89b26828f60cfc82816253dbadab6dd8c1fe84f4f2e74295c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 18,
+          "triangles": 0,
+          "signature": "35183565f532afb3db15a76f971c4b07224b85d143811865e9c91ccf42a0072c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2133-1362.mlt",
+        "sha256": "80d2164395656fcc3db086f3c6e89906117497be8f1cc85136165d5c0bd0d574",
+        "bytes": 81759,
+        "gzip": 58266
+      },
+      "streams": {
+        "NONE": 141,
+        "VARINT": 165,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2133-1361",
+      "z": 12,
+      "x": 2133,
+      "y": 1361,
+      "tmsY": 2734,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2133-1361.mvt",
+        "sha256": "dd96e1ad93c5387578cdd5beec80635a39e33137fe4f77d5a0f64fa21b23c9d1",
+        "bytes": 168775,
+        "gzip": 82025
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 66,
+          "triangles": 241,
+          "signature": "a4ff7cb75734b06a9704657a316c606830dbc41282fa922c41d1962f3ca3ffa3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 84,
+          "triangles": 1075,
+          "signature": "5987ece3f6b697d15ea43cc16a6a40d2f8c222b53b1f424bbdc451dd6e5dd8cb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 169,
+          "triangles": 1043,
+          "signature": "e606f8be34970d8feb7058bf7d0d2581c362a17d8205e7af2345533792aeaa10",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 1,
+          "triangles": 0,
+          "signature": "cb58cced9dcc0d6185e06df74db216957e88a799234fe5a15eb719741afc992e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 7,
+          "triangles": 95,
+          "signature": "31bf7212c31f01fab3176dfe90a71bd1d215c9fe531dd93d754f86902c33b40d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 5191,
+          "triangles": 0,
+          "signature": "913e98df5386c684473585004b55d17f68199f240c8590157a36d35f19a0d05f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 20,
+          "triangles": 0,
+          "signature": "522a1c41f87583e2eadcf6efdb02fed11308e86a8ade7726705b066d40a2745c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 96,
+          "triangles": 0,
+          "signature": "8e3741de97c29cefc825be9786aaa43b9d2dea0bd01a987a82b5d22f3d8a8e9e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 17,
+          "triangles": 0,
+          "signature": "ab6c9b2c4e89e3b6a6f47d4e052883fca92e199f0cd702c958d2f62af754490e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2133-1361.mlt",
+        "sha256": "845b352effe28f3c719df804039d60339cc2b702d0be01e653ae2f2b673dea1b",
+        "bytes": 74900,
+        "gzip": 52670
+      },
+      "streams": {
+        "NONE": 126,
+        "VARINT": 150,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2134-1362",
+      "z": 12,
+      "x": 2134,
+      "y": 1362,
+      "tmsY": 2733,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2134-1362.mvt",
+        "sha256": "75eb31e71bc97a277fb84edf21b2097955a9bde233433a24bf2f0feacebff061",
+        "bytes": 87285,
+        "gzip": 47404
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 38,
+          "triangles": 168,
+          "signature": "9c4a2f2a7b7f8bda9cb1012db5914676813f30c61de4831a86c02eab54a01b7c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "signature": "99c2cfcc35ded3230cf3dc2f446e8adb0d4dde2cd4f0d8ce2dac3b96cc0151b7",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 155,
+          "triangles": 2318,
+          "signature": "b7c28ffc82f2d847c069f1f9edc0a818825c431c82025a7e0b261455d1f4da42",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 71,
+          "triangles": 638,
+          "signature": "7a48324643220fde1b615a212a57fbc4d67ef99cc96f398ba3f6712d584bcccd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 1,
+          "triangles": 37,
+          "signature": "e45e28bcce06cf05b6716588edb987aa2123412e7708df6d5aa96d3283281f9c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 4,
+          "triangles": 0,
+          "signature": "ccf7184c0eb9907c53ab7db3a06e205eddbde6de3ea14874ba5040e5b2649b0e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2320,
+          "triangles": 0,
+          "signature": "021d82cda1c938c5c34d2c153c53f07ecfcea9d75d7f42018002dd72c717c1f8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 22,
+          "triangles": 0,
+          "signature": "5226cee1cb8c1acbea8f8d7a6b283d9518ac2f4ba7c6ac4c42c8e06755522b7b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 78,
+          "triangles": 0,
+          "signature": "ff66f5957127c7fa5a2f2316835fc16cb7bf0a36cb2a693586d758bd400c6cb9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 7,
+          "triangles": 0,
+          "signature": "d62b2b4b4375a9c328c55475a21d931d269ac72d82f95dc5efb95007ad002d0e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 2,
+          "triangles": 0,
+          "signature": "7ab914591331db3b88abcb11901c5891ee8ef69812d946a74c30374846a25ec6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2134-1362.mlt",
+        "sha256": "c36073f0540145ddc542ad39ea1a8090745c8b8eec2c4231be704b35b9582945",
+        "bytes": 52256,
+        "gzip": 36451
+      },
+      "streams": {
+        "NONE": 158,
+        "VARINT": 166,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "12-2134-1361",
+      "z": 12,
+      "x": 2134,
+      "y": 1361,
+      "tmsY": 2734,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2134-1361.mvt",
+        "sha256": "f31f327071e82d57b47302c1e81a74aed629973e93ed55b04d8ba3f4878093d2",
+        "bytes": 95225,
+        "gzip": 49345
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 42,
+          "triangles": 137,
+          "signature": "a898208c3ef712cd44ac2f652e74a2ca727af8efb94681e1906ebd2ff90cc28f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "signature": "6e917be63b104d70e683743972423186be931af5b33556a7a9344549645f3232",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 111,
+          "triangles": 1717,
+          "signature": "02e27b6a0fb764d183688020b875ee7d374316e8d5f5acb53af2c84e9be5fc99",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 94,
+          "triangles": 684,
+          "signature": "ae8684a57987c16d1bf176c184b44786d3b53dfb5ba5c90346493e99c23b3815",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 2,
+          "triangles": 0,
+          "signature": "9a985b692c10002dcb883b498dce412a46007c1bb1717125682b1df0126ee8d0",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 7,
+          "triangles": 128,
+          "signature": "518d045cdfa7800f1e944224c336555d75ee273658321f0bd817ec8391e73dcd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aeroway",
+          "features": 18,
+          "triangles": 0,
+          "signature": "42c3d9b694f7c21e93188943f187370ac6950c438d8a22610860fdbf688010ca",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2664,
+          "triangles": 0,
+          "signature": "0667f772bdd65645032878887e8f3808cbe12a78c816ae5144fd0096d62e3e21",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 13,
+          "triangles": 0,
+          "signature": "611593222018864b2ad599e652b81064aa1ccba5c401d67861dadcae553a8f9f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 82,
+          "triangles": 0,
+          "signature": "09e05710e99b9961c66bf2738e0a5d6ff74dd56e50b8f39a399c1dc9fd722442",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 11,
+          "triangles": 0,
+          "signature": "e8a6048920ca420bad3d6d4dd399498351463cb481b606928be5735343c058ac",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "aerodrome_label",
+          "features": 1,
+          "triangles": 0,
+          "signature": "68f423b96bc0f052a3f1ec75d1ec848c7b61404e3de35157b477029a60a9d41b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/12-2134-1361.mlt",
+        "sha256": "87b047cbbe3422480362bb61c43fb2e37f03452cc0bd571e75486fc2d237accb",
+        "bytes": 51407,
+        "gzip": 35621
+      },
+      "streams": {
+        "NONE": 173,
+        "VARINT": 180,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4264-2724",
+      "z": 13,
+      "x": 4264,
+      "y": 2724,
+      "tmsY": 5467,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4264-2724.mvt",
+        "sha256": "ab65c97f2f40b2c15b55a45b31cda533d2757aea15eabea3fb0ca254b1f6601e",
+        "bytes": 92414,
+        "gzip": 55451
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 17,
+          "triangles": 63,
+          "signature": "2706ec29aadae512336c93518478c9d4291d49a46862d42810d3914cc451995e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 47,
+          "triangles": 0,
+          "signature": "ab50328c5708dbf87409135db4cdae43efc6450bb0bc14daf86468e52852788f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 104,
+          "triangles": 1499,
+          "signature": "8879700281435aed7c5b13505072f52ef01aee33c32a20c92cb0ea125fbda0ea",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 62,
+          "triangles": 454,
+          "signature": "f5e9de2b89fe6bb976c409cfeea73a061c6b039eb48d3a0e2e635e463c752ab4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 3,
+          "triangles": 42,
+          "signature": "c1e4dea82dc695c97b7b5c0f33dee64b03db3a4525e395d0fb5b1b7920d08e2d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1871,
+          "triangles": 0,
+          "signature": "d6ad461570518f6270db2f8338a5638968f85d66f813481eb3c992977e1e5f0d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 565,
+          "triangles": 4389,
+          "signature": "25a63b7562ce9bd1fdc65f71b03770048a6d31e4debcf09d080e242a2bc72f55",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 28,
+          "triangles": 0,
+          "signature": "e38c254460557485177af474114ce68d23dfb6847f8960b169c5c8d657f71940",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 27,
+          "triangles": 0,
+          "signature": "891133b384dd1204e23a81bfafb4695fed1f28822572ffdf1fc51b3179134e79",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 12,
+          "triangles": 0,
+          "signature": "ed6bac7e4cdc9c4c0a5709c64f0d5c7053210a37fe6172295e2b5c43bfd07886",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4264-2724.mlt",
+        "sha256": "64398face98574eacd864590e0b1ed18a106b6276416587b86770e66c70cebfa",
+        "bytes": 71399,
+        "gzip": 49475
+      },
+      "streams": {
+        "NONE": 122,
+        "VARINT": 156,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4264-2723",
+      "z": 13,
+      "x": 4264,
+      "y": 2723,
+      "tmsY": 5468,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4264-2723.mvt",
+        "sha256": "ef5c57b7368a0f2503cc82888e826b46b88017b2a616f7e988a9192c9c44f496",
+        "bytes": 82165,
+        "gzip": 49391
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 24,
+          "triangles": 215,
+          "signature": "c4d203a777561924fd2e59543605ee30333b38c114f7d2bc66afa2cec6b49116",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 37,
+          "triangles": 0,
+          "signature": "f28745e155106c587ab1ea5d36743d3268fc5224e98f1ae918b75a503885f826",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 64,
+          "triangles": 874,
+          "signature": "9efff85fc215dd91aa06846c13155a64dfcfb71cae1edea6490807ca7adfa4f2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 77,
+          "triangles": 540,
+          "signature": "437dc5af2d401c63f98ce6155f93ba4c8e80c648148fa0524a798167aea195be",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 4,
+          "triangles": 54,
+          "signature": "3dd7b05a016c3d135597290f79b0ad3ef2d253f7675ec09635c8d6f914137df9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1702,
+          "triangles": 0,
+          "signature": "d443a79acf6a7801af95d7d8777771fd081b48fa243e34df1efba0ceb943e3bb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 466,
+          "triangles": 3577,
+          "signature": "f85c130ade7d940a791c72d85f70086a115918b588253de08619579530b74f09",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 25,
+          "triangles": 0,
+          "signature": "73b5fe50877b598468b0627d2a6e5d8926bf8028c1b57b0a288d3c1e9ee1d702",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 25,
+          "triangles": 0,
+          "signature": "2ace7e84ada67952ad400d5b658ab20aee1ab308e61c1d93bcabba0f4802bfa9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 7,
+          "triangles": 0,
+          "signature": "037c137234002f16adb07b03529b14115de38b4328ccab069e4a0633d1b2801e",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4264-2723.mlt",
+        "sha256": "ce4d2e7ae0a959afca2c96fba4bd14f8b985a7eedeacdfa490dc452cbd390583",
+        "bytes": 61757,
+        "gzip": 43501
+      },
+      "streams": {
+        "NONE": 124,
+        "VARINT": 158,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4265-2724",
+      "z": 13,
+      "x": 4265,
+      "y": 2724,
+      "tmsY": 5467,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4265-2724.mvt",
+        "sha256": "1dbd8ca14d32724b7a0eeda9d23b34f7dad7f1df92382301e7c115167254e702",
+        "bytes": 100841,
+        "gzip": 58483
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 17,
+          "triangles": 70,
+          "signature": "a106dda7a5105c8271860da01ab8e51ddf9fe956afdbefd6320cf5a5ef5d7447",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 43,
+          "triangles": 0,
+          "signature": "cec3595f44c6c3a182cc83bfc7d345a59451b1680a1fb3896d056be45630e1e5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 77,
+          "triangles": 1053,
+          "signature": "97e1cf572115d298508e421cbf3b88c52c882913bfb25f9eb3ed4ca09ad2ddca",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 83,
+          "triangles": 659,
+          "signature": "f9fdf65f77549dc46f8b251006ea8c367bdfc2b84c52776694656c447e41feb5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 2,
+          "triangles": 49,
+          "signature": "bc9477e1b3532cb54b1dd3db954321f917c5a5b908ee257783c4c5ebc123896d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2259,
+          "triangles": 0,
+          "signature": "4f93c7ce0bc3fcf6bc805c92acba44b2186c8a77e26a515881c53921b777f639",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 454,
+          "triangles": 4444,
+          "signature": "86a91b516da995efa0e32161321b8e7171fd57928240b3505baf87016bff6051",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 21,
+          "triangles": 0,
+          "signature": "d98b074aea2d39c4f9e7181b2ddd6a9fd0eeab66274a41d3aabcbedaacb5a5e1",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 28,
+          "triangles": 0,
+          "signature": "f06b80eacb5461dfbd2b6e7e6c845a1680d993a133752bbbbb1aa73cbbb2a5d4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 13,
+          "triangles": 0,
+          "signature": "d19a8861c978ceeca0d9383d8260c069b7c64d467f545e9936d52c3d0c235abf",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4265-2724.mlt",
+        "sha256": "86b3bf39339874de055c12dd3ce5f903f76954a5470ae2b671ba000c9336278a",
+        "bytes": 73478,
+        "gzip": 51970
+      },
+      "streams": {
+        "NONE": 124,
+        "VARINT": 156,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4265-2723",
+      "z": 13,
+      "x": 4265,
+      "y": 2723,
+      "tmsY": 5468,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4265-2723.mvt",
+        "sha256": "af9a23bfcf0903312d1fdba9d55ac6761287200a277c530118bf58659488d20e",
+        "bytes": 125481,
+        "gzip": 70964
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 11,
+          "triangles": 108,
+          "signature": "98d578f2691bcbe36b8ab6afcd435b06169a7f954f6c6e1894954b6c6bbbeb88",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 11,
+          "triangles": 0,
+          "signature": "ba3feb4d7ede9b81482b6951d194170b337a720128d9bf709c8be2b2fc3c1795",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 28,
+          "triangles": 351,
+          "signature": "130b619c947e19a1d8e15b0ea839cd61d8f371c4cd0873afbca56c3575b530bd",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 86,
+          "triangles": 537,
+          "signature": "fc3119f30aa2f4fb8a8692fc28912bde642578349e18b15fef435898d5b738db",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 3055,
+          "triangles": 0,
+          "signature": "bb619ad46a5c261b687883764f39f763155394066d2611c6a35799c877366423",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 624,
+          "triangles": 6443,
+          "signature": "b9b56516823a1f5b9c2db71da19bd6cc4d40e34fe2727c96a353b786be9ef6d4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 25,
+          "triangles": 0,
+          "signature": "95997740e1f0c43fc033960075d24a9992aed1aac02adb2af048f497676f1b19",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 22,
+          "triangles": 0,
+          "signature": "211570b9c3014d644c5e2d27d73624c47429d6e352708a660766ad25118a116b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 7,
+          "triangles": 0,
+          "signature": "cb82f6201431dc8be6d74a93167f72101f20df211e00eea817eb300093bf9c07",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4265-2723.mlt",
+        "sha256": "7eac54db419a4ed25cd97c23f574f2e5c7defe0889d8ee9720f96de9230b2dca",
+        "bytes": 84842,
+        "gzip": 61363
+      },
+      "streams": {
+        "NONE": 112,
+        "VARINT": 141,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4266-2724",
+      "z": 13,
+      "x": 4266,
+      "y": 2724,
+      "tmsY": 5467,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4266-2724.mvt",
+        "sha256": "6144138f35da5f05897fdbe7188ee4426934c400e77761c445c4f5542c9fcc15",
+        "bytes": 108016,
+        "gzip": 63540
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 40,
+          "triangles": 242,
+          "signature": "1d7dd526afbb136667ad1fe7b8da71ebc5b49763378bfb79bd779caf74588eca",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 62,
+          "triangles": 0,
+          "signature": "2f029ad41ef04357ce1d229e05ee532973d8ce2e06647a97ebded3233ad3ce23",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 61,
+          "triangles": 763,
+          "signature": "9f81b09dffc1961fd4c6aa194ee49735d18f5e9b1311504d61cb00156644db9b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 100,
+          "triangles": 598,
+          "signature": "953f81105e57abc7b635bb7be07ce3a125de0f2efb591de8d7c2617a4c2194c6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 2,
+          "triangles": 0,
+          "signature": "69108aebbdae46d9f585fa820e390b82b7c6f9bdf5d8177c1c70208fc919eaab",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 2257,
+          "triangles": 0,
+          "signature": "9336c28d6a44bbf49e74a6452beb90abbd4a289a9e9461e6f6fe70a9aad89c5a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 696,
+          "triangles": 5787,
+          "signature": "9cc24aafa9c59075d46481c3245c3308ae4e0bbe84e4bd56111944caf79c13c5",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 12,
+          "triangles": 0,
+          "signature": "8a238232e74fa0a325842fbc4d351ec53dae8a6b7f72d4fd10c6204c1b0a69e2",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 30,
+          "triangles": 0,
+          "signature": "96f24d25bae5cc30f2a5bec6963bc6594e5faf425b8eb82a793885aecb3ce329",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 9,
+          "triangles": 0,
+          "signature": "63be538336f125a1dd50175026f5e33507090a40b45a89d101c64d8777b349e8",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4266-2724.mlt",
+        "sha256": "a0af498511a8b685d78ff0af35864a84f0a81e20df8fb3f9129ae0adcd29ca71",
+        "bytes": 80724,
+        "gzip": 56126
+      },
+      "streams": {
+        "NONE": 125,
+        "VARINT": 156,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4266-2723",
+      "z": 13,
+      "x": 4266,
+      "y": 2723,
+      "tmsY": 5468,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4266-2723.mvt",
+        "sha256": "23858a425d90e7a5fe44c410e8e956727f9abb22bce0e93d4fffe99cbc643fe9",
+        "bytes": 89955,
+        "gzip": 54061
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 5,
+          "triangles": 29,
+          "signature": "0903e6792b656b44d405db52d38ae9f1e3c18b24bda2c6d24ebac6a1855e0dca",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 6,
+          "triangles": 0,
+          "signature": "1a0fc41fce7289c4df0ad0854493d380a2796e1be1a6ef5556250e64c1f3319a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 23,
+          "triangles": 257,
+          "signature": "ce0c6311fac7cb7e3ddd08fff53d561fffeb12c38b066dcab98fe4701523e895",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 91,
+          "triangles": 584,
+          "signature": "59219bd8ec3eeb536af52a73344a1b9e412b01d80244a171a00d4db0a0cbf0a6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1946,
+          "triangles": 0,
+          "signature": "f3189387cedc7670e56aa3b89df75624a14deb5b91530eb6be736255f0c72d3b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 576,
+          "triangles": 5702,
+          "signature": "2585a5d5d3454d0d89445b1c3b2586ecdad7c4e476d995164be311f13edd341d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 15,
+          "triangles": 0,
+          "signature": "56df3ea111cefbc43675887dd5c00f0640e1dcdde919a457b05c765d1dfdbb77",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 19,
+          "triangles": 0,
+          "signature": "3261d630375d9e6406a0f79419b3817248cf1c9e4caf7dc84c55952b6011d09a",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 3,
+          "triangles": 0,
+          "signature": "77fe851759c94e470d2f9cd0fb1eee683da7272623f8876088d76679da5ccff9",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4266-2723.mlt",
+        "sha256": "eeb6302c7cd1b1a4de31f09070b3409f072e2db11647765b5a94a7094a62d43e",
+        "bytes": 68664,
+        "gzip": 49147
+      },
+      "streams": {
+        "NONE": 110,
+        "VARINT": 139,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4267-2724",
+      "z": 13,
+      "x": 4267,
+      "y": 2724,
+      "tmsY": 5467,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4267-2724.mvt",
+        "sha256": "006bb4195dd6ab8d6226ea1dc3a563e736caa57c23701e6e1dbb7dd916f06319",
+        "bytes": 89856,
+        "gzip": 55239
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 12,
+          "triangles": 82,
+          "signature": "a827cfba85639b28402040554af5ff17e211b48f576a2294da63de21094487f6",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 16,
+          "triangles": 0,
+          "signature": "7de0449537335fc0095266d07c33aac8eaa9e26fda098156bf7591f660586b7b",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 64,
+          "triangles": 790,
+          "signature": "57f6db0404a363fa961e9a437a43dc4c4afb51e5416b4cd2f53239f559a860a3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 62,
+          "triangles": 575,
+          "signature": "67e393fc58fa981224b380d063fe1a5eaf88bf8d61a0cc822ff371380b7a4bc3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "mountain_peak",
+          "features": 2,
+          "triangles": 0,
+          "signature": "db61a42c562efbb3b16e0e2022b7277d4ac135e681d3c96d46ca8a0437f74c45",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "park",
+          "features": 2,
+          "triangles": 24,
+          "signature": "0376bf6a37a4ffbe7203bb5f1a065b72788630927f7faabc07a5ba08e4c76ef4",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1727,
+          "triangles": 0,
+          "signature": "975b6be69b7868be11d7b626d2e1e49b39fce9fdbd8007c0524accd2e6f3e281",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 740,
+          "triangles": 5163,
+          "signature": "81829bf2c9bf2d89aac51bc3b7754e5aabb03492cb05869e22f10d61f6a2fa3c",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 29,
+          "triangles": 0,
+          "signature": "bef0d07af7a0087291f589d7a0da747d7b42ba684e1f5aaf130c4c937f7dbf29",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 27,
+          "triangles": 0,
+          "signature": "a78c110241c863c07ccbbdeef449a5183906b2ff9084e7dc6473b60ebb5a6bc3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 3,
+          "triangles": 0,
+          "signature": "bbfc9206cef44ef824910b87db9ad40c4ec63126b3b03d481c82a135000766e3",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4267-2724.mlt",
+        "sha256": "6b49b19b49d7c3b5e494b1f227bf985399ba2ddc5cfe14a2f5adbca5ce17e086",
+        "bytes": 71835,
+        "gzip": 49526
+      },
+      "streams": {
+        "NONE": 117,
+        "VARINT": 158,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    },
+    {
+      "name": "13-4267-2723",
+      "z": 13,
+      "x": 4267,
+      "y": 2723,
+      "tmsY": 5468,
+      "mvt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4267-2723.mvt",
+        "sha256": "eed9f1ba3021c503f9092d4fd87ad50c0bd802f75da7bb458f227f4f1fccbba9",
+        "bytes": 75978,
+        "gzip": 46697
+      },
+      "layers": [
+        {
+          "name": "water",
+          "features": 13,
+          "triangles": 48,
+          "signature": "9c45ca0c661b34e31bd3d161e79d9828c6d7e92715dc4ce61c70960baa105c6d",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "waterway",
+          "features": 4,
+          "triangles": 0,
+          "signature": "305c8a7913b69317960149439c6755bb249840f5671c19fdabc784ad080f3886",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landcover",
+          "features": 40,
+          "triangles": 395,
+          "signature": "2694601bfcfb70d6410c47c084fda2e34804f870ed930cbf54dc5b604905b873",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "landuse",
+          "features": 64,
+          "triangles": 373,
+          "signature": "41490d7e9c3ba53886b6a23bd99adc137b8aea9501bbeacfbf6950d752e33beb",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation",
+          "features": 1433,
+          "triangles": 0,
+          "signature": "06434b5adaaef7cc83f5fdb6d2c4ac5c8769c81e4d7b5bfbffddc76bd816f057",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "building",
+          "features": 646,
+          "triangles": 4831,
+          "signature": "4ebdf796a4cfc17844bc2fc02b0c526aef9bc663a701ef6fb90755885bf9a667",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "transportation_name",
+          "features": 30,
+          "triangles": 0,
+          "signature": "937eec2f4d3238c763492ff90b48fbab5d505aa50dbb24b566c9d4ffc785b1ac",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "place",
+          "features": 15,
+          "triangles": 0,
+          "signature": "39bab652fc4b6f2d39abda32c73107fb8d1ab6b849cac1532050e181ff1c4cee",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        },
+        {
+          "name": "poi",
+          "features": 5,
+          "triangles": 0,
+          "signature": "c6bb00410669d2b57992be17202a3d56c021fdddab14bc6375afc0a307afc94f",
+          "geometryPropertiesParity": true,
+          "idDifferences": 0,
+          "idExamples": []
+        }
+      ],
+      "mlt": {
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-corpus-final-20260908/13-4267-2723.mlt",
+        "sha256": "fe2a83cbae344a6cebc1eadbc7c1504214e72a823e613a3e54a9dbeeb523d330",
+        "bytes": 60529,
+        "gzip": 41927
+      },
+      "streams": {
+        "NONE": 90,
+        "VARINT": 134,
+        "FAST_PFOR": 0
+      },
+      "status": "passed"
+    }
+  ],
+  "failures": []
+}

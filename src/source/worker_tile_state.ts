@@ -1,8 +1,10 @@
 import type {ExpiryData} from '../util/ajax.ts';
 import type {WorkerTile} from './worker_tile.ts';
+import type {MltTileData} from './mlt_tile_data.ts';
 
 export type ParsingState = {
     rawData: ArrayBufferLike;
+    mltParent?: MltTileData;
     cacheControl?: ExpiryData;
     resourceTiming?: any;
 };

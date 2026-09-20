@@ -26,7 +26,68 @@ type ValidateStyle = {
     (b: any, a?: any | null): readonly ValidationError[];
 };
 
-export const validateStyle = (validateStyleMin as unknown as ValidateStyle);
+const rawValidateStyle = (validateStyleMin as unknown as ValidateStyle);
+const lineGradientGeoJsonError = 'specifies a line-gradient, which requires a GeoJSON source with `lineMetrics` enabled.';
+
+function isMltVectorSource(source: any): boolean {
+    return source?.type === 'vector' && source?.encoding === 'mlt';
+}
+
+function getLayerForValidationInput(input: any, error: ValidationError): any | undefined {
+    if (input?.value?.type === 'line') {
+        return input.value;
+    }
+
+    const layerId = error.message.match(/layer "([^"]+)"/)?.[1];
+    if (!layerId) {
+        return undefined;
+    }
+
+    const style = input?.style?.layers ? input.style : input;
+    return style?.layers?.find((layer: any) => layer.id === layerId);
+}
+
+function shouldIgnoreValidationError(input: any, error: ValidationError): boolean {
+    if (!error.message.includes(lineGradientGeoJsonError)) {
+        return false;
+    }
+
+    const layer = getLayerForValidationInput(input, error);
+    if (!layer?.paint?.['line-gradient'] || !layer?.source) {
+        return false;
+    }
+
+    const style = input?.style?.sources ? input.style : input;
+    return isMltVectorSource(style?.sources?.[layer.source]);
+}
+
+function filterValidationErrors(input: any, errors: readonly ValidationError[]): readonly ValidationError[] {
+    return errors.filter((error) => !shouldIgnoreValidationError(input, error));
+}
+
+function validatorProperty(value: Validator): PropertyDescriptor {
+    return {value, enumerable: true, writable: true, configurable: true};
+}
+
+export const validateStyle: ValidateStyle = Object.defineProperties(
+    ((value: any, style?: any | null) => {
+        return filterValidationErrors(value, rawValidateStyle.call(validateStyle, value, style));
+    }) as ValidateStyle,
+    {
+        source: validatorProperty(rawValidateStyle.source),
+        sprite: validatorProperty(rawValidateStyle.sprite),
+        glyphs: validatorProperty(rawValidateStyle.glyphs),
+        layer: validatorProperty(((value: any) => {
+            return filterValidationErrors(value, rawValidateStyle.layer.call(validateStyle, value));
+        }) as Validator),
+        light: validatorProperty(rawValidateStyle.light),
+        sky: validatorProperty(rawValidateStyle.sky),
+        terrain: validatorProperty(rawValidateStyle.terrain),
+        filter: validatorProperty(rawValidateStyle.filter),
+        paintProperty: validatorProperty(rawValidateStyle.paintProperty),
+        layoutProperty: validatorProperty(rawValidateStyle.layoutProperty)
+    }
+);
 
 /**
  * The source types the spec has a schema for, and therefore the only ones it can judge. Taken from

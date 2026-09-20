@@ -1,0 +1,481 @@
+{
+  "status": "verified-geometry-browser-comparison",
+  "checkedAt": "2026-09-08T01:17:56.330Z",
+  "scope": "Repeated performance and exact captured parity only; not the complete test suite or universal style parity.",
+  "limitation": "Local fixed corpus. Render marks CPU draw submission, not GPU completion or presentation. Initial map/style/glyph setup is excluded. Native reloads decode fresh tables; overzoom reloads change URLs but reuse identical content. Settled time includes the scenario stability fence, not only the idle event. Queries, hashing, PNGs and forced-GC memory are outside render timing. First samples have only one observation per session; no cold-start gain is inferred from them.",
+  "scenario": "base",
+  "runs": 4,
+  "samples": 20,
+  "balancedVariantOrder": true,
+  "verifiedImages": 32,
+  "nonReferenceImageComparisons": 30,
+  "summary": [
+    {
+      "version": "before",
+      "encoding": "mvt",
+      "phase": "native",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 58.20000000298023,
+          "settledMs": 58.20000000298023,
+          "queryMs": 28.799999997019768
+        },
+        {
+          "firstRenderMs": 65.69999998807907,
+          "settledMs": 65.70000000298023,
+          "queryMs": 36.599999994039536
+        },
+        {
+          "firstRenderMs": 68.1499999910593,
+          "settledMs": 68.19999998807907,
+          "queryMs": 35.30000001192093
+        },
+        {
+          "firstRenderMs": 70.09999999403954,
+          "settledMs": 70.1499999910593,
+          "queryMs": 36.599999994039536
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 66.92499998956919,
+        "settledMs": 66.94999999552965,
+        "queryMs": 35.95000000298023
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mvt",
+      "phase": "overzoom",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 74.75,
+          "settledMs": 74.79999999701977,
+          "queryMs": 16.349999994039536
+        },
+        {
+          "firstRenderMs": 82.90000000596046,
+          "settledMs": 82.90000000596046,
+          "queryMs": 21.94999998807907
+        },
+        {
+          "firstRenderMs": 85.09999999403954,
+          "settledMs": 85.09999999403954,
+          "queryMs": 21.049999997019768
+        },
+        {
+          "firstRenderMs": 82.7999999821186,
+          "settledMs": 82.84999997913837,
+          "queryMs": 20.69999998807907
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 82.84999999403954,
+        "settledMs": 82.87499999254942,
+        "queryMs": 20.87499999254942
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mlt",
+      "phase": "native",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 66.40000000596046,
+          "settledMs": 66.5,
+          "queryMs": 56.6499999910593
+        },
+        {
+          "firstRenderMs": 62.5,
+          "settledMs": 62.54999999701977,
+          "queryMs": 56.5
+        },
+        {
+          "firstRenderMs": 58.099999994039536,
+          "settledMs": 58.20000000298023,
+          "queryMs": 54.74999998509884
+        },
+        {
+          "firstRenderMs": 63.150000005960464,
+          "settledMs": 63.25,
+          "queryMs": 53.95000000298023
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 62.82500000298023,
+        "settledMs": 62.899999998509884,
+        "queryMs": 55.62499999254942
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mlt",
+      "phase": "overzoom",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 55.6499999910593,
+          "settledMs": 55.6499999910593,
+          "queryMs": 27.200000002980232
+        },
+        {
+          "firstRenderMs": 57.45000000298023,
+          "settledMs": 57.5,
+          "queryMs": 28.049999997019768
+        },
+        {
+          "firstRenderMs": 52.99999998509884,
+          "settledMs": 52.99999998509884,
+          "queryMs": 27.299999997019768
+        },
+        {
+          "firstRenderMs": 52.05000001192093,
+          "settledMs": 52.150000005960464,
+          "queryMs": 28.350000008940697
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 54.32499998807907,
+        "settledMs": 54.32499998807907,
+        "queryMs": 27.674999997019768
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mvt",
+      "phase": "native",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 67.0499999821186,
+          "settledMs": 67.0499999821186,
+          "queryMs": 36.79999999701977
+        },
+        {
+          "firstRenderMs": 67.79999999701977,
+          "settledMs": 67.80000001192093,
+          "queryMs": 37.29999999701977
+        },
+        {
+          "firstRenderMs": 68.30000001192093,
+          "settledMs": 68.30000001192093,
+          "queryMs": 35.8999999910593
+        },
+        {
+          "firstRenderMs": 64,
+          "settledMs": 64.04999999701977,
+          "queryMs": 37
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 67.42499998956919,
+        "settledMs": 67.42499999701977,
+        "queryMs": 36.899999998509884
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mvt",
+      "phase": "overzoom",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 82.34999999403954,
+          "settledMs": 82.3999999910593,
+          "queryMs": 21.399999991059303
+        },
+        {
+          "firstRenderMs": 81.3999999910593,
+          "settledMs": 81.3999999910593,
+          "queryMs": 20.849999994039536
+        },
+        {
+          "firstRenderMs": 82.80000001192093,
+          "settledMs": 82.90000000596046,
+          "queryMs": 20.549999997019768
+        },
+        {
+          "firstRenderMs": 79.95000000298023,
+          "settledMs": 80.00000001490116,
+          "queryMs": 22.349999994039536
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 81.87499999254942,
+        "settledMs": 81.8999999910593,
+        "queryMs": 21.12499999254942
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mlt",
+      "phase": "native",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 59.150000005960464,
+          "settledMs": 59.150000005960464,
+          "queryMs": 55.6000000089407
+        },
+        {
+          "firstRenderMs": 63.29999999701977,
+          "settledMs": 63.349999994039536,
+          "queryMs": 54.75
+        },
+        {
+          "firstRenderMs": 59.75,
+          "settledMs": 59.75,
+          "queryMs": 56.29999999701977
+        },
+        {
+          "firstRenderMs": 59.45000000298023,
+          "settledMs": 59.55000001192093,
+          "queryMs": 54.25000001490116
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 59.600000001490116,
+        "settledMs": 59.650000005960464,
+        "queryMs": 55.17500000447035
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mlt",
+      "phase": "overzoom",
+      "sessionMedians": [
+        {
+          "firstRenderMs": 48.70000000298023,
+          "settledMs": 48.70000000298023,
+          "queryMs": 26.899999991059303
+        },
+        {
+          "firstRenderMs": 51,
+          "settledMs": 51.04999999701977,
+          "queryMs": 25.349999994039536
+        },
+        {
+          "firstRenderMs": 54.00000001490116,
+          "settledMs": 54.05000001192093,
+          "queryMs": 27.799999997019768
+        },
+        {
+          "firstRenderMs": 55.30000001192093,
+          "settledMs": 55.3500000089407,
+          "queryMs": 27.899999991059303
+        }
+      ],
+      "medianOfSessionMedians": {
+        "firstRenderMs": 52.50000000745058,
+        "settledMs": 52.55000000447035,
+        "queryMs": 27.349999994039536
+      }
+    }
+  ],
+  "memory": [
+    {
+      "version": "before",
+      "encoding": "mvt",
+      "phase": "native",
+      "main": {
+        "usedSize": 6583876,
+        "backingStorageSize": 4230825
+      },
+      "workers": {
+        "usedSize": 3343168,
+        "backingStorageSize": 2280181
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mvt",
+      "phase": "overzoom",
+      "main": {
+        "usedSize": 6536756,
+        "backingStorageSize": 2501842
+      },
+      "workers": {
+        "usedSize": 6153124,
+        "backingStorageSize": 12671198
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mlt",
+      "phase": "native",
+      "main": {
+        "usedSize": 6898400,
+        "backingStorageSize": 5303267
+      },
+      "workers": {
+        "usedSize": 3710102,
+        "backingStorageSize": 2844699
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mlt",
+      "phase": "overzoom",
+      "main": {
+        "usedSize": 7425240,
+        "backingStorageSize": 4099328
+      },
+      "workers": {
+        "usedSize": 3949758,
+        "backingStorageSize": 2472907
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mvt",
+      "phase": "native",
+      "main": {
+        "usedSize": 6586172,
+        "backingStorageSize": 4230837
+      },
+      "workers": {
+        "usedSize": 3345874,
+        "backingStorageSize": 2280193
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mvt",
+      "phase": "overzoom",
+      "main": {
+        "usedSize": 6527260,
+        "backingStorageSize": 2501854
+      },
+      "workers": {
+        "usedSize": 6149218,
+        "backingStorageSize": 12671210
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mlt",
+      "phase": "native",
+      "main": {
+        "usedSize": 6903136,
+        "backingStorageSize": 5303279
+      },
+      "workers": {
+        "usedSize": 3710874,
+        "backingStorageSize": 2844711
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mlt",
+      "phase": "overzoom",
+      "main": {
+        "usedSize": 7423016,
+        "backingStorageSize": 4099340
+      },
+      "workers": {
+        "usedSize": 3946858,
+        "backingStorageSize": 2472919
+      }
+    }
+  ],
+  "workers": [],
+  "evidence": {
+    "test/bench/baselines/browser-polygon-remap-production-repeat-20260908/results.json": "515f13f3d563b7d553bf22cbe608a338598a661e92f1dc22bcc56549f7321940",
+    "/tmp/mlt-polygon-before-C6lzuw/maplibre-gl-js/dist/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "/tmp/mlt-polygon-before-C6lzuw/maplibre-gl-js/dist/maplibre-gl-worker.mjs": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+    "/tmp/mlt-polygon-before-C6lzuw/maplibre-gl-js/dist/maplibre-gl-shared.mjs": "74bea9ed95728727e1041dcf4b8884821af5a4febd9748d39b8925d77aaa95f6",
+    "/tmp/mlt-polygon-before-C6lzuw/maplibre-gl-js/dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "test/bench/e2e/index.html": "44a5622d2f12c099c47458259c0c2330f74c2009cce24c6acfcbf7c50a944714",
+    "test/integration/assets/tiles/0-0-0.mvt": "b7d73613cece1eb32b95befa3b88aa5a548e2483c655cff6837dbd05da6eeceb",
+    "test/integration/assets/tiles/14-8802-5374.mvt": "cb54ebf28300dfe4f212eea6be2eb09b39c6c373ba492be76bd93b65fe6dacc2",
+    "test/integration/assets/tiles/14-8802-5375.mvt": "b2ad38f74c6b7f30660e558a36f38698d1e593c1f8a9edee6565c09b4d1c8c14",
+    "test/integration/assets/tiles/14-8803-5374.mvt": "922065aba50b847cefac7ff7a6e113dad0397267bba02cb95c98fcb2c5f1e74e",
+    "test/integration/assets/tiles/14-8803-5375.mvt": "1245fe2f4a73a9e1acfeb26109eeb705fd1cd810996ad1419573224c88d583cb",
+    "test/integration/assets/tiles/mlt/gl-js/0-0-0.mlt": "b0411769ab7de04389aacdd6e245dd8904d764293531b2ea9b32246af2e13d72",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5374.mlt": "417bd45b28f657c123ed33c4d1da3ed89adae87576ab41dd78af822af3da56e2",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5375.mlt": "753390227f2041c6cdc53449757b3d7a8a1916f9462a57e7e0554c5e75a376ac",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5374.mlt": "981afa69b47bf8944b7cc709221abed0e95ba0d6e5a08703a368645bddc7bb76",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5375.mlt": "e1937409ce51fd19b181970fa07a2c88952ad6e29e2058e97e826f366510c2a6",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/0-255.pbf": "8f5d61ce38db04dd51a54d1695c6feaa58192da3773f9e5fd57ea4407bb0b4a0",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/256-511.pbf": "fa1cac72decd017d18b3656c40c749a1d521f33a7a7c9f93f4b2f3f6bffd2772",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/8192-8447.pbf": "dedbf3d5ac34b44c95ac8c5d9798be4dfafc03571f4069b25dd762cff8792a1c",
+    "test/integration/assets/sprites/sprite.json": "45195aec08af9e5c8ffa95805d4e746432a4fcf62911f149eed2f16b7e098ece",
+    "test/integration/assets/sprites/sprite.png": "6de3ad41e56e7e004cacf4604680ce344dde180d7157c628fdebb9aaadc86d30",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "dist/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "dist/maplibre-gl-worker.mjs": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+    "dist/maplibre-gl-shared.mjs": "dcd98d282f4c1ae11d3a14ea9ccf5151fd44eeaafd4cfeb016ee983f4c283c07",
+    "dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "test/bench/e2e/mlt-geometry-browser.ts": "ae8f487c3782ff7672c1611be42c76202e0006476d20dbd939fe18973d805a1b",
+    "test/bench/e2e/mlt-geography.ts": "84e51b6e9db58a5560056ed2b38c409816f149acccefd968486e47e75c124a08",
+    "test/bench/e2e/mlt-lifecycle-page.ts": "873d031fc4cf3b64ae03e26b1b3a2c7013992a30148c053636afb64b5ca7baa7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-0-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-0-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-0-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-0-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-0-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-0-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-0-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-0-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-0-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-0-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-0-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-0-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-0-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-0-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-0-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-0-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-1-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-1-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-1-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-1-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-1-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-1-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-1-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-1-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-1-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-1-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-1-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-1-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-1-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-1-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-1-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-1-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-2-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-2-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-2-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-2-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-2-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-2-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-2-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-2-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-2-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-2-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-2-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-2-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-2-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-2-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-2-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-2-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-3-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-3-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-3-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mlt-3-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-3-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-3-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-3-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mvt-3-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-3-native.json.gz": "b9b714fa42b49451ddac02424c78b9794809af7a6c31c08a15058436d5e22ff4",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-3-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-3-overzoom.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/before-mlt-3-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-3-native.json.gz": "84fa0537c73e11b4a7235ef038160388d2e29a9fd99c1af1820d6b6a3ef97ec7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-3-native.png": "526c843e0d80b3cf4b192dea59fb6f5a4caded7640040154c04718eb08fcf24e",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-3-overzoom.json.gz": "5c31ec2695232f3a2404492f8d2dbb94419b60e163dfabfc247cceb072825feb",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-polygon-remap-production-repeat-20260908/after-mvt-3-overzoom.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b"
+  }
+}

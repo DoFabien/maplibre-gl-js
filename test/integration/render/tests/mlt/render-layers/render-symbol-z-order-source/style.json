@@ -1,0 +1,86 @@
+{
+  "version": 8,
+  "metadata": {
+    "test": {
+      "debug": true,
+      "width": 256,
+      "height": 256,
+      "timeout": 60000
+    }
+  },
+  "center": [
+    11.529107,
+    48.146443
+  ],
+  "zoom": 17.2,
+  "pitch": 0,
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "encoding": "mlt",
+      "tiles": [
+        "local://tiles/mlt/{z}/{x}/{y}.mlt"
+      ],
+      "maxzoom": 14
+    }
+  },
+  "glyphs": "local://glyphs/{fontstack}/{range}.pbf",
+  "sprite": "local://sprites/sprite",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8fafc"
+      }
+    },
+    {
+      "id": "place-z-order-source",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "housenumber",
+      "filter": [
+        "has",
+        "housenumber"
+      ],
+      "layout": {
+        "symbol-z-order": "source",
+        "icon-image": [
+          "step",
+          [
+            "to-number",
+            [
+              "get",
+              "housenumber"
+            ]
+          ],
+          "fav-circle-18",
+          20,
+          "fav-square-18",
+          40,
+          "fav-marker-18"
+        ],
+        "icon-size": 1.2,
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-field": "{housenumber}",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 18,
+        "text-offset": [
+          0,
+          0.8
+        ],
+        "text-anchor": "top",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      "paint": {
+        "text-color": "#0f172a",
+        "text-halo-color": "#f8fafc",
+        "text-halo-width": 1
+      }
+    }
+  ]
+}

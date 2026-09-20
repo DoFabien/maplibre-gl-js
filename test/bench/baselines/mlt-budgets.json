@@ -1,0 +1,556 @@
+{
+    "baseline": "test/bench/baselines/mlt-next-observability-a236ec257.json",
+    "minimumIterations": 30,
+    "minimumWarmup": 10,
+    "comparisonRelativeTolerance": 0.0001,
+    "defaultMedianMultiplier": 1.15,
+    "defaultP95Multiplier": 1.25,
+    "relativePairs": [
+        {
+            "name": "synthetic all buckets",
+            "reference": "MltWorkerParseOnlyMVT",
+            "candidate": "MltWorkerParseOnlyMLTNative"
+        },
+        {
+            "name": "synthetic line bucket",
+            "reference": "MltWorkerParseOnlySyntheticLineMVT",
+            "candidate": "MltWorkerParseOnlySyntheticLineMLT"
+        },
+        {
+            "name": "synthetic fill bucket",
+            "reference": "MltWorkerParseOnlySyntheticFillMVT",
+            "candidate": "MltWorkerParseOnlySyntheticFillMLT"
+        },
+        {
+            "name": "synthetic circle bucket",
+            "reference": "MltWorkerParseOnlySyntheticCircleMVT",
+            "candidate": "MltWorkerParseOnlySyntheticCircleMLT"
+        },
+        {
+            "name": "synthetic fill extrusion bucket",
+            "reference": "MltWorkerParseOnlySyntheticFillExtrusionMVT",
+            "candidate": "MltWorkerParseOnlySyntheticFillExtrusionMLT"
+        },
+        {
+            "name": "real scan",
+            "reference": "MltRealTileScanMVT",
+            "candidate": "MltRealTileScanMLT"
+        },
+        {
+            "name": "real projected decode",
+            "reference": "MltRealTileDecodeMVT",
+            "candidate": "MltRealTileDecodeMLTProjected"
+        },
+        {
+            "name": "real properties one",
+            "reference": "MltRealTileDecodePropertiesOneMVT",
+            "candidate": "MltRealTileDecodePropertiesOneMLT",
+            "medianMultiplier": 1.1,
+            "p95Multiplier": 1.1,
+            "maxMedianRatio": 4.0,
+            "maxP95Ratio": 5.0
+        },
+        {
+            "name": "real properties enumerate",
+            "reference": "MltRealTileDecodePropertiesEnumerateMVT",
+            "candidate": "MltRealTileDecodePropertiesEnumerateMLT",
+            "maxMedianRatio": 1.6,
+            "maxP95Ratio": 2.0,
+            "maxAbsoluteP95Ratio": 1.5
+        },
+        {
+            "name": "real public geometry",
+            "reference": "MltRealTileDecodeGeometryMVT",
+            "candidate": "MltRealTileDecodeGeometryMLT",
+            "maxMedianRatio": 1.1,
+            "maxP95Ratio": 1.75,
+            "maxAbsoluteP95Ratio": 1.35
+        },
+        {
+            "name": "real public toGeoJSON",
+            "reference": "MltRealTileDecodeToGeoJSONMVT",
+            "candidate": "MltRealTileDecodeToGeoJSONMLT",
+            "maxMedianRatio": 1.75,
+            "maxP95Ratio": 2.0,
+            "maxAbsoluteP95Ratio": 2.0
+        },
+        {
+            "name": "real full-access decode",
+            "reference": "MltRealTileDecodeFullAccessMVT",
+            "candidate": "MltRealTileDecodeFullAccessMLT",
+            "maxMedianRatio": 1.5,
+            "maxP95Ratio": 2.1,
+            "maxAbsoluteMedianRatio": 1.5,
+            "maxAbsoluteP95Ratio": 1.75
+        },
+        {
+            "name": "real parse-only",
+            "reference": "MltRealTileParseOnlyMVT",
+            "candidate": "MltRealTileParseOnlyMLTNative"
+        },
+        {
+            "name": "real end-to-end",
+            "reference": "MltRealTileEndToEndMVT",
+            "candidate": "MltRealTileEndToEndMLT",
+            "medianMultiplier": 1.1,
+            "p95Multiplier": 1.15
+        },
+        {
+            "name": "OMT buildings",
+            "reference": "MltOmtBuildingDecodeMVT",
+            "candidate": "MltOmtBuildingDecodeMLT"
+        },
+        {
+            "name": "OMT roads and labels",
+            "reference": "MltOmtRoadLabelsDecodeMVT",
+            "candidate": "MltOmtRoadLabelsDecodeMLT"
+        },
+        {
+            "name": "OMT low-zoom labels",
+            "reference": "MltOmtLowZoomLabelsDecodeMVT",
+            "candidate": "MltOmtLowZoomLabelsDecodeMLT"
+        },
+        {
+            "name": "OMT line symbols",
+            "reference": "MltOmtLineSymbolsMVT",
+            "candidate": "MltOmtLineSymbolsMLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "Bing standard full decode",
+            "reference": "MltBingDecodeMVT",
+            "candidate": "MltBingDecodeMLT"
+        },
+        {
+            "name": "point symbols",
+            "reference": "MltWorkerParseOnlySyntheticSymbolMVT",
+            "candidate": "MltWorkerParseOnlySyntheticSymbolMLT"
+        },
+        {
+            "name": "line symbols",
+            "reference": "MltWorkerParseOnlySyntheticLineSymbolMVT",
+            "candidate": "MltWorkerParseOnlySyntheticLineSymbolMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.45,
+            "maxAbsoluteP95Ratio": 1.45
+        },
+        {
+            "name": "line symbols matrix sparse",
+            "reference": "MltLineSymbolMatrixSparseMVT",
+            "candidate": "MltLineSymbolMatrixSparseMLT",
+            "maxMedianRatio": 1.1,
+            "maxP95Ratio": 1.65,
+            "maxAbsoluteMedianRatio": 1.15,
+            "maxAbsoluteP95Ratio": 1.25
+        },
+        {
+            "name": "line symbols matrix dense",
+            "reference": "MltLineSymbolMatrixDenseMVT",
+            "candidate": "MltLineSymbolMatrixDenseMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.25,
+            "maxAbsoluteP95Ratio": 1.1
+        },
+        {
+            "name": "line symbols matrix multipart",
+            "reference": "MltLineSymbolMatrixMultipartMVT",
+            "candidate": "MltLineSymbolMatrixMultipartMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.25,
+            "maxAbsoluteP95Ratio": 1.1
+        },
+        {
+            "name": "line symbols matrix vertex-dense",
+            "reference": "MltLineSymbolMatrixVertexDenseMVT",
+            "candidate": "MltLineSymbolMatrixVertexDenseMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.25,
+            "maxAbsoluteP95Ratio": 1.1
+        },
+        {
+            "name": "line symbols matrix clipped-half",
+            "reference": "MltLineSymbolMatrixClippedHalfMVT",
+            "candidate": "MltLineSymbolMatrixClippedHalfMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.25,
+            "maxAbsoluteP95Ratio": 1.1
+        },
+        {
+            "name": "line symbols matrix merge-short",
+            "reference": "MltLineSymbolMatrixMergeShortMVT",
+            "candidate": "MltLineSymbolMatrixMergeShortMLT",
+            "maxMedianRatio": 1.1,
+            "maxP95Ratio": 1.5,
+            "maxAbsoluteMedianRatio": 1.1,
+            "maxAbsoluteP95Ratio": 1.25
+        },
+        {
+            "name": "line symbols matrix merge-long",
+            "reference": "MltLineSymbolMatrixMergeLongMVT",
+            "candidate": "MltLineSymbolMatrixMergeLongMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.25,
+            "maxAbsoluteP95Ratio": 1.1
+        },
+        {
+            "name": "rendered query 0",
+            "reference": "MltQueryRendered0MVT",
+            "candidate": "MltQueryRendered0MLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "rendered query 1",
+            "reference": "MltQueryRendered1MVT",
+            "candidate": "MltQueryRendered1MLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "rendered query 10",
+            "reference": "MltQueryRendered10MVT",
+            "candidate": "MltQueryRendered10MLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "rendered query many",
+            "reference": "MltQueryRenderedManyMVT",
+            "candidate": "MltQueryRenderedManyMLT",
+            "maxMedianRatio": 1.05,
+            "maxP95Ratio": 1.15
+        },
+        {
+            "name": "source query 1 percent",
+            "reference": "MltQuerySource1PctMVT",
+            "candidate": "MltQuerySource1PctMLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "source query 10 percent",
+            "reference": "MltQuerySource10PctMVT",
+            "candidate": "MltQuerySource10PctMLT",
+            "medianMultiplier": 1.05,
+            "p95Multiplier": 1.05
+        },
+        {
+            "name": "source query 100 percent",
+            "reference": "MltQuerySource100PctMVT",
+            "candidate": "MltQuerySource100PctMLT",
+            "maxMedianRatio": 0.5,
+            "maxP95Ratio": 0.65
+        },
+        {
+            "name": "rendered query 10000 results",
+            "reference": "MltQueryRenderedMany10000NoneMVT",
+            "candidate": "MltQueryRenderedMany10000NoneMLT",
+            "maxMedianRatio": 0.95,
+            "maxP95Ratio": 1.0
+        },
+        {
+            "name": "rendered query 10000 real intersection",
+            "reference": "MltQueryRenderedMany10000RealIntersectionMVT",
+            "candidate": "MltQueryRenderedMany10000RealIntersectionMLT",
+            "maxMedianRatio": 1.2,
+            "maxP95Ratio": 1.35
+        },
+        {
+            "name": "source query 10000 results",
+            "reference": "MltQuerySource100Pct10000NoneMVT",
+            "candidate": "MltQuerySource100Pct10000NoneMLT",
+            "maxMedianRatio": 0.5,
+            "maxP95Ratio": 0.55
+        },
+        {
+            "name": "real full-access reverse",
+            "reference": "MltRealTileDecodeFullAccessReverseMVT",
+            "candidate": "MltRealTileDecodeFullAccessReverseMLT",
+            "maxMedianRatio": 1.5,
+            "maxP95Ratio": 1.75,
+            "maxAbsoluteMedianRatio": 1.5,
+            "maxAbsoluteP95Ratio": 1.75
+        },
+        {
+            "name": "real full-access pseudo-random",
+            "reference": "MltRealTileDecodeFullAccessPseudoRandomMVT",
+            "candidate": "MltRealTileDecodeFullAccessPseudoRandomMLT",
+            "maxMedianRatio": 1.85,
+            "maxP95Ratio": 2.1,
+            "maxAbsoluteP95Ratio": 1.75
+        }
+    ],
+    "materializations": {
+        "MltWorkerParseOnlyMLTNative": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticLineMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticFillMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticCircleMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticFillExtrusionMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltBingDecodeMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ],
+            "exact": {
+                "decodedLayers": 300,
+                "decodedColumns": 1590,
+                "decodedValues": 16410,
+                "decodedColumnBytes": 29914770
+            }
+        },
+        "MltFastPforDecodeMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ],
+            "exact": {
+                "decodedLayers": 100,
+                "decodedColumns": 200,
+                "decodedValues": 51200,
+                "decodedColumnBytes": 208800
+            }
+        },
+        "MltRealTileParseOnlyMLTNative": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltRealTileEndToEndMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized",
+                "mvtReencodes"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticSymbolMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltWorkerParseOnlySyntheticLineSymbolMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized"
+            ]
+        },
+        "MltLineSymbolMatrixSparseMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixDenseMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixMultipartMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixVertexDenseMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixClippedHalfMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixMergeShortMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltLineSymbolMatrixMergeLongMLT": {
+            "zero": ["workerFilterFallbackFeatures", "vectorTileFeatureWrappers", "propertyObjects", "pointObjects", "geometryPartsMaterialized"]
+        },
+        "MltQueryRendered0MLT": {
+            "zero": [
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "queryResults",
+                "estimatedQueryResultBytes",
+                "queryGeometriesLoaded"
+            ]
+        },
+        "MltQueryRendered1MLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 20, "estimatedQueryResultBytes": 2880 }
+        },
+        "MltQueryRendered10MLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 200, "estimatedQueryResultBytes": 28800 }
+        },
+        "MltQueryRenderedManyMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 12800, "estimatedQueryResultBytes": 1843200 }
+        },
+        "MltQuerySource1PctMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 120, "estimatedQueryResultBytes": 11520 }
+        },
+        "MltQuerySource10PctMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 1280, "estimatedQueryResultBytes": 122880 }
+        },
+        "MltQuerySource100PctMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 12800, "estimatedQueryResultBytes": 1228800 }
+        },
+        "MltQueryRenderedMany10000NoneMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 20000, "estimatedQueryResultBytes": 2880000 }
+        },
+        "MltQuerySource100Pct10000NoneMLT": {
+            "zero": ["vectorTileFeatureWrappers", "propertyObjects", "queryGeometriesLoaded"],
+            "exact": { "queryResults": 20000, "estimatedQueryResultBytes": 1920000 }
+        },
+        "MltFeatureStateRepeatedMLT": {
+            "zero": [
+                "vectorTileFeatureWrappers",
+                "propertyObjects",
+                "pointObjects",
+                "geometryPartsMaterialized",
+                "rawTileMainThreadDecodes"
+            ]
+        },
+        "MltOverzoomZPlus1MLT": {
+            "zero": [
+                "vectorTileFeatureWrappers",
+                "pointObjects",
+                "overzoomPointObjects",
+                "mvtReencodes"
+            ]
+        },
+        "MltOverzoomZPlus2MLT": {
+            "zero": [
+                "vectorTileFeatureWrappers",
+                "pointObjects",
+                "overzoomPointObjects",
+                "mvtReencodes"
+            ]
+        },
+        "MltOverzoomZPlus4MLT": {
+            "zero": [
+                "vectorTileFeatureWrappers",
+                "pointObjects",
+                "overzoomPointObjects",
+                "mvtReencodes"
+            ]
+        },
+        "MltColumns5ReadFew": { "exact": { "decodedColumns": 4 } },
+        "MltColumns5ReadMany": { "exact": { "decodedColumns": 7 } },
+        "MltColumns50ReadFew": { "exact": { "decodedColumns": 4 } },
+        "MltColumns50ReadMany": { "exact": { "decodedColumns": 52 } },
+        "MltColumns200ReadFew": { "exact": { "decodedColumns": 4 } },
+        "MltColumns200ReadMany": { "exact": { "decodedColumns": 202 } },
+        "MltMemoryLifecycleMLT": {
+            "zero": [
+                "workerFilterFallbackFeatures",
+                "vectorTileFeatureWrappers",
+                "pointObjects",
+                "geometryPartsMaterialized",
+                "overzoomPointObjects",
+                "mvtReencodes"
+            ],
+            "exact": { "rawTileMainThreadDecodes": 1, "queryResults": 64 },
+            "equal": {
+                "propertyObjects": "queryResults"
+            }
+        }
+    },
+    "exactMeasurements": {
+        "MltQueryRenderedManyMLT": {
+            "materializations.estimatedBytesPerQueryResult": 144
+        },
+        "MltQuerySource100PctMLT": {
+            "materializations.estimatedBytesPerQueryResult": 96
+        },
+        "MltPublicRenderedAggregation10000": {
+            "measurements.values.query.tilesIn.outputCount.median": 80,
+            "measurements.values.query.sortTiles.outputCount.median": 80,
+            "measurements.values.query.collectTile.outputCount.median": 200000,
+            "measurements.values.query.mergeDeduplicate.outputCount.median": 150000,
+            "measurements.values.query.enrich.outputCount.median": 150000,
+            "measurements.values.query.flattenSort.outputCount.median": 150000
+        },
+        "MltPublicSourceAggregation10000": {
+            "measurements.values.query.sourceDeduplicate.outputCount.median": 60,
+            "measurements.values.query.sourceCollectTile.outputCount.median": 150000
+        }
+    },
+    "maximumMeasurements": {
+        "MltRealTileEndToEndMLT": {
+            "measurements.transferredBytes.median": 1700000
+        },
+        "MltFeatureStateRepeatedMLT": {
+            "measurements.retainedBytes.median": 16000
+        },
+        "MltOverzoomZPlus1MLT": {
+            "measurements.retainedBytes.median": 70000
+        },
+        "MltOverzoomZPlus2MLT": {
+            "measurements.retainedBytes.median": 16000
+        },
+        "MltOverzoomZPlus4MLT": {
+            "measurements.retainedBytes.median": 2500
+        },
+        "MltMemoryLifecycleMLT": {
+            "measurements.transferredBytes.median": 230000,
+            "measurements.retainedBytes.median": 100000,
+            "measurements.phaseMemoryBytes.reload.heapUsed.p95": 77000000,
+            "measurements.phaseMemoryBytes.reload.arrayBuffers.p95": 1200000
+        }
+    }
+}

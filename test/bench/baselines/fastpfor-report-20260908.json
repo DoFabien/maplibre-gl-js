@@ -1,0 +1,356 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "MLT : le test FastPFOR",
+    "generatedAt": "2026-09-08T10:22:03.341Z",
+    "sources": [
+      {
+        "id": "verification",
+        "label": "Comparaison FastPFOR vérifiée — 8 septembre 2026",
+        "path": "test/bench/baselines/fastpfor-comparison-20260908.json"
+      },
+      {
+        "id": "protocol",
+        "label": "Protocole, limites et reproduction",
+        "path": "test/bench/baselines/MLT_FASTPFOR_20260908.md"
+      },
+      {
+        "id": "timing",
+        "label": "Campagne navigateur : mesures brutes",
+        "path": "test/bench/baselines/browser-fastpfor-timing-20260908/results.json"
+      },
+      {
+        "id": "timing_sql",
+        "label": "Médianes recalculées depuis les observations brutes",
+        "path": "test/bench/e2e/mlt-fastpfor-timing.sql",
+        "query": {
+          "sql": "WITH ranked_samples AS (\n    SELECT *,\n        ROW_NUMBER() OVER (PARTITION BY variant, phase, run, metric ORDER BY value) AS position,\n        COUNT(*) OVER (PARTITION BY variant, phase, run, metric) AS n\n    FROM raw_timing_samples\n), session_medians AS (\n    SELECT variant, phase, run, metric, AVG(value) AS value\n    FROM ranked_samples\n    WHERE position IN ((n + 1) / 2, (n + 2) / 2)\n    GROUP BY variant, phase, run, metric\n), ranked_sessions AS (\n    SELECT *,\n        ROW_NUMBER() OVER (PARTITION BY variant, phase, metric ORDER BY value) AS position,\n        COUNT(*) OVER (PARTITION BY variant, phase, metric) AS n\n    FROM session_medians\n), aggregates AS (\n    SELECT variant, phase, metric, AVG(value) AS value\n    FROM ranked_sessions\n    WHERE position IN ((n + 1) / 2, (n + 2) / 2)\n    GROUP BY variant, phase, metric\n)\nSELECT variant, phase,\n    MAX(CASE WHEN metric = 'firstRenderMs' THEN value END) AS dessin_ms,\n    MAX(CASE WHEN metric = 'queryMs' THEN value END) AS requetes_ms,\n    (SELECT MIN(s.value) FROM session_medians s WHERE s.variant = a.variant AND s.phase = a.phase AND s.metric = 'firstRenderMs') AS min_mediane_ms,\n    (SELECT MAX(s.value) FROM session_medians s WHERE s.variant = a.variant AND s.phase = a.phase AND s.metric = 'firstRenderMs') AS max_mediane_ms\nFROM aggregates a\nGROUP BY variant, phase\nORDER BY variant, phase;\n",
+          "engine": "SQLite",
+          "language": "sql",
+          "description": "Agrégation indépendante des mesures brutes de browser-fastpfor-timing-20260908/results.json, chargées par mlt-fastpfor-sql-verify.mjs. Le résultat est comparé exactement à la vérification JavaScript.",
+          "tables_used": [
+            "main.raw_timing_samples"
+          ],
+          "filters": [
+            "Quatre tuiles Berlin, scène base inchangée.",
+            "Premières observations et cinq échauffements exclus ; six sessions de vingt mesures par variante et phase."
+          ]
+        }
+      },
+      {
+        "id": "costs_sql",
+        "label": "Allocations et tailles recalculées depuis les profils et tuiles",
+        "path": "test/bench/e2e/mlt-fastpfor-costs.sql",
+        "query": {
+          "sql": "WITH session_allocations AS (\n    SELECT variant, run, context, SUM(self_bytes) AS bytes\n    FROM raw_profile_frames\n    GROUP BY variant, run, context\n), ranked_sessions AS (\n    SELECT *,\n        ROW_NUMBER() OVER (PARTITION BY variant, context ORDER BY bytes) AS position,\n        COUNT(*) OVER (PARTITION BY variant, context) AS n\n    FROM session_allocations\n), allocation_medians AS (\n    SELECT variant, context, AVG(bytes) / 1048576.0 AS mio\n    FROM ranked_sessions\n    WHERE position IN ((n + 1) / 2, (n + 2) / 2)\n    GROUP BY variant, context\n), tile_totals AS (\n    SELECT variant, SUM(bytes) / 1000.0 AS brut_ko, SUM(gzip) / 1000.0 AS gzip_ko\n    FROM raw_tile_sizes\n    GROUP BY variant\n)\nSELECT a.variant,\n    MAX(CASE WHEN a.context = 'worker' THEN a.mio END) AS allocations_worker_mio,\n    MAX(CASE WHEN a.context = 'main' THEN a.mio END) AS allocations_main_mio,\n    t.brut_ko, t.gzip_ko\nFROM allocation_medians a\nJOIN tile_totals t ON t.variant = a.variant\nGROUP BY a.variant\nORDER BY a.variant;\n",
+          "engine": "SQLite",
+          "language": "sql",
+          "description": "Somme des selfSize des noeuds de chaque profil V8 brut de browser-fastpfor-allocations-final-20260908, puis médiane de six sessions. Somme des tailles de fastpfor-encoding-audit-20260908/manifest.json ; chargement reproductible par mlt-fastpfor-sql-verify.mjs.",
+          "tables_used": [
+            "main.raw_profile_frames",
+            "main.raw_tile_sizes"
+          ],
+          "filters": [
+            "Dix rechargements natifs mesurés par session, après cinq échauffements.",
+            "Tailles des quatre tuiles, octets divisés par 1000 ; allocations divisées par 1048576."
+          ]
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# MLT : le test FastPFOR"
+      },
+      {
+        "id": "summary",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Résumé technique\n\n**Aucun gain de rendu stable avec FastPFOR sur cette scène.** Par rapport au MLT VARINT, le délai jusqu’au dessin augmente de 0,4 % au natif et de 2,7 % au surzoom chaud ; ces petits écarts agrégés masquent une dispersion importante entre sessions. Les allocations worker restent proches (−0,8 %), tandis que le gzip grossit de 3,5 %.\n\n**La parité globale n’est pas acquise : 64 couches sur 65 passent.** Une couche `contour` échoue au décodage. La scène de benchmark, qui ne dessine pas cette couche, reste strictement identique entre MVT, MLT VARINT et MLT FastPFOR."
+      },
+      {
+        "id": "drawing",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## FastPFOR ne raccourcit pas le délai jusqu’au dessin\n\nLes barres comparent la médiane de six médianes de session, chacune calculée sur vingt mesures. Plus bas signifie plus rapide. Le chronomètre s’arrête à la soumission CPU du dessin chargé après rechargement : **ce n’est ni la fin du travail GPU, ni les FPS, ni le chargement initial de la carte**.\n\nMLT FastPFOR reste plus rapide que MVT dans cette campagne : −10,4 % au natif et −37,0 % au surzoom. Mais MLT VARINT faisait déjà au moins aussi bien en médiane. Le changement d’encodage n’apporte donc pas de bénéfice supplémentaire démontré ici."
+      },
+      {
+        "id": "drawing_chart",
+        "type": "chart",
+        "chartId": "loaded_draw"
+      },
+      {
+        "id": "queries",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Les requêtes complètes restent le point faible du MLT\n\nL’extraction exhaustive des features source et rendues, avec conversion `toJSON`, est chronométrée après le dessin. Ce n’est pas une requête ponctuelle au survol. En natif, on mesure 45,03 ms pour MVT, 70,20 ms pour MLT VARINT et 69,98 ms pour MLT FastPFOR. En surzoom : 25,28 ms, 33,78 ms et 33,43 ms. FastPFOR ne change pas sensiblement ce coût."
+      },
+      {
+        "id": "costs",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Moins d’octets bruts, mais davantage de gzip\n\nLe tableau porte sur les quatre mêmes tuiles. Le gzip utilise les mêmes réglages pour les trois formats ; il est mesuré séparément, pas appliqué au serveur de benchmark. FastPFOR réduit le MLT brut de 4,9 %, mais augmente son gzip de 509,7 à 527,6 ko.\n\nLes allocations worker sont des estimations V8 pour dix rechargements natifs, mesurées dans une campagne distincte, objets déjà collectés inclus. Elles sont proches entre les deux MLT et nettement inférieures à MVT. **Elles ne représentent pas la RAM conservée, maximale ou GPU.**"
+      },
+      {
+        "id": "cost_table",
+        "type": "table",
+        "tableId": "cost_details"
+      },
+      {
+        "id": "parity",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## La scène est équivalente ; une couche empêche la qualification globale\n\nLes nouvelles tuiles contiennent 676 flux FAST_PFOR. L’audit complet préserve l’échec de la couche `contour` dans la tuile `14-8803-5374` : une erreur d’alignement est levée pendant la détection du type de vecteur. Cette couche n’est pas utilisée par la scène de référence ; elle n’a pas été retirée artificiellement du style pour faire passer le test.\n\nLes comparaisons finales contrôlent 66 images, 66 archives de requêtes et 756 observations. Les scènes instrumentées GPU et logiciel gardent les compteurs de matérialisation interdite à zéro et utilisent positivement les triangles préencodés. Les 848 fichiers source GL JS et 143 fichiers source MLT sont inchangés. Cela ne valide pas tous les styles ni la suite GPU complète."
+      },
+      {
+        "id": "method",
+        "type": "markdown",
+        "sourceId": "protocol",
+        "body": "## Méthode et incertitude\n\nLe test utilise quatre tuiles Berlin, un style fill/line/circle/heatmap inchangé, un worker, une image de 800 × 600 à DPR 1, Chrome 152 et un GPU Intel Iris Xe. Les six permutations des trois encodages équilibrent leur ordre de passage. Les campagnes de temps et d’allocations sont séparées ; aucune compilation ou suite de tests n’est exécutée pendant ces mesures.\n\nLes écarts FastPFOR/VARINT appariés sont mixtes : au natif, trois sessions favorables et trois défavorables. Leur plage va de −2,24 % à +18,07 %. Au surzoom, elle va de −15,39 % à +23,72 %. Ce sont des plages observées, **pas des intervalles de confiance**. Le bureau et sa charge ambiante ne constituent pas un laboratoire matériel contrôlé.\n\nLe serveur est local et ne simule pas un réseau compressé. Les premières observations sont conservées mais exclues des médianes réchauffées. Les nombres absolus ne doivent pas être mélangés avec ceux d’une ancienne campagne."
+      },
+      {
+        "id": "next",
+        "type": "markdown",
+        "body": "## Suite logique\n\n1. Corriger et couvrir le cas DELTA+RLE avec FastPFOR avant toute activation par défaut.\n2. Une fois la parité acquise, profiler le décodage pour décider si un encodage sélectif ou la réutilisation des espaces de travail peut apporter un gain.\n3. Étendre la comparaison à d’autres corpus, styles, architectures et à un véritable réseau compressé.\n\nLa question ouverte est l’intérêt de FastPFOR sur d’autres tailles et distributions de flux : ce test ne démontre pas son inutilité générale."
+      }
+    ],
+    "charts": [
+      {
+        "id": "loaded_draw",
+        "title": "Temps jusqu’au dessin chargé",
+        "subtitle": "Six sessions × vingt mesures ; millisecondes, plus bas = plus rapide.",
+        "showDescription": true,
+        "type": "bar",
+        "intent": "comparison",
+        "question": "Le changement d’encodage accélère-t-il le rendu natif ou le surzoom ?",
+        "rationale": "Six barres groupées comparent deux phases pour trois encodages, à moteur et scène identiques.",
+        "dataset": "drawing",
+        "sourceId": "timing_sql",
+        "encodings": {
+          "x": {
+            "field": "encodage",
+            "type": "nominal",
+            "label": "Encodage"
+          },
+          "y": {
+            "field": "dessin_ms",
+            "type": "quantitative",
+            "label": "Temps (ms)"
+          },
+          "color": {
+            "field": "phase",
+            "type": "nominal",
+            "label": "Phase"
+          },
+          "tooltip": [
+            {
+              "field": "requetes_ms",
+              "type": "quantitative",
+              "label": "Requêtes complètes (ms)"
+            },
+            {
+              "field": "min_mediane_ms",
+              "type": "quantitative",
+              "label": "Minimum des médianes (ms)"
+            },
+            {
+              "field": "max_mediane_ms",
+              "type": "quantitative",
+              "label": "Maximum des médianes (ms)"
+            },
+            {
+              "field": "sessions",
+              "type": "quantitative",
+              "label": "Sessions"
+            }
+          ]
+        },
+        "palette": {
+          "kind": "categorical"
+        },
+        "legend": {
+          "position": "bottom",
+          "sort": "spec",
+          "title": "Phase"
+        },
+        "labels": {
+          "values": "all"
+        },
+        "settings": {
+          "orientation": "vertical",
+          "groupMode": "grouped",
+          "sort": "none"
+        },
+        "unit": "ms",
+        "valueFormat": "number",
+        "layout": "full"
+      }
+    ],
+    "tables": [
+      {
+        "id": "cost_details",
+        "title": "Allocations et poids des tuiles",
+        "subtitle": "Allocations worker pour dix rechargements ; tailles totales des quatre tuiles.",
+        "dataset": "costs",
+        "sourceId": "costs_sql",
+        "defaultSort": {
+          "field": "allocations_worker_mio",
+          "direction": "desc"
+        },
+        "columns": [
+          {
+            "field": "encodage",
+            "label": "Encodage",
+            "type": "text"
+          },
+          {
+            "field": "allocations_worker_mio",
+            "label": "Worker (Mio)",
+            "format": "number"
+          },
+          {
+            "field": "gzip_ko",
+            "label": "Gzip (ko)",
+            "format": "number"
+          },
+          {
+            "field": "brut_ko",
+            "label": "Brut (ko)",
+            "format": "number"
+          }
+        ]
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "status": "ready",
+    "generatedAt": "2026-09-08T10:22:03.341Z",
+    "datasets": {
+      "drawing": [
+        {
+          "encodage": "MVT",
+          "phase": "Natif",
+          "dessin_ms": 75.62499999254942,
+          "requetes_ms": 45.0249999910593,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 72.6000000089407,
+          "max_mediane_ms": 80.70000000298023,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        },
+        {
+          "encodage": "MVT",
+          "phase": "Surzoom chaud",
+          "dessin_ms": 98.55000000447035,
+          "requetes_ms": 25.274999998509884,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 92.30000001192093,
+          "max_mediane_ms": 104.84999999403954,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        },
+        {
+          "encodage": "MLT VARINT",
+          "phase": "Natif",
+          "dessin_ms": 67.47499999403954,
+          "requetes_ms": 70.19999999552965,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 63.400000005960464,
+          "max_mediane_ms": 68.3999999910593,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        },
+        {
+          "encodage": "MLT VARINT",
+          "phase": "Surzoom chaud",
+          "dessin_ms": 60.399999998509884,
+          "requetes_ms": 33.775000005960464,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 57.29999999701977,
+          "max_mediane_ms": 66.84999999403954,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        },
+        {
+          "encodage": "MLT FastPFOR",
+          "phase": "Natif",
+          "dessin_ms": 67.75,
+          "requetes_ms": 69.97500000149012,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 65.54999999701977,
+          "max_mediane_ms": 77.09999999403954,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        },
+        {
+          "encodage": "MLT FastPFOR",
+          "phase": "Surzoom chaud",
+          "dessin_ms": 62.05000000447035,
+          "requetes_ms": 33.42500000447035,
+          "sessions": 6,
+          "mesures_par_session": 20,
+          "echauffements": 5,
+          "min_mediane_ms": 56.3500000089407,
+          "max_mediane_ms": 73.54999999701977,
+          "corpus": "4 tuiles Berlin — scène fill/line/circle/heatmap",
+          "jour": "8 septembre 2026"
+        }
+      ],
+      "costs": [
+        {
+          "encodage": "MVT",
+          "allocations_worker_mio": 387.1123447418213,
+          "allocations_main_mio": 19.203588485717773,
+          "gzip_ko": 733.662,
+          "brut_ko": 1481.872,
+          "rechargements": 10,
+          "sessions": 6
+        },
+        {
+          "encodage": "MLT VARINT",
+          "allocations_worker_mio": 181.49983978271484,
+          "allocations_main_mio": 20.50535774230957,
+          "gzip_ko": 509.665,
+          "brut_ko": 1055.493,
+          "rechargements": 10,
+          "sessions": 6
+        },
+        {
+          "encodage": "MLT FastPFOR",
+          "allocations_worker_mio": 180.06112670898438,
+          "allocations_main_mio": 21.02977180480957,
+          "gzip_ko": 527.605,
+          "brut_ko": 1003.79,
+          "rechargements": 10,
+          "sessions": 6
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "verification",
+      "label": "Calculs et preuves vérifiés",
+      "path": "test/bench/baselines/fastpfor-comparison-20260908.json"
+    },
+    {
+      "id": "protocol",
+      "label": "Notes techniques",
+      "path": "test/bench/baselines/MLT_FASTPFOR_20260908.md"
+    }
+  ]
+}

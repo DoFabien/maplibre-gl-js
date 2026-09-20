@@ -1,0 +1,551 @@
+{
+  "encoder": {
+    "path": "../maplibre-tile-spec/java/mlt-cli/build/libs/encode.jar",
+    "sha256": "807ad0761eb90e9381c7aeb50cdc017a6904adada2439dfc5da694d9eff99bdc",
+    "bytes": 171224238,
+    "gzip": 160524392
+  },
+  "arguments": [
+    "--tessellate",
+    "--outlines",
+    "ALL",
+    "--nomorton"
+  ],
+  "tiles": [
+    {
+      "name": "14-8802-5374",
+      "mvt": {
+        "sha256": "cb54ebf28300dfe4f212eea6be2eb09b39c6c373ba492be76bd93b65fe6dacc2",
+        "bytes": 390258,
+        "gzip": 192621
+      },
+      "existingMlt": {
+        "sha256": "417bd45b28f657c123ed33c4d1da3ed89adae87576ab41dd78af822af3da56e2",
+        "bytes": 273306,
+        "gzip": 136814
+      },
+      "pretriangulated": {
+        "sha256": "417bd45b28f657c123ed33c4d1da3ed89adae87576ab41dd78af822af3da56e2",
+        "bytes": 273306,
+        "gzip": 136814
+      },
+      "layers": [
+        {
+          "name": "barrier_line",
+          "features": 57,
+          "triangles": 0,
+          "vertices": 188,
+          "mesh": false
+        },
+        {
+          "name": "place_label",
+          "features": 2,
+          "triangles": 0,
+          "vertices": 2,
+          "mesh": false
+        },
+        {
+          "name": "poi_label",
+          "features": 1034,
+          "triangles": 0,
+          "vertices": 1034,
+          "mesh": false
+        },
+        {
+          "name": "waterway",
+          "features": 2,
+          "triangles": 0,
+          "vertices": 32,
+          "mesh": false
+        },
+        {
+          "name": "road_label",
+          "features": 426,
+          "triangles": 0,
+          "vertices": 1916,
+          "mesh": false
+        },
+        {
+          "name": "contour",
+          "features": 6,
+          "triangles": 0,
+          "vertices": 1211,
+          "mesh": false
+        },
+        {
+          "name": "water",
+          "features": 6,
+          "triangles": 59,
+          "vertices": 71,
+          "mesh": true
+        },
+        {
+          "name": "building",
+          "features": 1259,
+          "triangles": 5552,
+          "vertices": 8032,
+          "mesh": true
+        },
+        {
+          "name": "water_label",
+          "features": 2,
+          "triangles": 0,
+          "vertices": 2,
+          "mesh": false
+        },
+        {
+          "name": "road",
+          "features": 719,
+          "triangles": 0,
+          "vertices": 2840,
+          "mesh": false
+        },
+        {
+          "name": "hillshade",
+          "features": 3,
+          "triangles": 10,
+          "vertices": 16,
+          "mesh": true
+        },
+        {
+          "name": "waterway_label",
+          "features": 3,
+          "triangles": 0,
+          "vertices": 58,
+          "mesh": false
+        },
+        {
+          "name": "landuse",
+          "features": 111,
+          "triangles": 560,
+          "vertices": 784,
+          "mesh": true
+        },
+        {
+          "name": "bridge",
+          "features": 12,
+          "triangles": 0,
+          "vertices": 67,
+          "mesh": false
+        },
+        {
+          "name": "tunnel",
+          "features": 49,
+          "triangles": 0,
+          "vertices": 139,
+          "mesh": false
+        },
+        {
+          "name": "housenum_label",
+          "features": 3322,
+          "triangles": 0,
+          "vertices": 3322,
+          "mesh": false
+        }
+      ]
+    },
+    {
+      "name": "14-8802-5375",
+      "mvt": {
+        "sha256": "b2ad38f74c6b7f30660e558a36f38698d1e593c1f8a9edee6565c09b4d1c8c14",
+        "bytes": 317361,
+        "gzip": 159515
+      },
+      "existingMlt": {
+        "sha256": "753390227f2041c6cdc53449757b3d7a8a1916f9462a57e7e0554c5e75a376ac",
+        "bytes": 233178,
+        "gzip": 106582
+      },
+      "pretriangulated": {
+        "sha256": "753390227f2041c6cdc53449757b3d7a8a1916f9462a57e7e0554c5e75a376ac",
+        "bytes": 233178,
+        "gzip": 106582
+      },
+      "layers": [
+        {
+          "name": "barrier_line",
+          "features": 23,
+          "triangles": 0,
+          "vertices": 69,
+          "mesh": false
+        },
+        {
+          "name": "place_label",
+          "features": 7,
+          "triangles": 0,
+          "vertices": 7,
+          "mesh": false
+        },
+        {
+          "name": "poi_label",
+          "features": 951,
+          "triangles": 0,
+          "vertices": 951,
+          "mesh": false
+        },
+        {
+          "name": "landcover",
+          "features": 4,
+          "triangles": 51,
+          "vertices": 59,
+          "mesh": true
+        },
+        {
+          "name": "waterway",
+          "features": 1,
+          "triangles": 0,
+          "vertices": 15,
+          "mesh": false
+        },
+        {
+          "name": "road_label",
+          "features": 326,
+          "triangles": 0,
+          "vertices": 1583,
+          "mesh": false
+        },
+        {
+          "name": "contour",
+          "features": 6,
+          "triangles": 0,
+          "vertices": 1603,
+          "mesh": false
+        },
+        {
+          "name": "water",
+          "features": 4,
+          "triangles": 64,
+          "vertices": 72,
+          "mesh": true
+        },
+        {
+          "name": "building",
+          "features": 802,
+          "triangles": 5131,
+          "vertices": 6619,
+          "mesh": true
+        },
+        {
+          "name": "water_label",
+          "features": 1,
+          "triangles": 0,
+          "vertices": 1,
+          "mesh": false
+        },
+        {
+          "name": "road",
+          "features": 568,
+          "triangles": 0,
+          "vertices": 2517,
+          "mesh": false
+        },
+        {
+          "name": "hillshade",
+          "features": 3,
+          "triangles": 25,
+          "vertices": 31,
+          "mesh": true
+        },
+        {
+          "name": "waterway_label",
+          "features": 1,
+          "triangles": 0,
+          "vertices": 30,
+          "mesh": false
+        },
+        {
+          "name": "landuse",
+          "features": 104,
+          "triangles": 924,
+          "vertices": 1122,
+          "mesh": true
+        },
+        {
+          "name": "bridge",
+          "features": 3,
+          "triangles": 0,
+          "vertices": 6,
+          "mesh": false
+        },
+        {
+          "name": "tunnel",
+          "features": 18,
+          "triangles": 0,
+          "vertices": 83,
+          "mesh": false
+        },
+        {
+          "name": "housenum_label",
+          "features": 2580,
+          "triangles": 0,
+          "vertices": 2580,
+          "mesh": false
+        }
+      ]
+    },
+    {
+      "name": "14-8803-5374",
+      "mvt": {
+        "sha256": "922065aba50b847cefac7ff7a6e113dad0397267bba02cb95c98fcb2c5f1e74e",
+        "bytes": 339472,
+        "gzip": 168694
+      },
+      "existingMlt": {
+        "sha256": "981afa69b47bf8944b7cc709221abed0e95ba0d6e5a08703a368645bddc7bb76",
+        "bytes": 244870,
+        "gzip": 107940
+      },
+      "pretriangulated": {
+        "sha256": "981afa69b47bf8944b7cc709221abed0e95ba0d6e5a08703a368645bddc7bb76",
+        "bytes": 244870,
+        "gzip": 107940
+      },
+      "layers": [
+        {
+          "name": "barrier_line",
+          "features": 87,
+          "triangles": 0,
+          "vertices": 336,
+          "mesh": false
+        },
+        {
+          "name": "place_label",
+          "features": 3,
+          "triangles": 0,
+          "vertices": 3,
+          "mesh": false
+        },
+        {
+          "name": "poi_label",
+          "features": 996,
+          "triangles": 0,
+          "vertices": 996,
+          "mesh": false
+        },
+        {
+          "name": "waterway",
+          "features": 5,
+          "triangles": 0,
+          "vertices": 23,
+          "mesh": false
+        },
+        {
+          "name": "road_label",
+          "features": 377,
+          "triangles": 0,
+          "vertices": 1603,
+          "mesh": false
+        },
+        {
+          "name": "contour",
+          "features": 10,
+          "triangles": 0,
+          "vertices": 1351,
+          "mesh": false
+        },
+        {
+          "name": "water",
+          "features": 2,
+          "triangles": 44,
+          "vertices": 48,
+          "mesh": true
+        },
+        {
+          "name": "building",
+          "features": 899,
+          "triangles": 4633,
+          "vertices": 6357,
+          "mesh": true
+        },
+        {
+          "name": "water_label",
+          "features": 2,
+          "triangles": 0,
+          "vertices": 2,
+          "mesh": false
+        },
+        {
+          "name": "road",
+          "features": 586,
+          "triangles": 0,
+          "vertices": 2245,
+          "mesh": false
+        },
+        {
+          "name": "hillshade",
+          "features": 1,
+          "triangles": 4,
+          "vertices": 6,
+          "mesh": true
+        },
+        {
+          "name": "waterway_label",
+          "features": 3,
+          "triangles": 0,
+          "vertices": 32,
+          "mesh": false
+        },
+        {
+          "name": "landuse",
+          "features": 90,
+          "triangles": 407,
+          "vertices": 587,
+          "mesh": true
+        },
+        {
+          "name": "bridge",
+          "features": 20,
+          "triangles": 0,
+          "vertices": 107,
+          "mesh": false
+        },
+        {
+          "name": "tunnel",
+          "features": 20,
+          "triangles": 0,
+          "vertices": 43,
+          "mesh": false
+        },
+        {
+          "name": "housenum_label",
+          "features": 2740,
+          "triangles": 0,
+          "vertices": 2740,
+          "mesh": false
+        }
+      ]
+    },
+    {
+      "name": "14-8803-5375",
+      "mvt": {
+        "sha256": "1245fe2f4a73a9e1acfeb26109eeb705fd1cd810996ad1419573224c88d583cb",
+        "bytes": 434781,
+        "gzip": 212832
+      },
+      "existingMlt": {
+        "sha256": "e1937409ce51fd19b181970fa07a2c88952ad6e29e2058e97e826f366510c2a6",
+        "bytes": 304139,
+        "gzip": 158329
+      },
+      "pretriangulated": {
+        "sha256": "e1937409ce51fd19b181970fa07a2c88952ad6e29e2058e97e826f366510c2a6",
+        "bytes": 304139,
+        "gzip": 158329
+      },
+      "layers": [
+        {
+          "name": "barrier_line",
+          "features": 91,
+          "triangles": 0,
+          "vertices": 320,
+          "mesh": false
+        },
+        {
+          "name": "place_label",
+          "features": 7,
+          "triangles": 0,
+          "vertices": 7,
+          "mesh": false
+        },
+        {
+          "name": "poi_label",
+          "features": 1148,
+          "triangles": 0,
+          "vertices": 1148,
+          "mesh": false
+        },
+        {
+          "name": "waterway",
+          "features": 6,
+          "triangles": 0,
+          "vertices": 52,
+          "mesh": false
+        },
+        {
+          "name": "road_label",
+          "features": 367,
+          "triangles": 0,
+          "vertices": 1505,
+          "mesh": false
+        },
+        {
+          "name": "contour",
+          "features": 4,
+          "triangles": 0,
+          "vertices": 1320,
+          "mesh": false
+        },
+        {
+          "name": "water",
+          "features": 7,
+          "triangles": 115,
+          "vertices": 129,
+          "mesh": true
+        },
+        {
+          "name": "building",
+          "features": 1510,
+          "triangles": 8996,
+          "vertices": 12004,
+          "mesh": true
+        },
+        {
+          "name": "water_label",
+          "features": 1,
+          "triangles": 0,
+          "vertices": 1,
+          "mesh": false
+        },
+        {
+          "name": "road",
+          "features": 562,
+          "triangles": 0,
+          "vertices": 2214,
+          "mesh": false
+        },
+        {
+          "name": "hillshade",
+          "features": 3,
+          "triangles": 11,
+          "vertices": 17,
+          "mesh": true
+        },
+        {
+          "name": "waterway_label",
+          "features": 4,
+          "triangles": 0,
+          "vertices": 38,
+          "mesh": false
+        },
+        {
+          "name": "landuse",
+          "features": 131,
+          "triangles": 879,
+          "vertices": 1139,
+          "mesh": true
+        },
+        {
+          "name": "bridge",
+          "features": 14,
+          "triangles": 0,
+          "vertices": 29,
+          "mesh": false
+        },
+        {
+          "name": "tunnel",
+          "features": 15,
+          "triangles": 0,
+          "vertices": 36,
+          "mesh": false
+        },
+        {
+          "name": "housenum_label",
+          "features": 3970,
+          "triangles": 0,
+          "vertices": 3970,
+          "mesh": false
+        }
+      ]
+    }
+  ]
+}

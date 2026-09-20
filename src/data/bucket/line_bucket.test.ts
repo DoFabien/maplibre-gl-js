@@ -2,6 +2,8 @@ import {beforeAll, describe, test, expect, vi} from 'vitest';
 import Point from '@mapbox/point-geometry';
 import {SegmentVector} from '../segment.ts';
 import {LineBucket} from './line_bucket.ts';
+import {GEOJSONVT_CLIP_START, GEOJSONVT_CLIP_END} from '@maplibre/geojson-vt';
+import {lineClipPropertyNames} from './line_clip_properties.ts';
 import {LineStyleLayer} from '../../style/style_layer/line_style_layer.ts';
 import {SubdivisionGranularitySetting} from '../../render/subdivision_granularity_settings.ts';
 import {type CreateBucketParameters, createPopulateOptions, getFeaturesFromLayer, loadVectorTile} from '../../../test/unit/lib/tile.ts';
@@ -38,9 +40,20 @@ function createLineBucket({id, layout, paint, globalState, availableImages}: Cre
 describe('LineBucket', () => {
     let sourceLayer: VectorTileLayerLike;
     beforeAll(() => {
-        // Load line features from fixture tile.
         sourceLayer = loadVectorTile().layers.road;
     });
+
+    test('line metrics prefer a complete GeoJSON-VT pair and preserve legacy tile properties', () => {
+        expect(lineClipPropertyNames[0]).toEqual([GEOJSONVT_CLIP_START, GEOJSONVT_CLIP_END]);
+        const bucket = createLineBucket({id: 'metrics'});
+        const properties = {geojsonvt_clip_start: 0.2, geojsonvt_clip_end: 0.8, mapbox_clip_start: 0.1, mapbox_clip_end: 0.9};
+        expect(bucket.lineFeatureClips({properties} as BucketFeature)).toEqual({start: 0.2, end: 0.8});
+        delete properties.geojsonvt_clip_end;
+        expect(bucket.lineFeatureClips({properties} as BucketFeature)).toEqual({start: 0.1, end: 0.9});
+        delete properties.mapbox_clip_start;
+        expect(bucket.lineFeatureClips({properties} as BucketFeature)).toBeUndefined();
+    });
+
     test('LineBucket', () => {
         expect(() => {
             const bucket = createLineBucket({

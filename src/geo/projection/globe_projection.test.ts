@@ -3,6 +3,18 @@ import {GlobeProjection} from './globe_projection.ts';
 import {EvaluationParameters} from '../../style/evaluation_parameters.ts';
 
 import type {TransitionParameters} from '../../style/properties.ts';
+import type {ProjectionDefinitionT} from '@maplibre/maplibre-gl-style-spec';
+
+test.each([
+    {definition: ['mercator', 'vertical-perspective', 0.5], expected: 0.5},
+    {definition: ['vertical-perspective', 'mercator', 0.25], expected: 0.75},
+    {definition: ['mercator', 'mercator', 0.5], expected: 0},
+    {definition: ['vertical-perspective', 'vertical-perspective', 0.5], expected: 1}
+])('evaluates a literal projection tuple: $definition', ({definition, expected}) => {
+    const projection = new GlobeProjection({type: definition as ProjectionDefinitionT}, {});
+    expect(projection.transitionState).toBe(expected);
+    projection.destroy();
+});
 
 describe('GlobeProjection runtime error logging', () => {
     afterEach(() => {

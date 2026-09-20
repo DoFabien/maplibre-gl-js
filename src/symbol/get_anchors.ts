@@ -1,16 +1,24 @@
 import {interpolates} from '@maplibre/maplibre-gl-style-spec';
 import {Anchor} from '../symbol/anchor.ts';
 import {checkMaxAngle} from './check_max_angle.ts';
+import {
+    getSymbolLineAngle,
+    getSymbolLineDistance,
+    getSymbolLinePointCount,
+    getSymbolLineX,
+    getSymbolLineY,
+    type SymbolLine,
+} from './symbol_line.ts';
 
-import type Point from '@mapbox/point-geometry';
 import type {Shaping, PositionedIcon} from './shaping.ts';
 
 export {getAnchors, getCenterAnchor};
 
-function getLineLength(line: Point[]): number {
+function getLineLength(line: SymbolLine): number {
     let lineLength = 0;
-    for (let k = 0; k < line.length - 1; k++) {
-        lineLength += line[k].dist(line[k + 1]);
+    const pointCount = getSymbolLinePointCount(line);
+    for (let k = 0; k < pointCount - 1; k++) {
+        lineLength += getSymbolLineDistance(line, k, k + 1);
     }
     return lineLength;
 }
@@ -31,7 +39,7 @@ function getShapedLabelLength(shapedText?: Shaping | null, shapedIcon?: Position
         shapedIcon ? shapedIcon.right - shapedIcon.left : 0);
 }
 
-function getCenterAnchor(line: Point[],
+function getCenterAnchor(line: SymbolLine,
     maxAngle: number,
     shapedText: Shaping,
     shapedIcon: PositionedIcon,
@@ -43,20 +51,17 @@ function getCenterAnchor(line: Point[],
     let prevDistance = 0;
     const centerDistance = getLineLength(line) / 2;
 
-    for (let i = 0; i < line.length - 1; i++) {
-
-        const a = line[i],
-            b = line[i + 1];
-
-        const segmentDistance = a.dist(b);
+    const pointCount = getSymbolLinePointCount(line);
+    for (let i = 0; i < pointCount - 1; i++) {
+        const segmentDistance = getSymbolLineDistance(line, i, i + 1);
 
         if (prevDistance + segmentDistance > centerDistance) {
             // The center is on this segment
             const t = (centerDistance - prevDistance) / segmentDistance,
-                x = interpolates.number(a.x, b.x, t),
-                y = interpolates.number(a.y, b.y, t);
+                x = interpolates.number(getSymbolLineX(line, i), getSymbolLineX(line, i + 1), t),
+                y = interpolates.number(getSymbolLineY(line, i), getSymbolLineY(line, i + 1), t);
 
-            const anchor = new Anchor(x, y, b.angleTo(a), i);
+            const anchor = new Anchor(x, y, getSymbolLineAngle(line, i + 1, i), i);
             anchor._round();
             if (!angleWindowSize || checkMaxAngle(line, anchor, labelLength, angleWindowSize, maxAngle)) {
                 return anchor;
@@ -69,7 +74,7 @@ function getCenterAnchor(line: Point[],
     }
 }
 
-function getAnchors(line: Point[],
+function getAnchors(line: SymbolLine,
     spacing: number,
     maxAngle: number,
     shapedText: Shaping,
@@ -88,7 +93,9 @@ function getAnchors(line: Point[],
     const labelLength = shapedLabelLength * boxScale;
 
     // Is the line continued from outside the tile boundary?
-    const isLineContinued = line[0].x === 0 || line[0].x === tileExtent || line[0].y === 0 || line[0].y === tileExtent;
+    const firstX = getSymbolLineX(line, 0);
+    const firstY = getSymbolLineY(line, 0);
+    const isLineContinued = firstX === 0 || firstX === tileExtent || firstY === 0 || firstY === tileExtent;
 
     // Is the label long, relative to the spacing?
     // If so, adjust the spacing so there is always a minimum space of `spacing / 4` between label edges.
@@ -110,7 +117,7 @@ function getAnchors(line: Point[],
     return resample(line, offset, spacing, angleWindowSize, maxAngle, labelLength, isLineContinued, false, tileExtent);
 }
 
-function resample(line: Point[], offset: number, spacing: number, angleWindowSize: number, maxAngle: number, labelLength: number, isLineContinued: boolean, placeAtMiddle: boolean, tileExtent: number): Anchor[] {
+function resample(line: SymbolLine, offset: number, spacing: number, angleWindowSize: number, maxAngle: number, labelLength: number, isLineContinued: boolean, placeAtMiddle: boolean, tileExtent: number): Anchor[] {
 
     const halfLabelLength = labelLength / 2;
     const lineLength = getLineLength(line);
@@ -120,20 +127,17 @@ function resample(line: Point[], offset: number, spacing: number, angleWindowSiz
 
     let anchors: Anchor[] = [];
 
-    for (let i = 0; i < line.length - 1; i++) {
-
-        const a = line[i],
-            b = line[i + 1];
-
-        const segmentDist = a.dist(b),
-            angle = b.angleTo(a);
+    const pointCount = getSymbolLinePointCount(line);
+    for (let i = 0; i < pointCount - 1; i++) {
+        const segmentDist = getSymbolLineDistance(line, i, i + 1),
+            angle = getSymbolLineAngle(line, i + 1, i);
 
         while (markedDistance + spacing < distance + segmentDist) {
             markedDistance += spacing;
 
             const t = (markedDistance - distance) / segmentDist,
-                x = interpolates.number(a.x, b.x, t),
-                y = interpolates.number(a.y, b.y, t);
+                x = interpolates.number(getSymbolLineX(line, i), getSymbolLineX(line, i + 1), t),
+                y = interpolates.number(getSymbolLineY(line, i), getSymbolLineY(line, i + 1), t);
 
             // Check that the point is within the tile boundaries and that
             // the label would fit before the beginning and end of the line

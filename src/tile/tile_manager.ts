@@ -657,12 +657,15 @@ export class TileManager extends Evented<SourceEventType> {
         return idealTileIDs.concat(ancestors);
     }
 
-    releaseSymbolFadeTiles(): void {
+    /** Removes tiles held for completed symbol fades and reports whether the renderable set changed. */
+    releaseSymbolFadeTiles(): boolean {
+        let released = false;
         for (const id of this._inViewTiles.getAllIds()) {
-            if (this._inViewTiles.getTileById(id).holdingForSymbolFade()) {
-                this._removeTile(id);
-            }
+            if (!this._inViewTiles.getTileById(id).holdingForSymbolFade()) continue;
+            this._removeTile(id);
+            released = true;
         }
+        return released;
     }
 
     /**

@@ -111,4 +111,15 @@ describe('getAnchors', () => {
         const anchor = getCenterAnchor(line, Math.PI / 4, shapedText, shapedIcon, glyphSize, 1);
         expect(anchor).toBeFalsy();
     });
+
+    test('flattened lines match Point geometry anchors', () => {
+        const flattened = nonContinuedLine.flatMap(point => [point.x, point.y]);
+        expect(getAnchors(flattened, bigSpacing, Math.PI, shapedText, shapedIcon, glyphSize, 1, 1, TILE_EXTENT))
+            .toEqual(getAnchors(nonContinuedLine, bigSpacing, Math.PI, shapedText, shapedIcon, glyphSize, 1, 1, TILE_EXTENT));
+
+        const centerLine = [new Point(1, 1), new Point(1, 3.1), new Point(3, 6), new Point(4, 7)];
+        const flattenedCenterLine = centerLine.flatMap(point => [point.x, point.y]);
+        expect(getCenterAnchor(flattenedCenterLine, Math.PI, shapedText, shapedIcon, glyphSize, 1))
+            .toEqual(getCenterAnchor(centerLine, Math.PI, shapedText, shapedIcon, glyphSize, 1));
+    });
 });

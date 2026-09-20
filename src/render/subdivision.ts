@@ -20,6 +20,11 @@ type SubdivisionResult = {
     indicesLineList: number[][];
 };
 
+type RingRange = {
+    startVertexIndex: number;
+    vertexCount: number;
+};
+
 // Special pole vertices have coordinates -32768,-32768 for the north pole and 32767,32767 for the south pole.
 // First, find any *non-pole* vertices at those coordinates and move them slightly elsewhere.
 export const NORTH_POLE_Y = -32768;
@@ -443,6 +448,20 @@ class Subdivider {
         return subdividedLines;
     }
 
+    /** Generates subdivided outline segment indices directly from numeric coordinates, without Point or coordinate-tuple arrays. */
+    private _generateFlattenedOutline(flattened: number[], isRing: boolean): number[] {
+        const line = subdivideFlattenedVertexLine(flattened, this._granularity, isRing);
+        const indices: number[] = [];
+        if (line.length < 4) return indices;
+        let previous = this._vertexToIndex(line[0], line[1]);
+        for (let i = 2; i < line.length; i += 2) {
+            const current = this._vertexToIndex(line[i], line[i + 1]);
+            indices.push(previous, current);
+            previous = current;
+        }
+        return indices;
+    }
+
     /**
      * The outline path `subdivideVertexLine(ring, granularity, true)` returns when the granularity is too low to
      * subdivide, as vertex buffer indices rather than points, read from `inputRemap` instead of looked up per point.
@@ -586,11 +605,29 @@ class Subdivider {
      * @returns The index into the internal vertex buffer for each input vertex, in the order `flatten` produced them.
      */
     private _initializeVertices(flattened: number[]): number[] {
-        const inputRemap: number[] = [];
+        const oldToNewIndices = new Array<number>(flattened.length / 2);
         for (let i = 0; i < flattened.length; i += 2) {
-            inputRemap.push(this._vertexToIndex(flattened[i], flattened[i + 1]));
+            oldToNewIndices[i / 2] = this._vertexToIndex(flattened[i], flattened[i + 1]);
         }
-        return inputRemap;
+        return oldToNewIndices;
+    }
+
+    /** Remaps and orients owned triangles in one pass, with the same cross-product test as `fixWindingOrder`. */
+    private _remapOwnedTriangles(indices: number[], oldToNewIndices: number[]): void {
+        const vertices = this._vertexBuffer;
+        for (let i = 0; i < indices.length; i += 3) {
+            const i0 = oldToNewIndices[indices[i]];
+            const i1 = oldToNewIndices[indices[i + 1]];
+            const i2 = oldToNewIndices[indices[i + 2]];
+            const e0x = vertices[i1 * 2] - vertices[i0 * 2];
+            const e0y = vertices[i1 * 2 + 1] - vertices[i0 * 2 + 1];
+            const e1x = vertices[i2 * 2] - vertices[i0 * 2];
+            const e1y = vertices[i2 * 2 + 1] - vertices[i0 * 2 + 1];
+            const flip = e0x * e1y - e0y * e1x > 0;
+            indices[i] = i0;
+            indices[i + 1] = flip ? i2 : i1;
+            indices[i + 2] = flip ? i1 : i2;
+        }
     }
 
     /**
@@ -685,6 +722,106 @@ class Subdivider {
     }
 
     /**
+     * Subdivides a polygon described directly by flattened coordinates and ring-derived line lists.
+     * Intended for fast paths that already operate on columnar buffers and want to avoid rebuilding Point arrays.
+     * Subdivides interiors and outlines numerically, including pole geometry and clipping the zoom-zero world seam.
+     * Remaps the owned triangulation indices in place through the initialization map, without repeating vertex lookups.
+     * Without finer subdivision, also fixes winding in that same array; input coordinates remain borrowed.
+     */
+    public subdivideFlattenedPolygonInternal(
+        flattened: number[],
+        holeIndices: number[],
+        lineList: number[][],
+        ringRanges?: RingRange[],
+    ): SubdivisionResult {
+        if (this._used) {
+            throw new Error('Subdivision: multiple use not allowed.');
+        }
+        this._used = true;
+
+        const oldToNewIndices = this._initializeVertices(flattened);
+
+        let subdividedTriangles: number[];
+        try {
+            const cut = earcut(flattened, holeIndices);
+            if (this._granularity < 2) {
+                this._remapOwnedTriangles(cut, oldToNewIndices);
+                subdividedTriangles = cut;
+            } else {
+                subdividedTriangles = this._subdivideTrianglesScanline(cut, oldToNewIndices);
+            }
+        } catch (e) {
+            console.error(e);
+            subdividedTriangles = [];
+        }
+
+        let subdividedLines: number[][] = [];
+        if (this._granularity < 2) {
+            if (ringRanges && ringRanges.length > 0) {
+                subdividedLines = ringRanges.map((ring) => {
+                    const indices = new Array<number>(Math.max((ring.vertexCount - 1) * 2, 0));
+                    let writeIndex = 0;
+                    for (let vertexIndex = 1; vertexIndex < ring.vertexCount; vertexIndex++) {
+                        indices[writeIndex++] = oldToNewIndices[ring.startVertexIndex + vertexIndex - 1];
+                        indices[writeIndex++] = oldToNewIndices[ring.startVertexIndex + vertexIndex];
+                    }
+                    return indices;
+                });
+            } else {
+                subdividedLines = lineList.map((indices) => this._convertIndices(flattened, indices));
+            }
+        } else if (ringRanges?.length) {
+            subdividedLines = ringRanges.map(ring => this._generateFlattenedOutline(
+                flattened.slice(ring.startVertexIndex * 2, (ring.startVertexIndex + ring.vertexCount) * 2), true));
+        } else {
+            subdividedLines = lineList.map((indices) => {
+                const segments: number[] = [];
+                for (let i = 0; i < indices.length; i += 2) {
+                    const first = indices[i] * 2;
+                    const second = indices[i + 1] * 2;
+                    segments.push(...this._generateFlattenedOutline([
+                        flattened[first], flattened[first + 1], flattened[second], flattened[second + 1]
+                    ], false));
+                }
+                return segments;
+            });
+        }
+
+        this._ensureNoPoleVertices();
+        this._handlePoles(subdividedTriangles);
+
+        if (this._granularity >= 2 && this._canonical?.z === 0) {
+            subdividedTriangles = this._removeTrianglesOutsideTileX(subdividedTriangles);
+            subdividedLines = subdividedLines.map(lines => this._removeLinesOutsideTileX(lines));
+        }
+
+        return {
+            verticesFlattened: this._vertexBuffer,
+            indicesTriangles: subdividedTriangles,
+            indicesLineList: subdividedLines,
+        };
+    }
+
+    /**
+     * Sometimes the supplies vertex and index array has duplicate vertices - same coordinates that are referenced by multiple different indices.
+     * That is not allowed for purposes of subdivision, duplicates are removed in `this.initializeVertices`.
+     * This function converts the original index array that indexes into the original vertex array with duplicates
+     * into an index array that indexes into `this._finalVertices`.
+     * @param vertices - Flattened vertex array used by the old indices. This may contain duplicate vertices.
+     * @param oldIndices - Indices into the old vertex array.
+     * @returns Indices transformed so that they are valid indices into `this._finalVertices` (with duplicates removed).
+     */
+    private _convertIndices(vertices: number[], oldIndices: number[]): number[] {
+        const newIndices = [];
+        for (const oldIndex of oldIndices) {
+            const x = vertices[oldIndex * 2];
+            const y = vertices[oldIndex * 2 + 1];
+            newIndices.push(this._vertexToIndex(x, y));
+        }
+        return newIndices;
+    }
+
+    /**
      * Converts an array of points into an array of indices into the internal vertex buffer (`_finalVertices`).
      */
     private _pointArrayToIndices(array: Point[]): number[] {
@@ -710,6 +847,28 @@ class Subdivider {
 export function subdividePolygon(polygon: Point[][], canonical: CanonicalTileID, granularity: number, generateOutlineLines: boolean = true): SubdivisionResult {
     const subdivider = new Subdivider(granularity, canonical);
     return subdivider.subdividePolygonInternal(polygon, generateOutlineLines);
+}
+
+export function subdivideFlattenedPolygon(
+    flattened: number[],
+    holeIndices: number[],
+    lineList: number[][],
+    canonical: CanonicalTileID,
+    granularity: number,
+): SubdivisionResult {
+    const subdivider = new Subdivider(granularity, canonical);
+    return subdivider.subdivideFlattenedPolygonInternal(flattened, holeIndices, lineList);
+}
+
+export function subdivideFlattenedPolygonWithRings(
+    flattened: number[],
+    holeIndices: number[],
+    ringRanges: RingRange[],
+    canonical: CanonicalTileID,
+    granularity: number,
+): SubdivisionResult {
+    const subdivider = new Subdivider(granularity, canonical);
+    return subdivider.subdivideFlattenedPolygonInternal(flattened, holeIndices, [], ringRanges);
 }
 
 /**
@@ -861,6 +1020,112 @@ export function subdivideVertexLine(linePoints: Point[], granularity: number, is
         if (finalLineVertices[finalLineVertices.length - 1].x !== last.x ||
             finalLineVertices[finalLineVertices.length - 1].y !== last.y) {
             finalLineVertices.push(last);
+        }
+    }
+
+    return finalLineVertices;
+}
+
+export function subdivideFlattenedVertexLine(linePointsFlattened: number[], granularity: number, isRing: boolean = false): number[] {
+    if (!linePointsFlattened || linePointsFlattened.length < 2) {
+        return [];
+    }
+
+    const pointCount = Math.floor(linePointsFlattened.length / 2);
+    if (pointCount < 2) {
+        return [];
+    }
+
+    const firstX = linePointsFlattened[0];
+    const firstY = linePointsFlattened[1];
+    const lastX = linePointsFlattened[(pointCount - 1) * 2];
+    const lastY = linePointsFlattened[(pointCount - 1) * 2 + 1];
+    const addLastToFirstSegment = isRing && (firstX !== lastX || firstY !== lastY);
+
+    if (granularity < 2) {
+        if (addLastToFirstSegment) {
+            return [...linePointsFlattened, firstX, firstY];
+        } else {
+            return linePointsFlattened;
+        }
+    }
+
+    const cellSize = Math.floor(EXTENT / granularity);
+    const finalLineVertices: number[] = [firstX, firstY];
+    const totalPoints = pointCount;
+    const lastIndex = addLastToFirstSegment ? totalPoints : (totalPoints - 1);
+
+    for (let pointIndex = 0; pointIndex < lastIndex; pointIndex++) {
+        const point0Offset = pointIndex * 2;
+        const point1Index = pointIndex < (totalPoints - 1) ? pointIndex + 1 : 0;
+        const point1Offset = point1Index * 2;
+        const lineVertex0x = linePointsFlattened[point0Offset];
+        const lineVertex0y = linePointsFlattened[point0Offset + 1];
+        const lineVertex1x = linePointsFlattened[point1Offset];
+        const lineVertex1y = linePointsFlattened[point1Offset + 1];
+
+        const dirXnonZero = lineVertex0x !== lineVertex1x;
+        const dirYnonZero = lineVertex0y !== lineVertex1y;
+
+        if (!dirXnonZero && !dirYnonZero) {
+            continue;
+        }
+
+        const dirX = lineVertex1x - lineVertex0x;
+        const dirY = lineVertex1y - lineVertex0y;
+        const absDirX = Math.abs(dirX);
+        const absDirY = Math.abs(dirY);
+
+        let lastPointX = lineVertex0x;
+        let lastPointY = lineVertex0y;
+
+        while (true) {
+            const nextBoundaryX = dirX > 0 ?
+                ((Math.floor(lastPointX / cellSize) + 1) * cellSize) :
+                ((Math.ceil(lastPointX / cellSize) - 1) * cellSize);
+            const nextBoundaryY = dirY > 0 ?
+                ((Math.floor(lastPointY / cellSize) + 1) * cellSize) :
+                ((Math.ceil(lastPointY / cellSize) - 1) * cellSize);
+            const axisDistanceToBoundaryX = Math.abs(lastPointX - nextBoundaryX);
+            const axisDistanceToBoundaryY = Math.abs(lastPointY - nextBoundaryY);
+
+            const axisDistanceToEndX = Math.abs(lastPointX - lineVertex1x);
+            const axisDistanceToEndY = Math.abs(lastPointY - lineVertex1y);
+
+            const realDistanceToBoundaryX = dirXnonZero ? axisDistanceToBoundaryX / absDirX : Number.POSITIVE_INFINITY;
+            const realDistanceToBoundaryY = dirYnonZero ? axisDistanceToBoundaryY / absDirY : Number.POSITIVE_INFINITY;
+
+            if ((axisDistanceToEndX <= axisDistanceToBoundaryX || !dirXnonZero) &&
+                (axisDistanceToEndY <= axisDistanceToBoundaryY || !dirYnonZero)) {
+                break;
+            }
+
+            if ((realDistanceToBoundaryX < realDistanceToBoundaryY && dirXnonZero) || !dirYnonZero) {
+                lastPointX = nextBoundaryX;
+                lastPointY = lastPointY + dirY * realDistanceToBoundaryX;
+                const nextX = lastPointX;
+                const nextY = Math.round(lastPointY);
+
+                const previousOffset = finalLineVertices.length - 2;
+                if (finalLineVertices[previousOffset] !== nextX || finalLineVertices[previousOffset + 1] !== nextY) {
+                    finalLineVertices.push(nextX, nextY);
+                }
+            } else {
+                lastPointX = lastPointX + dirX * realDistanceToBoundaryY;
+                lastPointY = nextBoundaryY;
+                const nextX = Math.round(lastPointX);
+                const nextY = lastPointY;
+
+                const previousOffset = finalLineVertices.length - 2;
+                if (finalLineVertices[previousOffset] !== nextX || finalLineVertices[previousOffset + 1] !== nextY) {
+                    finalLineVertices.push(nextX, nextY);
+                }
+            }
+        }
+
+        const previousOffset = finalLineVertices.length - 2;
+        if (finalLineVertices[previousOffset] !== lineVertex1x || finalLineVertices[previousOffset + 1] !== lineVertex1y) {
+            finalLineVertices.push(lineVertex1x, lineVertex1y);
         }
     }
 

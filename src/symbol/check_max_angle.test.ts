@@ -52,4 +52,22 @@ describe('checkMaxAngle', () => {
         const anchor = new Anchor(5, 0, 0, 0);
         expect(checkMaxAngle(line, anchor, 0, 5, Math.PI)).toBeTruthy();
     });
+
+    test('flattened lines match Point geometry angle checks', () => {
+        const line = [
+            new Point(0, 0), new Point(10, 0), new Point(11, 0.1),
+            new Point(12, 0.3), new Point(13, 0.6), new Point(14, 1), new Point(13.9, 10)
+        ];
+        const flattened = line.flatMap(point => [point.x, point.y]);
+        const anchor = new Anchor(12, 0.3, 0, 3);
+
+        for (const [labelLength, windowSize, maxAngle] of [
+            [10, 5, Math.PI / 2],
+            [10, 2, Math.PI / 2],
+            [0, 5, Math.PI]
+        ]) {
+            expect(checkMaxAngle(flattened, anchor, labelLength, windowSize, maxAngle))
+                .toBe(checkMaxAngle(line, anchor, labelLength, windowSize, maxAngle));
+        }
+    });
 });

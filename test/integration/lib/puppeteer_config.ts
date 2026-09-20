@@ -3,14 +3,28 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {CoverageReport} from 'monocart-coverage-reports';
 
+function shouldDisableSandbox(): boolean {
+    if (process.env.PUPPETEER_NO_SANDBOX === 'false') return false;
+    if (process.env.PUPPETEER_NO_SANDBOX === 'true') return true;
+    return process.platform === 'linux';
+}
+
+/** Hardware validation is opt-in; the render harness also checks the actual WebGL renderer. */
 export async function launchPuppeteer(headless = true): Promise<Browser> {
+    const mode = process.env.PUPPETEER_GPU ?? 'software';
+    if (!['software', 'hardware'].includes(mode)) throw new Error(`Unknown PUPPETEER_GPU mode: ${mode}`);
+    const args = mode === 'hardware'
+        ? ['--use-gl=angle', '--use-angle=gl-egl', '--ignore-gpu-blocklist', '--disable-dev-shm-usage']
+        : ['--disable-gpu', '--disable-dev-shm-usage',
+            '--enable-features=AllowSwiftShaderFallback,AllowSoftwareGLFallbackDueToCrashes', '--enable-unsafe-swiftshader'];
+
+    if (shouldDisableSandbox()) {
+        args.push('--no-sandbox', '--disable-setuid-sandbox');
+    }
+
     return puppeteer.launch({
-        headless,
-        args: [
-            '--disable-gpu',
-            '--enable-features=AllowSwiftShaderFallback,AllowSoftwareGLFallbackDueToCrashes',
-            '--enable-unsafe-swiftshader'
-        ],
+        headless: process.env.PUPPETEER_HEADLESS === 'false' ? false : headless,
+        args,
     });
 }
 

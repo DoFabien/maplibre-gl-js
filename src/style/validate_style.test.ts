@@ -1,8 +1,9 @@
 import {describe, test, expect, vi, afterEach} from 'vitest';
 import {validateAndEmit, validateStyle, validateStyleAndEmit} from './validate_style.ts';
 import {Evented, type ErrorEventType} from '../util/evented.ts';
+import {latest as styleSpec} from '@maplibre/maplibre-gl-style-spec';
 
-import type {StyleSpecification} from '@maplibre/maplibre-gl-style-spec';
+import type {LineLayerSpecification, StyleSpecification} from '@maplibre/maplibre-gl-style-spec';
 
 class TestEmitter extends Evented<ErrorEventType> {}
 
@@ -17,6 +18,25 @@ function setup() {
     emitter.on('error', ({error}) => fired.push(error.message));
     return {emitter, fired, warn: vi.spyOn(console, 'warn').mockImplementation(() => {})};
 }
+
+const createLineGradientLayer = (source: string): LineLayerSpecification => ({
+    id: 'road-gradient',
+    type: 'line',
+    source,
+    'source-layer': 'transportation',
+    paint: {
+        'line-width': 6,
+        'line-gradient': [
+            'interpolate',
+            ['linear'],
+            ['line-progress'],
+            0,
+            '#1d4ed8',
+            1,
+            '#ef4444'
+        ]
+    }
+});
 
 describe('validateAndEmit', () => {
     const key = 'layers.symbol.filter';
@@ -106,5 +126,65 @@ describe('validateStyleAndEmit', () => {
 
         expect(hasErrors).toBe(true);
         expect(fired).toEqual([expect.stringContaining('layers[0]')]);
+    });
+});
+
+describe('validateStyle', () => {
+    test('allows line-gradient on MLT vector sources during full style validation', () => {
+        const style: StyleSpecification & {sources: Record<string, any>} = {
+            version: 8,
+            sources: {
+                openmaptiles: {
+                    type: 'vector',
+                    encoding: 'mlt',
+                    tiles: ['local://tiles/mlt/{z}/{x}/{y}.mlt']
+                }
+            },
+            layers: [createLineGradientLayer('openmaptiles')]
+        };
+
+        const errors = validateStyle(style);
+
+        expect(errors.find((error) => error.message.includes('line-gradient'))).toBeUndefined();
+    });
+
+    test('keeps line-gradient validation error for non-MLT vector sources', () => {
+        const style: StyleSpecification = {
+            version: 8,
+            sources: {
+                openmaptiles: {
+                    type: 'vector',
+                    tiles: ['local://tiles/{z}/{x}/{y}.pbf']
+                }
+            },
+            layers: [createLineGradientLayer('openmaptiles')]
+        };
+
+        const errors = validateStyle(style);
+
+        expect(errors.some((error) => error.message.includes('requires a GeoJSON source with `lineMetrics` enabled'))).toBe(true);
+    });
+
+    test('allows line-gradient on MLT vector sources during layer validation', () => {
+        const style: StyleSpecification & {sources: Record<string, any>} = {
+            version: 8,
+            sources: {
+                openmaptiles: {
+                    type: 'vector',
+                    encoding: 'mlt',
+                    tiles: ['local://tiles/mlt/{z}/{x}/{y}.mlt']
+                }
+            },
+            layers: []
+        };
+
+        const errors = validateStyle.layer({
+            key: 'layers.road-gradient',
+            style,
+            value: createLineGradientLayer('openmaptiles'),
+            styleSpec
+        });
+
+        expect(errors.find((error) => error.message.includes('line-gradient'))).toBeUndefined();
     });
 });

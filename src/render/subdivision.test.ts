@@ -1,7 +1,7 @@
 import {describe, expect, test} from 'vitest';
 import Point from '@mapbox/point-geometry';
 import {EXTENT} from '../data/extent.ts';
-import {scanlineTriangulateVertexRing, subdividePolygon, subdivideVertexLine} from './subdivision.ts';
+import {scanlineTriangulateVertexRing, subdividePolygon, subdivideVertexLine, subdivideFlattenedPolygon, subdivideFlattenedPolygonWithRings} from './subdivision.ts';
 import {CanonicalTileID} from '../tile/tile_id.ts';
 
 /**
@@ -11,6 +11,75 @@ const granularityForInterval4 = EXTENT / 4;
 const granularityForInterval128 = EXTENT / 128;
 
 const canonicalDefault = new CanonicalTileID(20, 1, 1);
+
+describe('Flattened polygon subdivision parity', () => {
+    test.each([0, 1, 8])('preserves winding and borrowed coordinates across ring orientations at granularity %s', granularity => {
+        for (let sample = 0; sample < 12; sample++) {
+            const shift = sample * 0.125;
+            const outer = [new Point(-30.25 + shift, -40.25), new Point(8200.25, -40.25),
+                new Point(8200.1, -40.1), new Point(8100.25, 8192), new Point(0, 8192), new Point(-30.25 + shift, -40.25)];
+            const hole = [new Point(1000.25, 1000.25), new Point(1000.25, 4000.25 + shift),
+                new Point(4000.25, 4000.25 + shift), new Point(4000.25, 1000.25), new Point(1000.25, 1000.25)];
+            if (sample % 2) outer.reverse();
+            if (sample % 3) hole.reverse();
+            const polygon = [outer, hole];
+            const flattened = polygon.flatMap(ring => ring.flatMap(point => [point.x, point.y]));
+            const holes = [outer.length];
+            const rings = [{startVertexIndex: 0, vertexCount: outer.length}, {startVertexIndex: outer.length, vertexCount: hole.length}];
+            Object.freeze(flattened); Object.freeze(holes);
+            for (const ring of rings) Object.freeze(ring);
+            Object.freeze(rings);
+            for (const canonical of [canonicalDefault, new CanonicalTileID(0, 0, 0)]) {
+                expect(subdivideFlattenedPolygonWithRings(flattened, holes, rings, canonical, granularity))
+                    .toEqual(subdividePolygon(polygon, canonical, granularity));
+            }
+        }
+    });
+
+    test.each([1, 8])('preserves holes, rounded duplicates and input ownership at granularity %s', (granularity) => {
+        const polygon = [
+            [new Point(-100.25, -100.25), new Point(8300.25, -100.25), new Point(8300.1, -100.1),
+                new Point(8300.25, 8300.25), new Point(-100.25, 8300.25), new Point(-100.25, -100.25)],
+            [new Point(2000.25, 2000.25), new Point(2000.25, 6000.25), new Point(6000.25, 6000.25),
+                new Point(6000.25, 2000.25), new Point(2000.25, 2000.25)]
+        ];
+        const flattened = polygon.flatMap(ring => ring.flatMap(point => [point.x, point.y]));
+        const holes = [polygon[0].length];
+        const rings = [{startVertexIndex: 0, vertexCount: 6}, {startVertexIndex: 6, vertexCount: 5}];
+        const lines = [[0, 1, 1, 2, 2, 3, 3, 4, 4, 5], [6, 7, 7, 8, 8, 9, 9, 10]];
+        Object.freeze(flattened); Object.freeze(holes); Object.freeze(rings);
+        for (const line of lines) Object.freeze(line);
+        Object.freeze(lines);
+
+        for (const canonical of [canonicalDefault, new CanonicalTileID(0, 0, 0)]) {
+            const expected = subdividePolygon(polygon, canonical, granularity);
+            expect(expected.indicesTriangles.length).toBeGreaterThan(0);
+            expect(subdivideFlattenedPolygonWithRings(flattened, holes, rings, canonical, granularity)).toEqual(expected);
+            expect(subdivideFlattenedPolygon(flattened, holes, lines, canonical, granularity)).toEqual(expected);
+            expect(subdivideFlattenedPolygon(flattened, holes, [], canonical, granularity))
+                .toEqual(subdividePolygon(polygon, canonical, granularity, false));
+        }
+    });
+
+    test('preserves empty and degenerate meshes without creating triangle indices', () => {
+        expect(subdivideFlattenedPolygon([], [], [], canonicalDefault, 1))
+            .toEqual({verticesFlattened: [], indicesTriangles: [], indicesLineList: []});
+        expect(subdivideFlattenedPolygon([2, 2, 2, 2, 2, 2], [], [[0, 1, 1, 2]], canonicalDefault, 1))
+            .toEqual({verticesFlattened: [2, 2], indicesTriangles: [], indicesLineList: [[0, 0, 0, 0]]});
+    });
+
+    test.each(['rings', 'segments', 'no outline'] as const)('matches native subdivision including poles and the world seam (%s)', (outline) => {
+        const flattened = [-100, -100, 8300, -100, 8300, 8300, -100, 8300, -100, -100];
+        const polygon = [[new Point(-100, -100), new Point(8300, -100), new Point(8300, 8300), new Point(-100, 8300), new Point(-100, -100)]];
+        const canonical = new CanonicalTileID(0, 0, 0);
+        const expected = subdividePolygon(polygon, canonical, 8, outline !== 'no outline');
+        const actual = outline === 'rings'
+            ? subdivideFlattenedPolygonWithRings(flattened, [], [{startVertexIndex: 0, vertexCount: 5}], canonical, 8)
+            : subdivideFlattenedPolygon(flattened, [], outline === 'segments' ? [[0, 1, 1, 2, 2, 3, 3, 4]] : [], canonical, 8);
+        expect(expected.indicesTriangles.length).toBeGreaterThan(6);
+        expect(actual).toEqual(expected);
+    });
+});
 
 describe('Line geometry subdivision', () => {
     test('Line inside cell remains unchanged', () => {

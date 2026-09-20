@@ -13,6 +13,7 @@ import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, test, vi, 
 
 import type {MapLibreMap, CanvasSource, PointLike, StyleSpecification, MapEventType} from '../../../dist/maplibre-gl';
 import type * as MapLibreGL from '../../../dist/maplibre-gl';
+import type {MltMaterializationStats} from '../../../src/util/mlt_materialization_stats.ts';
 import type {Page, Browser, WebWorker} from 'puppeteer';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -37,10 +38,26 @@ const HOOK_TIMEOUT = 180000;
 /** How many tests run at the same time, each in its own browser; 1 is serial / default. */
 const TEST_CONCURRENCY = Math.max(1, +process.env.RENDER_TEST_CONCURRENCY || 1);
 
+/** Adjacent fixture-server ports allow isolated upstream and experimental render runs. */
+const TEST_PORT = Number(process.env.RENDER_TEST_PORT ?? 2900);
+
+/** Enables the separately built worker with strict MLT materialization guards. */
+const STRICT_MLT = process.env.MLT_RENDER_STRICT === 'true';
+
+/** Per-fixture worker snapshots are captured before Map.remove() terminates the workers. */
+const mltWorkerStats: Record<string, Array<MltMaterializationStats['counters']>> = {};
+
+type RendererInfo = {vendor: string; renderer: string; version: string};
+
+/** Captured from each map's rendering context, never inferred from launch flags. */
+const webGLRenderers: Record<string, RendererInfo> = {};
+
 type RenderTestContext = TestContext & {page: Page};
 
 type TestData = {
     id: string;
+    /** Whether this fixture ran, excluding tests omitted by the name filter. */
+    executed?: boolean;
     width: number;
     height: number;
     pixelRatio: number;
@@ -196,7 +213,10 @@ function getTestStyles(directory: string): StyleWithTestData[] {
     return globSync('**/style.json', {cwd: directory})
         .map(fixture => {
             const id = path.dirname(fixture);
-            const style = JSON.parse(fs.readFileSync(path.join(directory, fixture), 'utf8')) as StyleWithTestData;
+            const fixtureText = fs.readFileSync(path.join(directory, fixture), 'utf8')
+                .replaceAll('http://localhost:2900/', `http://localhost:${TEST_PORT}/`)
+                .replaceAll('http://localhost:2901/', `http://localhost:${TEST_PORT + 1}/`);
+            const style = JSON.parse(fixtureText) as StyleWithTestData;
             style.metadata ||= {} as any;
 
             style.metadata.test = {
@@ -545,7 +565,7 @@ async function getImageFromStyle(styleForTest: StyleWithTestData, page: Page): P
                 return img;
             };
 
-            const image = await getMeta(`http://localhost:2900/${imagePath}`);
+            const image = await getMeta(`${window.location.origin}/${imagePath}`);
 
             fakeCanvas.width = image.naturalWidth;
             fakeCanvas.height = image.naturalHeight;
@@ -615,7 +635,7 @@ async function getImageFromStyle(styleForTest: StyleWithTestData, page: Page): P
                             await img.decode();
                             return img;
                         };
-                        const image = await getImage(`http://localhost:2900/${operation[2]}`);
+                        const image = await getImage(`${window.location.origin}/${operation[2]}`);
 
                         map.addImage(operation[1], image, operation[3] || {});
                         break;
@@ -661,7 +681,7 @@ async function getImageFromStyle(styleForTest: StyleWithTestData, page: Page): P
                 return img;
             };
 
-            const image = await getImage(`http://localhost:2900/${imagePath}`);
+            const image = await getImage(`${window.location.origin}/${imagePath}`);
 
             fakeCanvas.width = image.naturalWidth;
             fakeCanvas.height = image.naturalHeight;
@@ -737,8 +757,20 @@ async function getImageFromStyle(styleForTest: StyleWithTestData, page: Page): P
             data.set(tmp, end);
         }
 
-        map.remove();
-        delete map.painter.context.gl;
+        try {
+            const debugRenderer = gl.getExtension('WEBGL_debug_renderer_info');
+            await (window as any).collectWebGLRenderer(options.id, {
+                vendor: debugRenderer ? gl.getParameter(debugRenderer.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR),
+                renderer: debugRenderer ? gl.getParameter(debugRenderer.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+                version: gl.getParameter(gl.VERSION)
+            });
+            if ((window as any).collectMltWorkerStats) {
+                await (window as any).collectMltWorkerStats(options.id);
+            }
+        } finally {
+            map.remove();
+            delete map.painter.context.gl;
+        }
 
         if (options.addFakeCanvas) {
             const fakeCanvas = window.document.getElementById(options.addFakeCanvas.id);
@@ -808,7 +840,7 @@ async function createServer() {
         passthrough: true,
     });
     const distMount = st({
-        path: 'dist',
+        path: STRICT_MLT ? 'dist/mlt-validation' : 'dist',
         url: '/dist',
         cors: true,
         passthrough: true,
@@ -846,14 +878,15 @@ async function createServer() {
         })
     );
 
-    await new Promise<void>((resolve) => server.listen(2900, '0.0.0.0', resolve));
-    await new Promise<void>((resolve) => mvtServer.listen(2901, '0.0.0.0', resolve));
+    await new Promise<void>((resolve) => server.listen(TEST_PORT, '0.0.0.0', resolve));
+    await new Promise<void>((resolve) => mvtServer.listen(TEST_PORT + 1, '0.0.0.0', resolve));
 
     return {server, mvtServer};
 }
 
+/** Reports only executed fixtures, including errors that occurred before image comparison. */
 function printHTMLReport(testStyles: StyleWithTestData[]) {
-    const tests = testStyles.map(s => s.metadata.test).filter(t => !!t);
+    const tests = testStyles.map(s => s.metadata.test).filter(t => t.executed);
     const testStats: TestStats = {
         total: tests.length,
         errored: tests.filter(t => t.error),
@@ -908,7 +941,33 @@ describe('Render tests', () => {
         const serverPort = (server.address() as any).port;
         pages = await Promise.all(browsers.map(async (browser) => {
             const page = await browser.newPage();
-            workers.push(await startCoverage(page));
+            await page.exposeFunction('collectWebGLRenderer', (fixtureId: string, info: RendererInfo) => {
+                webGLRenderers[fixtureId] = info;
+                if (process.env.PUPPETEER_GPU !== 'hardware') return;
+                if (/swiftshader|llvmpipe|softpipe|software/i.test(info.renderer) || info.renderer === 'WebKit WebGL') {
+                    throw new Error(`Hardware validation requires an identifiable GPU, got: ${info.renderer}`);
+                }
+            });
+            if (!STRICT_MLT) workers.push(await startCoverage(page));
+            if (STRICT_MLT) {
+                await page.exposeFunction('collectMltWorkerStats', async (fixtureId: string) => {
+                    mltWorkerStats[fixtureId] = await Promise.all(page.workers().map(async (worker) => {
+                        const snapshot = await worker.evaluate(() => {
+                            const stats = (globalThis as any).__mltRenderStats as MltMaterializationStats;
+                            if (!stats?.strict) throw new Error('Strict MLT worker instrumentation is missing');
+                            const snapshot = {counters: {...stats.counters}, forbidden: [...stats.forbiddenCounters]};
+                            for (const counter of Object.keys(stats.counters)) stats.counters[counter] = 0;
+                            return snapshot;
+                        });
+                        for (const counter of snapshot.forbidden) {
+                            if (snapshot.counters[counter] !== 0) {
+                                throw new Error(`${fixtureId}: forbidden MLT materialization ${counter} = ${snapshot.counters[counter]}`);
+                            }
+                        }
+                        return snapshot.counters;
+                    }));
+                });
+            }
             await page.goto(`http://localhost:${serverPort}/test-page.html`, {waitUntil: 'load'});
             await page.waitForFunction(() => (window as any).maplibregl, {timeout: 10000});
             return page;
@@ -934,21 +993,41 @@ describe('Render tests', () => {
     });
 
     afterAll(async () => {
-        if (pages.length > 0) {
+        fs.writeFileSync(process.env.RENDER_TEST_METADATA_OUTPUT ?? path.join(__dirname, 'results-metadata.json'), JSON.stringify({
+            mode: process.env.PUPPETEER_GPU ?? 'software',
+            strict: STRICT_MLT,
+            browsers: await Promise.all(browsers.map(browser => browser.version())),
+            renderers: webGLRenderers
+        }, null, 2));
+        if (STRICT_MLT) {
+            fs.writeFileSync(process.env.MLT_WORKER_STATS_OUTPUT ?? path.join(__dirname, 'mlt-worker-stats.json'), JSON.stringify(mltWorkerStats, null, 2));
+        }
+        if (pages.length > 0 && !STRICT_MLT) {
             await stopCoverageAndReport(pages, workers.flat(), 'render');
         }
         printHTMLReport(testStyles);
         server?.close();
         mvtServer?.close();
         await Promise.all(browsers.map((browser) => browser.close()));
+        if (STRICT_MLT) {
+            const decodedLayers = Object.values(mltWorkerStats).flat().reduce((sum, counters) => sum + counters.decodedLayers, 0);
+            if (decodedLayers === 0) throw new Error('Strict render validation must exercise MLT decoding');
+        }
     }, HOOK_TIMEOUT);
 
     for (const style of testStyles) {
         test.concurrent(style.metadata.test.id, {retry: 1, timeout: style.metadata.test.timeout || DEFAULT_TEST_TIMEOUT}, async ({page}: RenderTestContext) => {
+            style.metadata.test.executed = true;
+            delete style.metadata.test.error;
             const serverPort = (server.address() as any).port;
             localizeURLs(style, serverPort, path.join(__dirname, '../'));
-            const data = await getImageFromStyle(style, page);
-            compareRenderResults(directory, style.metadata.test, data);
+            try {
+                const data = await getImageFromStyle(style, page);
+                compareRenderResults(directory, style.metadata.test, data);
+            } catch (error) {
+                style.metadata.test.error = ensureError(error);
+                throw error;
+            }
             expect(style.metadata.test.ok).toBe(true);
         });
     }

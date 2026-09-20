@@ -65,6 +65,128 @@ export function clipLine(lines: Point[][], x1: number, y1: number, x2: number, y
 }
 
 /**
+ * Allocation-free input cursor for scalar line coordinates. Implementations
+ * expose one point at a time through `x` and `y`; the clipper only allocates
+ * the clipped lines that it emits.
+ */
+export type ScalarLineCursor = {
+    x: number;
+    y: number;
+    next(): boolean;
+};
+
+/**
+ * Clips scalar coordinates as they are read. This is intentionally equivalent
+ * to `clipLine()`/`clipLineFlat()`, including integer rounding at tile edges,
+ * but it does not require a flattened input buffer.
+ */
+export function clipLineStreaming(
+    cursor: ScalarLineCursor,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    visitor: (line: number[]) => void,
+): void {
+    if (!cursor.next()) return;
+
+    let previousX = cursor.x;
+    let previousY = cursor.y;
+    let previousInside = previousX >= x1 && previousX < x2 && previousY >= y1 && previousY < y2;
+    let clippedLine: number[] | undefined;
+
+    while (cursor.next()) {
+        const nextX = cursor.x;
+        const nextY = cursor.y;
+        let p0x = previousX;
+        let p0y = previousY;
+        let p1x = nextX;
+        let p1y = nextY;
+
+        previousX = nextX;
+        previousY = nextY;
+
+        // The overwhelmingly common tile-local case needs neither divisions
+        // nor boundary interpolation. The produced array is already the final
+        // clipped line consumed by subdivision and placement.
+        const p1Inside = p1x >= x1 && p1x < x2 && p1y >= y1 && p1y < y2;
+        const p0Inside = previousInside;
+        previousInside = p1Inside;
+        if (!p0Inside || !p1Inside) {
+            if (p0x < x1 && p1x < x1) {
+                continue;
+            } else if (p0x < x1) {
+                p0y = Math.round(p0y + (p1y - p0y) * ((x1 - p0x) / (p1x - p0x)));
+                p0x = x1;
+            } else if (p1x < x1) {
+                p1y = Math.round(p0y + (p1y - p0y) * ((x1 - p0x) / (p1x - p0x)));
+                p1x = x1;
+            }
+
+            if (p0y < y1 && p1y < y1) {
+                continue;
+            } else if (p0y < y1) {
+                p0x = Math.round(p0x + (p1x - p0x) * ((y1 - p0y) / (p1y - p0y)));
+                p0y = y1;
+            } else if (p1y < y1) {
+                p1x = Math.round(p0x + (p1x - p0x) * ((y1 - p0y) / (p1y - p0y)));
+                p1y = y1;
+            }
+
+            if (p0x >= x2 && p1x >= x2) {
+                continue;
+            } else if (p0x >= x2) {
+                p0y = Math.round(p0y + (p1y - p0y) * ((x2 - p0x) / (p1x - p0x)));
+                p0x = x2;
+            } else if (p1x >= x2) {
+                p1y = Math.round(p0y + (p1y - p0y) * ((x2 - p0x) / (p1x - p0x)));
+                p1x = x2;
+            }
+
+            if (p0y >= y2 && p1y >= y2) {
+                continue;
+            } else if (p0y >= y2) {
+                p0x = Math.round(p0x + (p1x - p0x) * ((y2 - p0y) / (p1y - p0y)));
+                p0y = y2;
+            } else if (p1y >= y2) {
+                p1x = Math.round(p0x + (p1x - p0x) * ((y2 - p0y) / (p1y - p0y)));
+                p1y = y2;
+            }
+        }
+
+        if (p0x !== clippedLine?.[clippedLine.length - 2] || p0y !== clippedLine?.[clippedLine.length - 1]) {
+            if (clippedLine) visitor(clippedLine);
+            clippedLine = [p0x, p0y];
+        }
+
+        clippedLine.push(p1x, p1y);
+    }
+
+    if (clippedLine) visitor(clippedLine);
+}
+
+/**
+ * Point-free variant used by columnar MLT symbol placement. The input and
+ * output lines are flattened as [x0, y0, x1, y1, ...].
+ */
+export function clipLineFlat(line: number[], x1: number, y1: number, x2: number, y2: number): number[][] {
+    const clippedLines: number[][] = [];
+    let pointIndex = 0;
+    clipLineStreaming({
+        x: 0,
+        y: 0,
+        next() {
+            if (pointIndex >= line.length) return false;
+            this.x = line[pointIndex++];
+            this.y = line[pointIndex++];
+            return true;
+        }
+    }, x1, y1, x2, y2, clippedLine => clippedLines.push(clippedLine));
+
+    return clippedLines;
+}
+
+/**
  * Clips the geometry to the given bounds.
  * @param geometry - the geometry to clip
  * @param type - the geometry type (1=POINT, 2=LINESTRING, 3=POLYGON)

@@ -1,0 +1,104 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "height": 256
+        }
+    },
+    "center": [
+        13.418056,
+        52.499167
+    ],
+    "zoom": 14,
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/{z}-{x}-{y}.mvt"
+            ]
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8f7ef"
+            }
+        },
+        {
+            "id": "road-context",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "==",
+                [
+                    "geometry-type"
+                ],
+                "LineString"
+            ],
+            "paint": {
+                "line-width": 1,
+                "line-color": "#b9c1c7",
+                "line-opacity": 0.55
+            }
+        },
+        {
+            "id": "road-complex-logic-match-case",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "let",
+                    "is_path",
+                    [
+                        "==",
+                        [
+                            "get",
+                            "class"
+                        ],
+                        "path"
+                    ],
+                    [
+                        "case",
+                        [
+                            "var",
+                            "is_path"
+                        ],
+                        [
+                            "match",
+                            [
+                                "get",
+                                "type"
+                            ],
+                            [
+                                "footway",
+                                "cycleway"
+                            ],
+                            true,
+                            false
+                        ],
+                        false
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-offset": 0,
+                "line-color": "#7f00ff",
+                "line-opacity": 0.95
+            }
+        }
+    ]
+}

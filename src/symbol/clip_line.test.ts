@@ -1,6 +1,6 @@
 import {describe, test, expect} from 'vitest';
 import Point from '@mapbox/point-geometry';
-import {clipGeometry, clipLine} from './clip_line.ts';
+import {clipGeometry, clipLine, clipLineFlat, clipLineStreaming} from './clip_line.ts';
 
 describe('clipLines', () => {
 
@@ -151,6 +151,87 @@ describe('clipLines', () => {
         ];
 
         expect(clipLineTest([line])).toEqual([result]);
+    });
+
+    test('flattened lines match Point geometry clipping', () => {
+        const lines = [
+            [new Point(-350, -100), new Point(-200, -250)],
+            [new Point(-100, 250), new Point(0, 150), new Point(100, 250)],
+            [new Point(-80, 150), new Point(-80, 350), new Point(120, 1000), new Point(120, 0)]
+        ];
+
+        for (const line of lines) {
+            const flattened = line.flatMap(point => [point.x, point.y]);
+            const expected = clipLineTest([line]).map(part => part.flatMap(point => [point.x, point.y]));
+            expect(clipLineFlat(flattened, minX, minY, maxX, maxY)).toEqual(expected);
+        }
+    });
+
+    const clipStreaming = (line: number[]) => {
+        let offset = 0;
+        const clipped: number[][] = [];
+        clipLineStreaming({
+            x: 0,
+            y: 0,
+            next() {
+                if (offset >= line.length) return false;
+                this.x = line[offset++];
+                this.y = line[offset++];
+                return true;
+            }
+        }, minX, minY, maxX, maxY, part => clipped.push(part));
+        return clipped;
+    };
+
+    test.each([
+        {
+            name: 'inside',
+            line: [-250, -150, -20, 170, 250, -150]
+        },
+        {
+            name: 'outside',
+            line: [-500, -300, -450, -250, -400, -300]
+        },
+        {
+            name: 'all four borders',
+            line: [-400, 0, 0, -300, 400, 0, 0, 300, -400, 0]
+        },
+        {
+            name: 'rounded intersections',
+            line: [310, 2.9, 290, 2.5, -310, -3.4]
+        },
+        {
+            name: 'repeated vertices',
+            line: [-100, 0, -100, 0, 100, 0, 100, 0]
+        },
+        {
+            name: 'degenerate segments',
+            line: [-400, 0, -400, 0, 0, 0, 0, 0, 400, 0]
+        },
+        {
+            name: 'split and re-enter',
+            line: [-80, 150, -80, 350, 120, 1000, 120, 0]
+        }
+    ])('streaming clipping is differential-equivalent for $name', ({line}) => {
+        const points = [];
+        for (let i = 0; i < line.length; i += 2) points.push(new Point(line[i], line[i + 1]));
+        const expected = clipLineTest([points]).map(part => part.flatMap(point => [point.x, point.y]));
+        expect(clipStreaming(line)).toEqual(expected);
+    });
+
+    test('streaming clipping preserves multipart boundaries', () => {
+        const parts = [
+            [-400, 0, 0, 0],
+            [0, -300, 0, 300],
+            [400, 300, 450, 350]
+        ];
+        const actual = parts.map(clipStreaming);
+        const expected = parts.map(line => {
+            const points = [];
+            for (let i = 0; i < line.length; i += 2) points.push(new Point(line[i], line[i + 1]));
+            return clipLineTest([points]).map(part => part.flatMap(point => [point.x, point.y]));
+        });
+        expect(actual).toEqual(expected);
     });
 });
 

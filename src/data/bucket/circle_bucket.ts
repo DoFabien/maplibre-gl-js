@@ -28,6 +28,7 @@ import type Point from '@mapbox/point-geometry';
 import type {FeatureStates} from '../../source/source_state.ts';
 import type {ImagePosition} from '../../render/image_atlas.ts';
 import type {VectorTileLayerLike} from '@maplibre/vt-pbf';
+import type {DashEntry} from '../../render/line_atlas.ts';
 
 const VERTEX_MIN_VALUE = -32768; // -(2^15)
 
@@ -46,7 +47,7 @@ function addCircleVertex(layoutVertexArray, x, y, extrudeX, extrudeY) {
  * Each corner has a pos that is the center of the circle and an extrusion
  * vector that is where it points.
  */
-export class CircleBucket<Layer extends CircleStyleLayer | HeatmapStyleLayer> implements Bucket {
+export class CircleBucket<Layer extends CircleStyleLayer | HeatmapStyleLayer> implements Bucket<IndexedFeature[]> {
     index: number;
     zoom: number;
     overscaling: number;
@@ -141,7 +142,7 @@ export class CircleBucket<Layer extends CircleStyleLayer | HeatmapStyleLayer> im
         }
     }
 
-    update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {[_: string]: ImagePosition}): void {
+    update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {[_: string]: ImagePosition}, dashPositions?: Record<string, DashEntry>): void {
         if (!this.stateDependentLayers.length) return;
         this.programConfigurations.updatePaintArrays(states, vtLayer, this.stateDependentLayers, {
             imagePositions

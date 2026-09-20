@@ -6,6 +6,7 @@ import {TileBounds} from '../tile/tile_bounds.ts';
 import {ResourceType} from '../util/request_manager.ts';
 import {MessageType} from '../util/actor_messages.ts';
 import {isAbortError} from '../util/abort_error.ts';
+import {MltParentRegistry} from './mlt_parent_registry.ts';
 
 import type {Source} from './source.ts';
 import type {OverscaledTileID} from '../tile/tile_id.ts';
@@ -84,6 +85,7 @@ export class VectorTileSource extends Evented<SourceEventType> implements Source
     isTileClipped: boolean;
     _tileJSONRequest: AbortController;
     _loaded: boolean;
+    private mltParents?: MltParentRegistry;
 
     constructor(id: string, options: VectorTileSourceOptions, dispatcher: Dispatcher, eventedParent: Evented) {
         super();
@@ -192,6 +194,7 @@ export class VectorTileSource extends Evented<SourceEventType> implements Source
     }
 
     onRemove(): void {
+        this.mltParents?.clear();
         if (this._tileJSONRequest) {
             this._tileJSONRequest.abort();
             this._tileJSONRequest = null;
@@ -232,12 +235,23 @@ export class VectorTileSource extends Evented<SourceEventType> implements Source
             });
         }
         tile.abortController = new AbortController();
+        const actor = tile.actor;
+        const parentKey = params.encoding === 'mlt' && params.overzoomParameters ?
+            `${params.overzoomParameters.maxZoomTileID.key}:${params.overzoomParameters.overzoomRequest.url}` : undefined;
+        const retainedParent = parentKey ? (this.mltParents ??= new MltParentRegistry()).get(actor, parentKey) : undefined;
+        if (retainedParent) params.mltParentId = retainedParent.id;
         try {
-            const data = await tile.actor.sendAsync({type: messageType, data: params}, tile.abortController);
+            const data = await actor.sendAsync({type: messageType, data: params}, tile.abortController);
             delete tile.abortController;
 
             if (tile.aborted) {
                 return;
+            }
+            if (data && 'mltParentId' in data && data.mltParentId !== undefined) {
+                if (!parentKey) throw new Error('Received an MLT parent outside an overzoom request');
+                const parent = this.mltParents.receive(actor, parentKey, data.mltParentId, data.rawTileData, retainedParent);
+                data.rawTileData = parent.data.rawData;
+                data.featureIndex.mltTileData = parent.data;
             }
             this._afterTileLoadWorkerResponse(tile, data);
 

@@ -10,8 +10,13 @@ import {now} from '../util/time_control.ts';
 import {toEvaluationFeature} from '../data/evaluation_feature.ts';
 import {EvaluationParameters} from '../style/evaluation_parameters.ts';
 import {rtlMainThreadPluginFactory} from '../source/rtl_text_plugin_main_thread.ts';
+import {isMltMaterializationStatsActive, MLT_ESTIMATED_GEOJSON_QUERY_RESULT_BYTES, recordMltMaterialization} from '../util/mlt_materialization_stats.ts';
+import mltFilter, {getMltFilterSupport} from '../data/filter/mlt/filter.ts';
+import {getMltFeatureTable} from '../source/vector_tile_mlt.ts';
+import {getColumnarEvaluationFeature} from '../data/bucket/columnar/evaluation_feature.ts';
 
 import type {SourceFeatureState} from '../source/source_state.ts';
+import type {MltTileData} from '../source/mlt_tile_data.ts';
 import type {Bucket} from '../data/bucket.ts';
 import type {StyleLayer} from '../style/style_layer.ts';
 import type {TileEncoding, WorkerTileResult} from '../source/worker_source.ts';
@@ -32,9 +37,62 @@ import type {QueryRenderedFeaturesOptionsStrict, QuerySourceFeatureOptionsStrict
 import type {DashEntry} from '../render/line_atlas.ts';
 import type {VectorTileLayerLike} from '@maplibre/vt-pbf';
 import type {Painter, RTTObject} from '../render/painter.ts';
+import type {ExpressionSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {RTTFingerprint} from '../webgl/rtt_fingerprint.ts';
 
 const CLOCK_SKEW_RETRY_TIMEOUT = 30000;
+
+type MltFeatureSelection = {
+    limit: number;
+    getIndex(index: number): number | bigint;
+};
+
+function appendMltSourceQueryResults(
+    result: GeoJSONFeature[],
+    featureIndex: FeatureIndex,
+    featureTable: NonNullable<ReturnType<typeof getMltFeatureTable>>,
+    sourceLayer: string,
+    selection: MltFeatureSelection | readonly number[] | undefined,
+    selectionSize: number,
+    z: number,
+    x: number,
+    y: number,
+    collectStats: boolean,
+): void {
+    if (selectionSize === 0) return;
+
+    const resolveId = featureIndex.createMltIdResolver(featureTable, sourceLayer);
+    const tile = {z, x, y};
+    const resultOffset = result.length;
+    result.length = resultOffset + selectionSize;
+
+    for (let selectionIndex = 0; selectionIndex < selectionSize; selectionIndex++) {
+        const featureIndexInLayer = selection
+            ? Number(selection instanceof Array
+                ? selection[selectionIndex]
+                : selection.getIndex(selectionIndex))
+            : selectionIndex;
+        const geojsonFeature = GeoJSONFeature.fromFeatureTable(
+            featureTable,
+            featureIndexInLayer,
+            z,
+            x,
+            y,
+            resolveId(featureIndexInLayer),
+        );
+        (geojsonFeature as any).tile = tile;
+        result[resultOffset + selectionIndex] = geojsonFeature;
+    }
+
+    if (collectStats) {
+        recordMltMaterialization('queryResults', selectionSize, {sourceLayerId: sourceLayer});
+        recordMltMaterialization(
+            'estimatedQueryResultBytes',
+            selectionSize * MLT_ESTIMATED_GEOJSON_QUERY_RESULT_BYTES,
+            {sourceLayerId: sourceLayer, detail: 'shallow GeoJSON query result estimate'},
+        );
+    }
+}
 
 /**
  * The tile's state, can be:
@@ -75,6 +133,8 @@ export class Tile {
     buckets: {[_: string]: Bucket};
     latestFeatureIndex: FeatureIndex | null;
     latestRawTileData: ArrayBuffer;
+    /** Shared MLT owner retained alongside raw data across a style-only bucket reload. */
+    latestMltTileData?: MltTileData;
     latestEncoding: TileEncoding;
     imageAtlas: ImageAtlas;
     imageAtlasTexture: Texture;
@@ -282,6 +342,7 @@ export class Tile {
                 // 'reloadTile'
                 this.latestRawTileData = data.rawTileData;
                 this.latestEncoding = data.encoding;
+                this.latestMltTileData = data.featureIndex.mltTileData;
                 this.latestFeatureIndex.rawTileData = data.rawTileData;
                 this.latestFeatureIndex.encoding = data.encoding;
             } else if (this.latestRawTileData) {
@@ -289,6 +350,7 @@ export class Tile {
                 // one we received
                 this.latestFeatureIndex.rawTileData = this.latestRawTileData;
                 this.latestFeatureIndex.encoding = this.latestEncoding;
+                this.latestFeatureIndex.mltTileData = this.latestMltTileData;
             }
         }
         this.collisionBoxArray = data.collisionBoxArray;
@@ -431,20 +493,81 @@ export class Tile {
 
         if (!layer) return;
 
-        const filter = featureFilter(params?.filter, `querySourceFeatures[${sourceLayer}].filter`, params?.globalState);
         const {z, x, y} = this.tileID.canonical;
         const coord = {z, x, y};
+
+        const featureTable = featureIndex.encoding === 'mlt' ? getMltFeatureTable(layer) : undefined;
+
+        if (featureTable) {
+            const collectStats = isMltMaterializationStatsActive();
+            const filterSupport = getMltFilterSupport(params?.filter, params?.globalState);
+            if (collectStats) {
+                recordMltMaterialization('queryCandidates', featureTable.numFeatures, {sourceLayerId: sourceLayer});
+            }
+            if (filterSupport.supported) {
+                const selection = params?.filter
+                    ? mltFilter(featureTable, params.filter as ExpressionSpecification, params.globalState, this.tileID.canonical, new EvaluationParameters(this.tileID.overscaledZ))
+                    : undefined;
+                const selectionSize = selection?.limit ?? featureTable.numFeatures;
+                appendMltSourceQueryResults(
+                    result,
+                    featureIndex,
+                    featureTable,
+                    sourceLayer,
+                    selection,
+                    selectionSize,
+                    z,
+                    x,
+                    y,
+                    collectStats,
+                );
+                return;
+            }
+
+            const filter = featureFilter(params?.filter, `querySourceFeatures[${sourceLayer}].filter`, params?.globalState);
+            const evaluationParameters = new EvaluationParameters(this.tileID.overscaledZ);
+            const evaluationFeature = getColumnarEvaluationFeature(featureTable, 0);
+            const selectedFeatureIndices: number[] = [];
+            for (let featureIndexInLayer = 0; featureIndexInLayer < featureTable.numFeatures; featureIndexInLayer++) {
+                const feature = evaluationFeature.setIndex(featureIndexInLayer);
+                if (filter.needGeometry) {
+                    if (collectStats) {
+                        recordMltMaterialization('queryGeometriesLoaded', 1, {sourceLayerId: sourceLayer});
+                    }
+                    const evaluationFeature = toEvaluationFeature(feature, true);
+                    if (!filter.filter(evaluationParameters, evaluationFeature, this.tileID.canonical)) continue;
+                } else if (!filter.filter(evaluationParameters, feature)) {
+                    continue;
+                }
+                selectedFeatureIndices.push(featureIndexInLayer);
+            }
+            appendMltSourceQueryResults(
+                result,
+                featureIndex,
+                featureTable,
+                sourceLayer,
+                selectedFeatureIndices,
+                selectedFeatureIndices.length,
+                z,
+                x,
+                y,
+                collectStats,
+            );
+            return;
+        }
+
+        const filter = featureFilter(params?.filter, `querySourceFeatures[${sourceLayer}].filter`, params?.globalState);
+        const evaluationParameters = new EvaluationParameters(this.tileID.overscaledZ);
 
         for (let i = 0; i < layer.length; i++) {
             const feature = layer.feature(i);
             if (filter.needGeometry) {
                 const evaluationFeature = toEvaluationFeature(feature, true);
-                if (!filter.filter(new EvaluationParameters(this.tileID.overscaledZ), evaluationFeature, this.tileID.canonical)) continue;
-            } else if (!filter.filter(new EvaluationParameters(this.tileID.overscaledZ), feature)) {
+                if (!filter.filter(evaluationParameters, evaluationFeature, this.tileID.canonical)) continue;
+            } else if (!filter.filter(evaluationParameters, feature)) {
                 continue;
             }
-            const id = featureIndex.getId(feature, sourceLayer);
-            const geojsonFeature = new GeoJSONFeature(feature, z, x, y, id);
+            const geojsonFeature = new GeoJSONFeature(feature, z, x, y, featureIndex.getId(feature, sourceLayer));
             (geojsonFeature as any).tile = coord;
             result.push(geojsonFeature);
         }
@@ -530,17 +653,26 @@ export class Tile {
         }
         this.featureStateRevision = revision;
 
-        const vtLayers = this.latestFeatureIndex.loadVTLayers();
+        let vtLayers: {[_: string]: VectorTileLayerLike} | undefined;
 
         for (const id in this.buckets) {
             if (!painter.style.hasLayer(id)) continue;
 
             const bucket = this.buckets[id];
+            if (!bucket.stateDependentLayers?.length) continue;
             // Buckets are grouped by common source-layer
             const sourceLayerId = bucket.layers[0]['sourceLayer'] || GEOJSON_TILE_LAYER_NAME;
-            const sourceLayer = vtLayers[sourceLayerId];
             const sourceLayerStates = states[sourceLayerId];
-            if (!sourceLayer || !sourceLayerStates || sourceLayerStates.length === 0) continue;
+            if (!sourceLayerStates || sourceLayerStates.length === 0) continue;
+
+            const updateWithoutVtLayer = this.latestFeatureIndex.encoding === 'mlt' &&
+                bucket.canUpdateFeatureStateWithoutVtLayer?.();
+            let sourceLayer: VectorTileLayerLike | undefined;
+            if (!updateWithoutVtLayer) {
+                vtLayers ??= this.latestFeatureIndex.loadVTLayers();
+                sourceLayer = vtLayers[sourceLayerId];
+                if (!sourceLayer) continue;
+            }
 
             bucket.update(sourceLayerStates, sourceLayer, this.imageAtlas?.patternPositions || {}, this.dashPositions || {});
             const layer = painter?.style?.getLayer(id);

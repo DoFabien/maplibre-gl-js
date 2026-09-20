@@ -11,8 +11,29 @@ import type {SubdivisionGranularitySetting} from '../render/subdivision_granular
 import type {DashEntry} from '../render/line_atlas.ts';
 import type {Feature as StyleFeature} from '@maplibre/maplibre-gl-style-spec';
 import type {VectorTileFeatureLike, VectorTileLayerLike} from '@maplibre/vt-pbf';
+import type {FeatureTable} from '@maplibre/mlt';
 import type {GetGlyphsResponse, GetImagesResponse} from '../util/actor_messages.ts';
 import type {GlyphPositions} from '../render/glyph_atlas.ts';
+
+export type ParseProfileRecord = {
+    phase: string;
+    duration: number;
+    kind?: 'exclusive' | 'aggregate';
+    encoding?: 'mvt' | 'mlt';
+    sourceLayerId?: string;
+    layerId?: string;
+    layerType?: string;
+    featureCount?: number;
+    detail?: string;
+};
+
+export type ParseProfile = {
+    records: ParseProfileRecord[];
+};
+
+export function recordParseProfile(profile: ParseProfile | undefined, record: ParseProfileRecord): void {
+    profile?.records.push(record);
+}
 
 export type BucketParameters<Layer extends TypedStyleLayer> = {
     index: number;
@@ -23,6 +44,7 @@ export type BucketParameters<Layer extends TypedStyleLayer> = {
     collisionBoxArray: CollisionBoxArray;
     sourceLayerIndex: number;
     sourceID: string;
+    encoding?: 'mvt' | 'mlt';
 };
 
 export type PopulateParameters = {
@@ -41,6 +63,8 @@ export type PopulateParameters = {
     dashDependencies: Record<string, {round: boolean; dasharray: number[]}>;
     availableImages: string[];
     subdivisionGranularity: SubdivisionGranularitySetting;
+    profile?: ParseProfile;
+    skipLayerFeatureFilter?: boolean;
 };
 
 /**
@@ -110,15 +134,16 @@ export type BucketFeature = {
  * the array data now stored in `bucket.buffers: BufferGroup`. BufferGroups
  * hold the same data as ArrayGroups, but are tuned for consumption by WebGL.
  */
-export interface Bucket {
+export interface Bucket<T extends FeatureTable | IndexedFeature[] = FeatureTable | IndexedFeature[]> {
     layerIds: string[];
     hasDependencies: boolean;
     readonly layers: any[];
     readonly stateDependentLayers: any[];
     readonly stateDependentLayerIds: string[];
-    populate(features: IndexedFeature[], options: PopulateParameters, canonical: CanonicalTileID): void;
+    populate(data: T, options: PopulateParameters, canonical: CanonicalTileID): void;
+    update(states: FeatureStates, vtLayer: VectorTileLayerLike | undefined, imagePositions: {[_: string]: ImagePosition}, dashPositions?: Record<string, DashEntry>): void;
+    canUpdateFeatureStateWithoutVtLayer?(): boolean;
     addFeatures(parameters: BucketDependencyParameters): void;
-    update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {[_: string]: ImagePosition}, dashPositions: Record<string, DashEntry>): void;
     isEmpty(): boolean;
     upload(context: Context): void;
     uploadPending(): boolean;

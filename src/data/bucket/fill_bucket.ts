@@ -32,10 +32,11 @@ import type {FeatureStates} from '../../source/source_state.ts';
 import type {ImagePosition} from '../../render/image_atlas.ts';
 import type {SubdivisionGranularitySetting} from '../../render/subdivision_granularity_settings.ts';
 import type {VectorTileLayerLike} from '@maplibre/vt-pbf';
+import type {DashEntry} from '../../render/line_atlas.ts';
 import type {GetImagesResponse} from '../../util/actor_messages.ts';
 import type {StyleImage} from '../../style/style_image.ts';
 
-export class FillBucket implements Bucket {
+export class FillBucket implements Bucket<IndexedFeature[]> {
     index: number;
     zoom: number;
     overscaling: number;
@@ -134,7 +135,7 @@ export class FillBucket implements Bucket {
 
     update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {
         [_: string]: ImagePosition;
-    }): void {
+    }, dashPositions?: Record<string, DashEntry>): void {
         if (!this.stateDependentLayers.length) return;
         this.programConfigurations.updatePaintArrays(states, vtLayer, this.stateDependentLayers, {
             imagePositions

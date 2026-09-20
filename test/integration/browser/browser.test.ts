@@ -334,6 +334,8 @@ describe('Browser tests', () => {
             }
 
             let map: Map;
+            let resolveMapReady: () => void;
+            const mapReady = new Promise<void>((resolve) => { resolveMapReady = resolve; });
             class MapLibre extends HTMLElement {
                 async connectedCallback() {
                     const maplibreCSS = await (await fetch('/../../../../dist/maplibre-gl.css')).text();
@@ -368,11 +370,12 @@ describe('Browser tests', () => {
                         }
                     });
                     map.addControl(new maplibregl.FullscreenControl());
+                    resolveMapReady();
                 }
             }
             customElements.define('map-libre', MapLibre);
             document.body.innerHTML = '<map-libre></map-libre>';
-            await sleepInBrowser(100);
+            await mapReady;
 
             await map.once('idle');
             const fullscreenButton = document.getElementsByTagName('map-libre')[0].shadowRoot.querySelector<HTMLButtonElement>('.maplibregl-ctrl-fullscreen');

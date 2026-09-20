@@ -1,0 +1,37 @@
+{
+  "status": "same-seven-failures-and-exact-images",
+  "reportPath": "/tmp/mlt-pretriangulated-render-gpu-20260908.json",
+  "reportSha256": "f7140254be78035e99fd9d2e9d134dc2f64ae690539ac235104166944ca5cb79",
+  "images": [
+    {
+      "name": "Render tests tests/mlt/filter-parity/mlt-fill-arithmetic",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mlt-line-filter-matrix",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mvt-fill-arithmetic",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mvt-line-filter-matrix",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-fill-extrusion",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-fill-extrusion-pattern",
+      "pixels": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-symbol-visibility-visible",
+      "pixels": 0
+    }
+  ],
+  "archive": "test/bench/baselines/pretriangulated-checkpoint-20260908/gpu-failure-images.tar.gz",
+  "sha256": "bdfac0673d634fce57573719a298b0a14b46ae231e85eecca6b186109b5546e3"
+}

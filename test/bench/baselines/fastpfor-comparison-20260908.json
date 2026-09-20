@@ -1,0 +1,525 @@
+{
+  "status": "passed-with-global-input-parity-failure",
+  "checkedAt": "2026-09-08T10:22:03.341Z",
+  "imagesChecked": 66,
+  "queriesChecked": 66,
+  "samplesChecked": 756,
+  "sourceFilesUnchanged": {
+    "gl": 848,
+    "mlt": 143
+  },
+  "metrics": [
+    {
+      "variant": "mvt",
+      "phase": "native",
+      "medians": [
+        {
+          "firstRenderMs": 72.6000000089407,
+          "settledMs": 72.65000000596046,
+          "queryMs": 43.25
+        },
+        {
+          "firstRenderMs": 77.95000000298023,
+          "settledMs": 78.04999999701977,
+          "queryMs": 45.099999994039536
+        },
+        {
+          "firstRenderMs": 74.79999999701977,
+          "settledMs": 74.84999999403954,
+          "queryMs": 45.80000001192093
+        },
+        {
+          "firstRenderMs": 73.05000001192093,
+          "settledMs": 73.15000000596046,
+          "queryMs": 43.44999998807907
+        },
+        {
+          "firstRenderMs": 80.70000000298023,
+          "settledMs": 80.75,
+          "queryMs": 46.3999999910593
+        },
+        {
+          "firstRenderMs": 76.44999998807907,
+          "settledMs": 76.49999998509884,
+          "queryMs": 44.94999998807907
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 75.62499999254942,
+        "settledMs": 75.67499998956919,
+        "queryMs": 45.0249999910593
+      }
+    },
+    {
+      "variant": "mvt",
+      "phase": "overzoom",
+      "medians": [
+        {
+          "firstRenderMs": 92.30000001192093,
+          "settledMs": 92.3500000089407,
+          "queryMs": 25.099999994039536
+        },
+        {
+          "firstRenderMs": 104.84999999403954,
+          "settledMs": 104.8999999910593,
+          "queryMs": 26.05000001192093
+        },
+        {
+          "firstRenderMs": 94.84999999403954,
+          "settledMs": 94.90000000596046,
+          "queryMs": 23.850000008940697
+        },
+        {
+          "firstRenderMs": 101.5,
+          "settledMs": 101.5,
+          "queryMs": 24.80000001192093
+        },
+        {
+          "firstRenderMs": 101.50000001490116,
+          "settledMs": 101.65000000596046,
+          "queryMs": 25.599999994039536
+        },
+        {
+          "firstRenderMs": 95.6000000089407,
+          "settledMs": 95.65000000596046,
+          "queryMs": 25.450000002980232
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 98.55000000447035,
+        "settledMs": 98.57500000298023,
+        "queryMs": 25.274999998509884
+      }
+    },
+    {
+      "variant": "varint",
+      "phase": "native",
+      "medians": [
+        {
+          "firstRenderMs": 63.400000005960464,
+          "settledMs": 63.45000000298023,
+          "queryMs": 69.34999999403954
+        },
+        {
+          "firstRenderMs": 67.8999999910593,
+          "settledMs": 67.8999999910593,
+          "queryMs": 71.04999999701977
+        },
+        {
+          "firstRenderMs": 67.04999999701977,
+          "settledMs": 67.15000000596046,
+          "queryMs": 72.74999998509884
+        },
+        {
+          "firstRenderMs": 67.9500000178814,
+          "settledMs": 68.00000001490116,
+          "queryMs": 68.44999998807907
+        },
+        {
+          "firstRenderMs": 65.30000001192093,
+          "settledMs": 65.3500000089407,
+          "queryMs": 74.34999999403954
+        },
+        {
+          "firstRenderMs": 68.3999999910593,
+          "settledMs": 68.5,
+          "queryMs": 67.9500000178814
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 67.47499999403954,
+        "settledMs": 67.52499999850988,
+        "queryMs": 70.19999999552965
+      }
+    },
+    {
+      "variant": "varint",
+      "phase": "overzoom",
+      "medians": [
+        {
+          "firstRenderMs": 59.45000000298023,
+          "settledMs": 59.5,
+          "queryMs": 29.349999994039536
+        },
+        {
+          "firstRenderMs": 66.6000000089407,
+          "settledMs": 66.6000000089407,
+          "queryMs": 38.55000001192093
+        },
+        {
+          "firstRenderMs": 66.84999999403954,
+          "settledMs": 66.90000000596046,
+          "queryMs": 39.6000000089407
+        },
+        {
+          "firstRenderMs": 61.349999994039536,
+          "settledMs": 61.349999994039536,
+          "queryMs": 34.3500000089407
+        },
+        {
+          "firstRenderMs": 58,
+          "settledMs": 58.04999999701977,
+          "queryMs": 31.700000002980232
+        },
+        {
+          "firstRenderMs": 57.29999999701977,
+          "settledMs": 57.349999994039536,
+          "queryMs": 33.20000000298023
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 60.399999998509884,
+        "settledMs": 60.42499999701977,
+        "queryMs": 33.775000005960464
+      }
+    },
+    {
+      "variant": "fastpfor",
+      "phase": "native",
+      "medians": [
+        {
+          "firstRenderMs": 67,
+          "settledMs": 67.15000000596046,
+          "queryMs": 69.6000000089407
+        },
+        {
+          "firstRenderMs": 67.19999998807907,
+          "settledMs": 67.19999998807907,
+          "queryMs": 70.04999999701977
+        },
+        {
+          "firstRenderMs": 65.54999999701977,
+          "settledMs": 65.54999999701977,
+          "queryMs": 69.44999998807907
+        },
+        {
+          "firstRenderMs": 71.84999999403954,
+          "settledMs": 71.84999999403954,
+          "queryMs": 76.3999999910593
+        },
+        {
+          "firstRenderMs": 77.09999999403954,
+          "settledMs": 77.09999999403954,
+          "queryMs": 77.94999998807907
+        },
+        {
+          "firstRenderMs": 68.30000001192093,
+          "settledMs": 68.3500000089407,
+          "queryMs": 69.90000000596046
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 67.75,
+        "settledMs": 67.77499999850988,
+        "queryMs": 69.97500000149012
+      }
+    },
+    {
+      "variant": "fastpfor",
+      "phase": "overzoom",
+      "medians": [
+        {
+          "firstRenderMs": 73.54999999701977,
+          "settledMs": 73.6499999910593,
+          "queryMs": 38.70000001788139
+        },
+        {
+          "firstRenderMs": 56.3500000089407,
+          "settledMs": 56.3500000089407,
+          "queryMs": 32.24999998509884
+        },
+        {
+          "firstRenderMs": 59.20000001788139,
+          "settledMs": 59.25000001490116,
+          "queryMs": 32.19999998807907
+        },
+        {
+          "firstRenderMs": 61.349999994039536,
+          "settledMs": 61.44999998807907,
+          "queryMs": 33.3500000089407
+        },
+        {
+          "firstRenderMs": 62.8500000089407,
+          "settledMs": 62.95000000298023,
+          "queryMs": 34.79999999701977
+        },
+        {
+          "firstRenderMs": 62.75000001490116,
+          "settledMs": 62.80000001192093,
+          "queryMs": 33.5
+        }
+      ],
+      "aggregate": {
+        "firstRenderMs": 62.05000000447035,
+        "settledMs": 62.125,
+        "queryMs": 33.42500000447035
+      }
+    }
+  ],
+  "allocated": [
+    {
+      "variant": "mvt",
+      "rows": [
+        {
+          "main": 20056084,
+          "worker": 401538420
+        },
+        {
+          "main": 20878516,
+          "worker": 407329064
+        },
+        {
+          "main": 20216760,
+          "worker": 406046784
+        },
+        {
+          "main": 21551852,
+          "worker": 408862680
+        },
+        {
+          "main": 19828016,
+          "worker": 405786644
+        },
+        {
+          "main": 20037252,
+          "worker": 400491988
+        }
+      ],
+      "aggregate": {
+        "main": 20136422,
+        "worker": 405916714
+      }
+    },
+    {
+      "variant": "varint",
+      "rows": [
+        {
+          "main": 21636800,
+          "worker": 190726088
+        },
+        {
+          "main": 21829008,
+          "worker": 190322744
+        },
+        {
+          "main": 21366052,
+          "worker": 189254708
+        },
+        {
+          "main": 22761456,
+          "worker": 190310008
+        },
+        {
+          "main": 21096940,
+          "worker": 190350620
+        },
+        {
+          "main": 20893492,
+          "worker": 189497124
+        }
+      ],
+      "aggregate": {
+        "main": 21501426,
+        "worker": 190316376
+      }
+    },
+    {
+      "variant": "fastpfor",
+      "rows": [
+        {
+          "main": 23090336,
+          "worker": 188260568
+        },
+        {
+          "main": 22011016,
+          "worker": 192113704
+        },
+        {
+          "main": 22429536,
+          "worker": 189354984
+        },
+        {
+          "main": 22091612,
+          "worker": 187428076
+        },
+        {
+          "main": 21774580,
+          "worker": 186645536
+        },
+        {
+          "main": 21340120,
+          "worker": 190105796
+        }
+      ],
+      "aggregate": {
+        "main": 22051314,
+        "worker": 188807776
+      }
+    }
+  ],
+  "sizes": {
+    "mvt": {
+      "bytes": 1481872,
+      "gzip": 733662
+    },
+    "varint": {
+      "bytes": 1055493,
+      "gzip": 509665
+    },
+    "fastpfor": {
+      "bytes": 1003790,
+      "gzip": 527605
+    }
+  },
+  "deltas": [
+    {
+      "candidate": "fastpfor",
+      "baseline": "varint",
+      "phase": "native",
+      "percent": {
+        "firstRenderMs": 0.4075583638158742,
+        "settledMs": 0.37023324695375504,
+        "queryMs": -0.32051281204253934
+      },
+      "pairedDrawPercent": [
+        5.678233428550605,
+        -1.0309278395764454,
+        -2.237136465423817,
+        5.739514312188132,
+        18.070444073452443,
+        -0.1461987999290093
+      ]
+    },
+    {
+      "candidate": "fastpfor",
+      "baseline": "varint",
+      "phase": "overzoom",
+      "percent": {
+        "firstRenderMs": 2.7317880894059066,
+        "settledMs": 2.8134050526505305,
+        "queryMs": -1.0362694342808232
+      },
+      "pairedDrawPercent": [
+        23.717409576674008,
+        -15.390390388324315,
+        -11.443530257053446,
+        0,
+        8.362068980932236,
+        9.51134383623884
+      ]
+    },
+    {
+      "candidate": "fastpfor",
+      "baseline": "varint",
+      "allocationPercent": -0.7926800791961286,
+      "gzipPercent": 3.519959188878974
+    },
+    {
+      "candidate": "fastpfor",
+      "baseline": "mvt",
+      "phase": "native",
+      "percent": {
+        "firstRenderMs": -10.413223131669769,
+        "settledMs": -10.439378912650433,
+        "queryMs": 55.413659112460145
+      },
+      "pairedDrawPercent": [
+        -7.713498633954618,
+        -13.790891615766721,
+        -12.366310160920513,
+        -1.6427104964894856,
+        -4.460966553665113,
+        -10.660562429599707
+      ]
+    },
+    {
+      "candidate": "fastpfor",
+      "baseline": "mvt",
+      "phase": "overzoom",
+      "percent": {
+        "firstRenderMs": -37.03703703535699,
+        "settledMs": -36.97692112795154,
+        "queryMs": 32.245301706986965
+      },
+      "pairedDrawPercent": [
+        -20.314192862924727,
+        -46.256556974588406,
+        -37.58566154812696,
+        -39.556650252177796,
+        -38.0788177342722,
+        -34.36192467674408
+      ]
+    },
+    {
+      "candidate": "fastpfor",
+      "baseline": "mvt",
+      "allocationPercent": -53.48607990554437,
+      "gzipPercent": -28.086094141443883
+    },
+    {
+      "candidate": "varint",
+      "baseline": "mvt",
+      "phase": "native",
+      "percent": {
+        "firstRenderMs": -10.776859503223568,
+        "settledMs": -10.769739005196799,
+        "queryMs": 55.91338147577878
+      },
+      "pairedDrawPercent": [
+        -12.672176311084371,
+        -12.892880066115065,
+        -10.360962567257726,
+        -6.981519497888122,
+        -19.083023532206422,
+        -10.529758009516044
+      ]
+    },
+    {
+      "candidate": "varint",
+      "baseline": "mvt",
+      "phase": "overzoom",
+      "percent": {
+        "firstRenderMs": -38.71131405807198,
+        "settledMs": -38.70149632747357,
+        "queryMs": 33.6300692698386
+      },
+      "pairedDrawPercent": [
+        -35.59046587724591,
+        -36.48068668314092,
+        -29.520295204807113,
+        -39.556650252177796,
+        -42.85714286553197,
+        -40.06276151499899
+      ]
+    },
+    {
+      "candidate": "varint",
+      "baseline": "mvt",
+      "allocationPercent": -53.11442731082021,
+      "gzipPercent": -30.531361853278483
+    }
+  ],
+  "inputLayers": {
+    "total": 65,
+    "failures": [
+      {
+        "tile": "14-8803-5374",
+        "status": "failed",
+        "name": "contour",
+        "error": "RangeError: start offset of Int32Array should be a multiple of 4",
+        "stack": "RangeError: start offset of Int32Array should be a multiple of 4\n    at new Int32Array (<anonymous>)\n    at getVectorType (<decoder>:2735:17)\n    at decodeIdColumn (<decoder>:5255:21)\n    at decodeFeatureTable (<decoder>:5202:15)\n    at decodeTileLayer (<decoder>:5147:9)\n    at file:///data/Projet/maplibre/maplibre-gl-js/test/bench/generate-mlt-fastpfor.mjs:34:23\n    at Array.map (<anonymous>)\n    at file:///data/Projet/maplibre/maplibre-gl-js/test/bench/generate-mlt-fastpfor.mjs:32:27"
+      }
+    ]
+  },
+  "streams": {
+    "VARINT": 76,
+    "FAST_PFOR": 676,
+    "NONE": 522
+  },
+  "evidence": [
+    "test/bench/baselines/browser-fastpfor-timing-20260908",
+    "test/bench/baselines/browser-fastpfor-allocations-final-20260908",
+    "test/bench/baselines/browser-fastpfor-parity-final-gpu-20260908",
+    "test/bench/baselines/browser-fastpfor-parity-final-software-20260908"
+  ]
+}

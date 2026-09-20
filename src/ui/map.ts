@@ -4380,6 +4380,9 @@ export class Map extends Evented<MapEventType> {
      * - The map has is moving (or just finished moving)
      * - A transition is in progress
      *
+     * Repaint after releasing symbol-fade tiles: their removal can change
+     * cross-tile placement, so the frame already painted is not yet final.
+     *
      * @param paintStartTimeStamp - The time when the animation frame began executing.
      */
     _render(paintStartTimeStamp: number): this {
@@ -4477,19 +4480,14 @@ export class Map extends Evented<MapEventType> {
             this._styleDirty = true;
         }
 
-        if (this.style && !this._placementDirty) {
-            // Since no fade operations are in progress, we can release
-            // all tiles held for fading. If we didn't do this, the tiles
-            // would just sit in the TileManagers until the next render
-            this.style._releaseSymbolFadeTiles();
-        }
+        const symbolFadeTilesReleased = this.style && !this._placementDirty && this.style._releaseSymbolFadeTiles();
 
         // Schedule another render frame if it's needed.
         //
         // Even though `_styleDirty` and `_sourcesDirty` are reset in this
         // method, synchronous events fired during Style.update or
         // Style._updateSources could have caused them to be set again.
-        const somethingDirty = this._sourcesDirty || this._styleDirty || this._placementDirty || this.painter.renderToTexture?.needsFollowUpFrame;
+        const somethingDirty = this._sourcesDirty || this._styleDirty || this._placementDirty || symbolFadeTilesReleased || this.painter.renderToTexture?.needsFollowUpFrame;
         if (somethingDirty || this._repaint) {
             this.triggerRepaint();
         } else if (!this.isMoving() && this.loaded()) {

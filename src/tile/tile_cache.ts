@@ -245,3 +245,88 @@ export class BoundedLRUCache<K, V> {
         this.map.clear();
     }
 }
+
+export type ByteBoundedLRUCacheStats = {
+    hits: number;
+    misses: number;
+    evictions: number;
+    bytes: number;
+    entries: number;
+};
+
+/**
+ * LRU cache whose retained values are bounded by an explicit byte budget.
+ * The byte-size callback must account for all memory retained by a value.
+ */
+export class ByteBoundedLRUCache<K, V> {
+    private map = new Map<K, {value: V; bytes: number}>();
+    private currentBytes = 0;
+    private hitCount = 0;
+    private missCount = 0;
+    private evictionCount = 0;
+
+    constructor(
+        readonly maxBytes: number,
+        private readonly byteSize: (value: V) => number,
+    ) {
+        if (!Number.isSafeInteger(maxBytes) || maxBytes < 0) {
+            throw new RangeError(`Cache byte budget must be a non-negative safe integer, got ${maxBytes}`);
+        }
+    }
+
+    get(key: K): V | undefined {
+        const entry = this.map.get(key);
+        if (!entry) {
+            this.missCount++;
+            return undefined;
+        }
+
+        this.hitCount++;
+        this.map.delete(key);
+        this.map.set(key, entry);
+        return entry.value;
+    }
+
+    set(key: K, value: V): void {
+        const bytes = this.byteSize(value);
+        if (!Number.isSafeInteger(bytes) || bytes < 0) {
+            throw new RangeError(`Cached value size must be a non-negative safe integer, got ${bytes}`);
+        }
+
+        const previous = this.map.get(key);
+        if (previous) {
+            this.currentBytes -= previous.bytes;
+            this.map.delete(key);
+        }
+
+        this.map.set(key, {value, bytes});
+        this.currentBytes += bytes;
+        while (this.currentBytes > this.maxBytes && this.map.size > 0) {
+            const oldestKey = this.map.keys().next().value as K;
+            const evicted = this.map.get(oldestKey);
+            this.map.delete(oldestKey);
+            this.currentBytes -= evicted.bytes;
+            this.evictionCount++;
+        }
+    }
+
+    clear(): void {
+        this.map.clear();
+        this.currentBytes = 0;
+    }
+
+    /** Reaccounts a growing cached value without resurrecting an entry already evicted or replaced. */
+    refresh(key: K, value: V): void {
+        if (this.map.get(key)?.value === value) this.set(key, value);
+    }
+
+    get stats(): ByteBoundedLRUCacheStats {
+        return {
+            hits: this.hitCount,
+            misses: this.missCount,
+            evictions: this.evictionCount,
+            bytes: this.currentBytes,
+            entries: this.map.size,
+        };
+    }
+}

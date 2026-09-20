@@ -37,6 +37,22 @@ beforeEach(() => {
 
 describe('ScrollZoomHandler', () => {
 
+    test.each([-simulate.magicWheelZoomDelta, -120])('preserves originalEvent for a single wheel tick with deltaY %s', async (deltaY) => {
+        const map = createMap();
+        try {
+            await map.once('idle');
+            const types = ['movestart', 'zoomstart', 'zoom', 'zoomend', 'moveend'] as const;
+            const events: Array<{type: string; originalEvent: unknown}> = [];
+            for (const type of types) map.on(type, event => events.push({type, originalEvent: event.originalEvent}));
+            const wheel = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY});
+            const complete = map.once('idle');
+            map.getCanvas().dispatchEvent(wheel);
+            await complete;
+            expect(new Set(events.map(event => event.type))).toEqual(new Set(types));
+            expect(events.map(event => event.originalEvent === wheel)).toEqual(events.map(() => true));
+        } finally { map.remove(); }
+    });
+
     test('Zooms for single mouse wheel tick', () => {
         const timeControlNow = vi.spyOn(timeControl, 'now');
         let now = 1555555555555;

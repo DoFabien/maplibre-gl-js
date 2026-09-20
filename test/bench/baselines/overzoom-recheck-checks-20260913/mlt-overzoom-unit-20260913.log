@@ -1,0 +1,12 @@
+
+> maplibre-gl@6.7.0 test-unit
+> vitest run --config vitest.config.unit.ts src/data/bucket/columnar/pretriangulated_fill.test.ts src/data/bucket/columnar/columnar_fill_bucket.test.ts src/source/vector_tile_worker_source_mlt_direct.test.ts src/source/mlt_tile_data.test.ts
+
+
+ RUN  v4.1.11 /data/Projet/maplibre/maplibre-gl-js
+
+
+ Test Files  4 passed (4)
+      Tests  29 passed (29)
+   Start at  18:35:51
+   Duration  9.83s (transform 13.33s, setup 15.17s, import 2.74s, tests 1.54s, environment 9.13s)

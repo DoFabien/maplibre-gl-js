@@ -26,6 +26,7 @@ import type {Map} from '../ui/map.ts';
 import type {StyleSetterOptions} from './style.ts';
 import type {UnwrappedTileID} from '../tile/tile_id.ts';
 import type {VectorTileFeatureLike} from '@maplibre/vt-pbf';
+import type {FeatureGeometry} from '../util/geometry_view.ts';
 
 export type PaintPropertyEntry = { [K in keyof AllPaintProperties]: {name: K; value: AllPaintProperties[K]} }[keyof AllPaintProperties];
 
@@ -47,7 +48,7 @@ export type QueryIntersectsFeatureParams = {
      * The geometry of the feature.
      * This geometry is in tile coordinates.
      */
-    geometry: Point[][];
+    geometry: FeatureGeometry;
     /**
      * The current zoom level.
      */
@@ -114,6 +115,7 @@ export abstract class StyleLayer extends Evented<ErrorEventType> {
     createBucket?(parameters: BucketParameters<any>): Bucket;
 
     private _globalState: Record<string, any>; // reference to global state
+    private _hasDataDrivenPaintProperties: boolean; // computed at construction
 
     constructor(layer: LayerSpecification | CustomLayerInterface, properties: Readonly<{
         layout?: Properties<any>;
@@ -156,12 +158,21 @@ export abstract class StyleLayer extends Evented<ErrorEventType> {
 
             this._transitioningPaint = this._transitionablePaint.untransitioned();
             this.paint = new PossiblyEvaluated(properties.paint);
+
+            // Compute data-driven status once at construction
+            this._hasDataDrivenPaintProperties = this._computeHasDataDrivenPaintProperties();
+        } else {
+            this._hasDataDrivenPaintProperties = false;
         }
     }
 
     setFilter(filter: FilterSpecification | void): void {
         this.filter = filter;
         this._featureFilter = featureFilter(filter, `layers[${this.id}].filter`, this._globalState);
+    }
+
+    getGlobalState(): Record<string, any> {
+        return this._globalState;
     }
 
     getCrossfadeParameters(): CrossfadeParameters {
@@ -301,6 +312,11 @@ export abstract class StyleLayer extends Evented<ErrorEventType> {
             const newValue = this._transitionablePaint._values[name].value;
             const isDataDriven = newValue.isDataDriven();
 
+            // Recompute when data-driven status changes
+            if (isDataDriven !== wasDataDriven) {
+                this._hasDataDrivenPaintProperties = this._computeHasDataDrivenPaintProperties();
+            }
+
             // if a cross-faded value is changed, we need to make sure the new icons get added to each tile's iconAtlas
             // so a call to _updateLayer is necessary, and we return true from this function so it gets called in
             // Style.setPaintProperty
@@ -351,6 +367,24 @@ export abstract class StyleLayer extends Evented<ErrorEventType> {
         }
 
         (this as any).paint = this._transitioningPaint.possiblyEvaluate(parameters, undefined, availableImages);
+    }
+
+    private _computeHasDataDrivenPaintProperties(): boolean {
+        for (const property in this._transitionablePaint._values) {
+            if (this._transitionablePaint._values[property].value.isDataDriven()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if this layer has data-driven paint properties.
+     * Data-driven properties have values that vary per feature (source/composite expressions).
+     * Computed once at layer construction, updated when setPaintProperty changes data-driven status.
+     */
+    hasDataDrivenPaintProperties(): boolean {
+        return this._hasDataDrivenPaintProperties;
     }
 
     serialize(): LayerSpecification {

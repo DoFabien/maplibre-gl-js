@@ -66,6 +66,10 @@ describe('main sourcemap', () => {
         const expectedEntriesInSourcemapJSON = srcFiles.filter(f => {
             if (f.endsWith('.test.ts') || f.endsWith('.bench.ts'))
                 return false;
+            if (f.endsWith('.spec.ts'))
+                return false;
+            if (f.startsWith(path.join('src', 'shaders')))
+                return false;
             if (f.startsWith(path.join('src', 'style-spec')))
                 return false;
             if (f === path.join('src', 'util', 'test', 'util.ts'))
@@ -75,7 +79,11 @@ describe('main sourcemap', () => {
 
         // actual files from *.mjs.map
         const actualEntriesInSourcemapJSON = sourcemapEntriesNormalized.filter(f => {
-            if (f.startsWith('node_modules'))
+            if (!f.startsWith(path.join('src', '')))
+                return false;
+            if (f.endsWith('.spec.ts'))
+                return false;
+            if (f.startsWith(path.join('src', 'shaders')))
                 return false;
             return !f.startsWith(path.join('src', 'style-spec'));
         }).sort();

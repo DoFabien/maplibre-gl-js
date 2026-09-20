@@ -1,0 +1,14 @@
+geometry browser 1/4: before/mvt passed
+geometry browser 1/4: before/mlt passed
+geometry browser 1/4: after/mvt passed
+geometry browser 1/4: after/mlt passed
+geometry browser 2/4: before/mlt passed
+geometry browser 2/4: after/mvt passed
+ProtocolError: Protocol error (Target.closeTarget): No target with given id found
+    at <instance_members_initializer> (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/common/CallbackRegistry.js:108:14)
+    at new Callback (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/common/CallbackRegistry.js:112:16)
+    at CallbackRegistry.create (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/common/CallbackRegistry.js:27:26)
+    at Connection._rawSend (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/Connection.js:125:26)
+    at Connection.send (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/Connection.js:112:21)
+    at CdpPage.close (file:///data/Projet/maplibre/maplibre-gl-js/node_modules/puppeteer-core/lib/puppeteer/cdp/Page.js:958:34)
+    at async main (file:///data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-geometry-browser.ts:82:29)

@@ -197,6 +197,44 @@ describe('symbol fade after the placement guard', () => {
         restoreNow();
     });
 
+    test.each([0, 300])('idle follows a render of the final symbol tile set (fadeDuration: %i)', async (fadeDuration) => {
+        const data = {type: 'FeatureCollection' as const, features: [
+            {type: 'Feature' as const, geometry: {type: 'Point' as const, coordinates: [-20, 0]}, properties: {}},
+            {type: 'Feature' as const, geometry: {type: 'Point' as const, coordinates: [20, 0]}, properties: {}}
+        ]};
+        const map = createMap({fadeDuration, style: {
+            version: 8,
+            sources: {first: {type: 'geojson', data}, second: {type: 'geojson', data}},
+            layers: []
+        }});
+        try {
+            await map.once('load');
+            map.addImage('dot', {width: 20, height: 20, data: new Uint8Array(20 * 20 * 4).fill(255)});
+            for (const source of ['first', 'second']) {
+                map.addLayer({id: source, type: 'symbol', source, layout: {'icon-image': 'dot', 'icon-allow-overlap': true}});
+            }
+            await map.once('idle');
+            const managers = Object.values(map.style.tileManagers);
+            const releaseCalls = managers.map(manager => vi.spyOn(manager, 'releaseSymbolFadeTiles'));
+            let paintedTiles: string[][];
+            map.on('render', () => { paintedTiles = managers.map(manager => manager.getRenderableIds(true)); });
+
+            if (fadeDuration === 0) setNow(now() + 1000);
+            const idle = map.once('idle');
+            map.jumpTo({zoom: 1});
+            await idle;
+
+            for (const release of releaseCalls) expect(release.mock.results.some(result => result.value === true)).toBe(true);
+            expect(paintedTiles).toEqual(managers.map(manager => manager.getRenderableIds(true)));
+            const settledTiles = paintedTiles;
+            map.redraw();
+            expect(paintedTiles).toEqual(settledTiles);
+            for (const release of releaseCalls) expect(release).toHaveLastReturnedWith(false);
+        } finally {
+            map.remove();
+        }
+    });
+
     test('a placement change keeps the map rendering through fadeDuration, then it goes idle', async () => {
         const map = createMap({style: {
             version: 8,
@@ -248,6 +286,30 @@ describe('render-to-texture follow-up frame', () => {
         expect(idle).toHaveBeenCalled();
         map.remove();
     });
+});
+
+test('switches a custom globe expression back to the automatic globe projection', async () => {
+    const map = createMap({zoom: 2.5});
+    try {
+        await map.once('idle');
+        let globeness: number;
+        map.addLayer({id: 'projection-observer', type: 'custom', renderingMode: '2d',
+            render(_context, input) { globeness = input.defaultProjectionData.projectionTransition; }});
+        map.setProjection({type: ['interpolate', ['linear'], ['zoom'], 0, 'mercator', 5, 'vertical-perspective']});
+        await map.once('idle');
+        expect(globeness).toBe(0.5);
+
+        map.setProjection({type: 'globe'});
+        await map.once('idle');
+        expect(map.getProjection()).toEqual({type: 'globe'});
+        expect(globeness).toBe(1);
+
+        map.setZoom(14);
+        await map.once('idle');
+        expect(globeness).toBe(0);
+    } finally {
+        map.remove();
+    }
 });
 
 describe('hidden layers', () => {

@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest';
-import {TileCache, BoundedLRUCache} from './tile_cache.ts';
+import {TileCache, BoundedLRUCache, ByteBoundedLRUCache} from './tile_cache.ts';
 import {OverscaledTileID} from './tile_id.ts';
 
 import type {Tile} from './tile.ts';
@@ -188,5 +188,55 @@ describe('BoundedLRUCache', () => {
 
         expect(cache.get(1)).toBeUndefined();
         expect(cache.get(2)).toBeUndefined();
+    });
+});
+
+describe('ByteBoundedLRUCache', () => {
+    test('evicts least-recently-used values until the byte budget is met', () => {
+        const cache = new ByteBoundedLRUCache<string, Uint8Array>(10, (value) => value.byteLength);
+        cache.set('a', new Uint8Array(4));
+        cache.set('b', new Uint8Array(4));
+        expect(cache.get('a')).toHaveLength(4);
+
+        cache.set('c', new Uint8Array(5));
+
+        expect(cache.get('b')).toBeUndefined();
+        expect(cache.get('a')).toHaveLength(4);
+        expect(cache.get('c')).toHaveLength(5);
+        expect(cache.stats).toEqual({hits: 3, misses: 1, evictions: 1, bytes: 9, entries: 2});
+    });
+
+    test('updates retained bytes when replacing an entry', () => {
+        const cache = new ByteBoundedLRUCache<string, Uint8Array>(10, (value) => value.byteLength);
+        cache.set('a', new Uint8Array(8));
+        cache.set('a', new Uint8Array(3));
+        cache.set('b', new Uint8Array(7));
+
+        expect(cache.stats).toEqual({hits: 0, misses: 0, evictions: 0, bytes: 10, entries: 2});
+        expect(cache.get('a')).toHaveLength(3);
+        expect(cache.get('b')).toHaveLength(7);
+    });
+
+    test('does not retain a value larger than the entire budget', () => {
+        const cache = new ByteBoundedLRUCache<string, Uint8Array>(4, (value) => value.byteLength);
+        cache.set('oversized', new Uint8Array(5));
+
+        expect(cache.get('oversized')).toBeUndefined();
+        expect(cache.stats).toEqual({hits: 0, misses: 1, evictions: 1, bytes: 0, entries: 0});
+    });
+
+    test('clears retained values while keeping cumulative metrics', () => {
+        const cache = new ByteBoundedLRUCache<string, Uint8Array>(4, (value) => value.byteLength);
+        cache.set('a', new Uint8Array(4));
+        expect(cache.get('a')).toHaveLength(4);
+        cache.clear();
+
+        expect(cache.stats).toEqual({hits: 1, misses: 0, evictions: 0, bytes: 0, entries: 0});
+    });
+
+    test('rejects invalid budgets and value sizes', () => {
+        expect(() => new ByteBoundedLRUCache<string, string>(-1, (value) => value.length)).toThrow(RangeError);
+        const cache = new ByteBoundedLRUCache<string, string>(10, () => Number.NaN);
+        expect(() => cache.set('a', 'value')).toThrow(RangeError);
     });
 });

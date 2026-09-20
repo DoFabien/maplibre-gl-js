@@ -6,3 +6,8 @@ If you have something you would like to share with the community that is not str
 Things that are short enough and/or with lower complexity are probably already in the [Examples](../examples/index.md) section, but if not, feel free to add there.
 
 The process of adding examples or guides is pretty straight forward, see our `docs` folder in the [MapLibre GL JS repo](https://github.com/maplibre/maplibre-gl-js/tree/main/docs) for more information.
+
+## Data formats and performance
+
+- [Using MapLibre Tile (MLT) vector sources](./mlt-vector-tiles.md)
+- [Optimising performance for large GeoJSON datasets](./large-data.md)

@@ -1,0 +1,1542 @@
+{
+  "status": "verified-overzoom-diagnostics",
+  "checkedAt": "2026-09-13T16:48:30.685Z",
+  "images": 56,
+  "queryArchives": 56,
+  "observations": 2560,
+  "campaigns": [
+    {
+      "directory": "test/bench/baselines/overzoom-diagnostic-timing-20260913",
+      "mode": "timing",
+      "runs": 6,
+      "samples": 40,
+      "bundles": {
+        "before": "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist",
+        "after": "/data/Projet/maplibre/maplibre-gl-js/dist"
+      },
+      "identicalBuilds": false,
+      "summary": {
+        "firstRenderMs": {
+          "before": 81.52500000223517,
+          "after": 81.80000000447035,
+          "deltaPercent": 0.3373198432721658,
+          "pairedDeltaMs": [
+            0.15000000596046448,
+            0.050000011920928955,
+            -0.09999999403953552,
+            0.5499999970197678,
+            3.399999998509884,
+            16.049999989569187
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 72.52500000596046,
+          "after": 76.75000000372529,
+          "deltaPercent": 5.825577383547187,
+          "pairedDeltaMs": [
+            5.1500000059604645,
+            3.4500000029802322,
+            -2.4000000059604645,
+            2.100000001490116,
+            5.700000002980232,
+            11.100000008940697
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 9.50000000372529,
+          "after": 9.100000001490116,
+          "deltaPercent": -4.21052633766652,
+          "pairedDeltaMs": [
+            -0.9000000059604645,
+            -4.249999992549419,
+            2.4499999955296516,
+            1.3999999985098839,
+            -0.04999999701976776,
+            0.75
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 3.6250000074505806,
+          "after": 3.6999999918043613,
+          "deltaPercent": 2.068965081369134,
+          "pairedDeltaMs": [
+            0.14999999105930328,
+            -1.4901161193847656e-8,
+            0,
+            0.3499999940395355,
+            -0.10000000149011612,
+            0.20000000298023224
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.29999999701977,
+            "lastTileDataMs": 70.5,
+            "readyToRenderMs": 9.850000001490116,
+            "startRafPhaseMs": 3.5499999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.45000000298023,
+            "lastTileDataMs": 75.65000000596046,
+            "readyToRenderMs": 8.949999995529652,
+            "startRafPhaseMs": 3.699999988079071,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.45000000298023,
+            "lastTileDataMs": 73.90000000596046,
+            "readyToRenderMs": 7.450000002980232,
+            "startRafPhaseMs": 3.5999999940395355,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.3999999910593,
+            "lastTileDataMs": 70.45000000298023,
+            "readyToRenderMs": 11.699999995529652,
+            "startRafPhaseMs": 3.6000000089406967,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 71.8500000089407,
+            "readyToRenderMs": 9.700000002980232,
+            "startRafPhaseMs": 3.5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.40000000596046,
+            "lastTileDataMs": 69.45000000298023,
+            "readyToRenderMs": 12.149999998509884,
+            "startRafPhaseMs": 3.5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 82.15000000596046,
+            "lastTileDataMs": 77.85000000149012,
+            "readyToRenderMs": 9.399999998509884,
+            "startRafPhaseMs": 4,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.6000000089407,
+            "lastTileDataMs": 75.75,
+            "readyToRenderMs": 8,
+            "startRafPhaseMs": 3.6500000059604645,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.55000000447035,
+            "lastTileDataMs": 73.20000000298023,
+            "readyToRenderMs": 9.300000004470348,
+            "startRafPhaseMs": 3.7999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 84.95000000298023,
+            "lastTileDataMs": 78.90000000596046,
+            "readyToRenderMs": 9.25000000745058,
+            "startRafPhaseMs": 3.6999999955296516,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 97.8999999910593,
+            "lastTileDataMs": 88.05000000447035,
+            "readyToRenderMs": 8.100000001490116,
+            "startRafPhaseMs": 4,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.85000000149012,
+            "lastTileDataMs": 76.94999999552965,
+            "readyToRenderMs": 7.350000001490116,
+            "startRafPhaseMs": 3.7999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        }
+      ]
+    },
+    {
+      "directory": "test/bench/baselines/overzoom-diagnostic-control-20260913",
+      "mode": "timing",
+      "runs": 6,
+      "samples": 40,
+      "bundles": {
+        "before": "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist",
+        "after": "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist"
+      },
+      "identicalBuilds": true,
+      "summary": {
+        "firstRenderMs": {
+          "before": 81.45000000298023,
+          "after": 81.69999999925494,
+          "deltaPercent": 0.3069367664402245,
+          "pairedDeltaMs": [
+            0.25,
+            0.2499999925494194,
+            0.44999998807907104,
+            -0.09999999403953552,
+            0.19999999552965164,
+            14.50000000745058
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 71.72499999403954,
+          "after": 74.84999999403954,
+          "deltaPercent": 4.35691878739588,
+          "pairedDeltaMs": [
+            -1.4500000104308128,
+            2.9499999955296516,
+            7,
+            -0.6999999955296516,
+            -0.4999999850988388,
+            11.75
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 10.025000002235174,
+          "after": 9.150000005960464,
+          "deltaPercent": -8.728179512016155,
+          "pairedDeltaMs": [
+            1.1000000014901161,
+            -2.200000010430813,
+            -2.299999989569187,
+            0.9499999955296516,
+            0.75,
+            -3.949999988079071
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 3.449999999254942,
+          "after": 3.599999997764826,
+          "deltaPercent": 4.347826044703695,
+          "pairedDeltaMs": [
+            0.20000000298023224,
+            -0.05000000447034836,
+            -0.09999999403953552,
+            0.25,
+            0.29999999701976776,
+            0.7499999925494194
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.25,
+            "lastTileDataMs": 74.55000000447035,
+            "readyToRenderMs": 7.550000004470348,
+            "startRafPhaseMs": 3.6999999955296516,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 73.09999999403954,
+            "readyToRenderMs": 8.650000005960464,
+            "startRafPhaseMs": 3.899999998509884,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.89999999850988,
+            "lastTileDataMs": 77.10000000149012,
+            "readyToRenderMs": 6.25,
+            "startRafPhaseMs": 3.5999999940395355,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.65000000596046,
+            "lastTileDataMs": 74.15000000596046,
+            "readyToRenderMs": 8.450000010430813,
+            "startRafPhaseMs": 3.649999998509884,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.3500000089407,
+            "lastTileDataMs": 69.59999999403954,
+            "readyToRenderMs": 11.949999995529652,
+            "startRafPhaseMs": 3.5499999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.79999999701977,
+            "lastTileDataMs": 76.59999999403954,
+            "readyToRenderMs": 9.650000005960464,
+            "startRafPhaseMs": 3.4500000029802322,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.40000000596046,
+            "lastTileDataMs": 72.05000000447035,
+            "readyToRenderMs": 10.149999998509884,
+            "startRafPhaseMs": 3.600000001490116,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 72.75,
+            "readyToRenderMs": 9.200000002980232,
+            "startRafPhaseMs": 3.350000001490116,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.40000000596046,
+            "lastTileDataMs": 70.69999998807907,
+            "readyToRenderMs": 10.850000001490116,
+            "startRafPhaseMs": 3.2999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.60000000149012,
+            "lastTileDataMs": 70.20000000298023,
+            "readyToRenderMs": 11.600000001490116,
+            "startRafPhaseMs": 3.5999999940395355,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 96.05000000447035,
+            "lastTileDataMs": 81.29999999701977,
+            "readyToRenderMs": 8.200000002980232,
+            "startRafPhaseMs": 3.850000001490116,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.54999999701977,
+            "lastTileDataMs": 69.54999999701977,
+            "readyToRenderMs": 12.149999991059303,
+            "startRafPhaseMs": 3.1000000089406967,
+            "queryMs": 0
+          },
+          "profiles": []
+        }
+      ]
+    },
+    {
+      "directory": "test/bench/baselines/overzoom-diagnostic-profile-20260913",
+      "mode": "profile",
+      "runs": 2,
+      "samples": 80,
+      "bundles": {
+        "before": "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist",
+        "after": "/data/Projet/maplibre/maplibre-gl-js/dist"
+      },
+      "identicalBuilds": false,
+      "summary": {
+        "firstRenderMs": {
+          "before": 90.37500000372529,
+          "after": 98.39999999850988,
+          "deltaPercent": 8.879668043655652,
+          "pairedDeltaMs": [
+            0.19999999552965164,
+            15.849999994039536
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 82.84999999776483,
+          "after": 89.30000000819564,
+          "deltaPercent": 7.785153905376974,
+          "pairedDeltaMs": [
+            1.6000000089406967,
+            11.300000011920929
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 8.849999997764826,
+          "after": 10.024999998509884,
+          "deltaPercent": 13.276836169964046,
+          "pairedDeltaMs": [
+            -0.14999999850988388,
+            2.5
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 4.074999999254942,
+          "after": 4.225000001490116,
+          "deltaPercent": 3.6809816506159443,
+          "pairedDeltaMs": [
+            0.10000000149011612,
+            0.20000000298023224
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 97.80000000447035,
+            "lastTileDataMs": 86,
+            "readyToRenderMs": 10.549999997019768,
+            "startRafPhaseMs": 4.149999998509884,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.060712499999999996,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.1989,
+                "(garbage collector)": 1.0229
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.7858624999999999,
+                "subdivision.ts": 3.0414499999999998,
+                "earcut": 2.8519875000000003,
+                "mlt_tile_data.ts": 8.5045375,
+                "(garbage collector)": 1.5097375
+              }
+            }
+          ]
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 98,
+            "lastTileDataMs": 87.6000000089407,
+            "readyToRenderMs": 10.399999998509884,
+            "startRafPhaseMs": 4.25,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.051825,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.2137,
+                "(garbage collector)": 0.9074625
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0.21505000000000002,
+                "columnar_fill_bucket.ts": 0.758275,
+                "subdivision.ts": 3.1672875,
+                "earcut": 2.8549875,
+                "mlt_tile_data.ts": 8.6240375,
+                "(garbage collector)": 1.2930125000000001
+              }
+            }
+          ]
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 98.79999999701977,
+            "lastTileDataMs": 91.00000000745058,
+            "readyToRenderMs": 9.649999998509884,
+            "startRafPhaseMs": 4.200000002980232,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.06075,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.3072375,
+                "(garbage collector)": 0.905825
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0.2142125,
+                "columnar_fill_bucket.ts": 0.7916625,
+                "subdivision.ts": 3.1503,
+                "earcut": 3.02205,
+                "mlt_tile_data.ts": 8.973525,
+                "(garbage collector)": 1.2681375000000001
+              }
+            }
+          ]
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 82.95000000298023,
+            "lastTileDataMs": 79.69999999552965,
+            "readyToRenderMs": 7.149999998509884,
+            "startRafPhaseMs": 4,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.06035,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.0763624999999999,
+                "(garbage collector)": 0.809975
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.70935,
+                "subdivision.ts": 2.8084875,
+                "earcut": 2.64015,
+                "mlt_tile_data.ts": 7.8953875,
+                "(garbage collector)": 1.2411125
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "directory": "test/bench/baselines/overzoom-hoist-profile-20260913",
+      "mode": "profile",
+      "runs": 2,
+      "samples": 80,
+      "bundles": {
+        "before": "/data/Projet/maplibre/maplibre-gl-js/dist",
+        "after": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913"
+      },
+      "identicalBuilds": false,
+      "summary": {
+        "firstRenderMs": {
+          "before": 82.17500000074506,
+          "after": 82.32500000298023,
+          "deltaPercent": 0.1825372707439099,
+          "pairedDeltaMs": [
+            0.25,
+            0.05000000447034836
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 78.65000000223517,
+          "after": 78.92499999701977,
+          "deltaPercent": 0.3496503430092446,
+          "pairedDeltaMs": [
+            0.19999999552965164,
+            0.3499999940395355
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 7.074999995529652,
+          "after": 7.800000004470348,
+          "deltaPercent": 10.24734995616663,
+          "pairedDeltaMs": [
+            0.45000001788139343,
+            1
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 3.850000001490116,
+          "after": 3.8500000052154064,
+          "deltaPercent": 9.676077716846976e-8,
+          "pairedDeltaMs": [
+            0.10000000149011612,
+            -0.09999999403953552
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 82,
+            "lastTileDataMs": 78.30000000447035,
+            "readyToRenderMs": 7.399999991059303,
+            "startRafPhaseMs": 3.7000000029802322,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.066,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 0.9704875,
+                "(garbage collector)": 0.7994125
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0.16476249999999998,
+                "columnar_fill_bucket.ts": 0.6795625,
+                "subdivision.ts": 2.83775,
+                "earcut": 2.5021375,
+                "mlt_tile_data.ts": 7.547524999999999,
+                "(garbage collector)": 1.0479749999999999
+              }
+            }
+          ]
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 82.25,
+            "lastTileDataMs": 78.5,
+            "readyToRenderMs": 7.850000008940697,
+            "startRafPhaseMs": 3.8000000044703484,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.063375,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.0114,
+                "(garbage collector)": 0.7116375
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.7105125,
+                "subdivision.ts": 2.7070250000000002,
+                "earcut": 2.4242375000000003,
+                "mlt_tile_data.ts": 7.6282250000000005,
+                "(garbage collector)": 1.1776624999999998
+              }
+            }
+          ]
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 82.40000000596046,
+            "lastTileDataMs": 79.34999999403954,
+            "readyToRenderMs": 7.75,
+            "startRafPhaseMs": 3.9000000059604645,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.0485125,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 0.991775,
+                "(garbage collector)": 0.9378125
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.5775125000000001,
+                "subdivision.ts": 2.8603625000000004,
+                "earcut": 2.7117375000000004,
+                "mlt_tile_data.ts": 7.822550000000001,
+                "(garbage collector)": 1.0874249999999999
+              }
+            }
+          ]
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 82.35000000149012,
+            "lastTileDataMs": 79,
+            "readyToRenderMs": 6.75,
+            "startRafPhaseMs": 4,
+            "queryMs": 0
+          },
+          "profiles": [
+            {
+              "name": "main",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0,
+                "columnar_fill_bucket.ts": 0.0413375,
+                "subdivision.ts": 0,
+                "earcut": 0,
+                "mlt_tile_data.ts": 1.1808375,
+                "(garbage collector)": 0.910525
+              }
+            },
+            {
+              "name": "worker",
+              "sampledMsPerReload": {
+                "pretriangulated_fill.ts": 0.1116125,
+                "columnar_fill_bucket.ts": 0.6133500000000001,
+                "subdivision.ts": 2.964,
+                "earcut": 2.6729625,
+                "mlt_tile_data.ts": 7.8476875,
+                "(garbage collector)": 1.2042
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "directory": "test/bench/baselines/overzoom-hoist-timing-20260913",
+      "mode": "timing",
+      "runs": 4,
+      "samples": 40,
+      "bundles": {
+        "before": "/data/Projet/maplibre/maplibre-gl-js/dist",
+        "after": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913"
+      },
+      "identicalBuilds": false,
+      "summary": {
+        "firstRenderMs": {
+          "before": 81.60000000149012,
+          "after": 90.67500000447035,
+          "deltaPercent": 11.121323532860927,
+          "pairedDeltaMs": [
+            -14.899999991059303,
+            18.150000005960464,
+            -0.09999999403953552,
+            0.25
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 77.19999999925494,
+          "after": 84.69999999925494,
+          "deltaPercent": 9.71502590682951,
+          "pairedDeltaMs": [
+            -13.849999994039536,
+            18.75,
+            -2.450000010430813,
+            0.7000000029802322
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 9,
+          "after": 8.675000004470348,
+          "deltaPercent": -3.611111061440575,
+          "pairedDeltaMs": [
+            -2.850000001490116,
+            0.7999999970197678,
+            1.3500000089406967,
+            -1.0499999970197678
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 3.824999999254942,
+          "after": 4.1500000059604645,
+          "deltaPercent": 8.496732203106628,
+          "pairedDeltaMs": [
+            -0.3500000014901161,
+            0.5,
+            -0.14999999850988388,
+            0.45000000298023224
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 115.54999999701977,
+            "lastTileDataMs": 111.04999999701977,
+            "readyToRenderMs": 9.550000004470348,
+            "startRafPhaseMs": 5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 100.65000000596046,
+            "lastTileDataMs": 97.20000000298023,
+            "readyToRenderMs": 6.700000002980232,
+            "startRafPhaseMs": 4.649999998509884,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 99.45000000298023,
+            "lastTileDataMs": 90.85000000149012,
+            "readyToRenderMs": 10.099999994039536,
+            "startRafPhaseMs": 4.200000002980232,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.29999999701977,
+            "lastTileDataMs": 72.10000000149012,
+            "readyToRenderMs": 9.299999997019768,
+            "startRafPhaseMs": 3.7000000029802322,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.54999999701977,
+            "lastTileDataMs": 76.55000000447035,
+            "readyToRenderMs": 8.349999994039536,
+            "startRafPhaseMs": 3.9499999955296516,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.45000000298023,
+            "lastTileDataMs": 74.09999999403954,
+            "readyToRenderMs": 9.700000002980232,
+            "startRafPhaseMs": 3.7999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.90000000596046,
+            "lastTileDataMs": 78.54999999701977,
+            "readyToRenderMs": 7.6500000059604645,
+            "startRafPhaseMs": 4.100000008940697,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.65000000596046,
+            "lastTileDataMs": 77.84999999403954,
+            "readyToRenderMs": 8.700000002980232,
+            "startRafPhaseMs": 3.6500000059604645,
+            "queryMs": 0
+          },
+          "profiles": []
+        }
+      ]
+    },
+    {
+      "directory": "test/bench/baselines/overzoom-hoist-timing-repeat-20260913",
+      "mode": "timing",
+      "runs": 8,
+      "samples": 40,
+      "bundles": {
+        "before": "/data/Projet/maplibre/maplibre-gl-js/dist",
+        "after": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913"
+      },
+      "identicalBuilds": false,
+      "summary": {
+        "firstRenderMs": {
+          "before": 81.5,
+          "after": 82.05000000074506,
+          "deltaPercent": 0.6748466266810471,
+          "pairedDeltaMs": [
+            6.000000007450581,
+            -0.44999999552965164,
+            15.450000002980232,
+            0.8500000014901161,
+            0.3999999910593033,
+            0.29999999701976776,
+            -0.20000000298023224,
+            -12
+          ]
+        },
+        "lastTileDataMs": {
+          "before": 72.30000000074506,
+          "after": 76.27500000596046,
+          "deltaPercent": 5.4979253183602195,
+          "pairedDeltaMs": [
+            8.949999995529652,
+            -4.600000001490116,
+            9.49999999254942,
+            8.150000005960464,
+            3.600000001490116,
+            4.9000000059604645,
+            -2.9999999925494194,
+            -14.700000002980232
+          ]
+        },
+        "readyToRenderMs": {
+          "before": 9.849999997764826,
+          "after": 10.699999995529652,
+          "deltaPercent": 8.629441603631571,
+          "pairedDeltaMs": [
+            2.5,
+            3.1499999910593033,
+            0.5,
+            -2.450000010430813,
+            -1.75,
+            -1.3999999985098839,
+            1.7500000074505806,
+            0.14999999850988388
+          ]
+        },
+        "startRafPhaseMs": {
+          "before": 3.550000000745058,
+          "after": 3.6750000044703484,
+          "deltaPercent": 3.5211268647621363,
+          "pairedDeltaMs": [
+            0.10000000149011612,
+            -0.09999998658895493,
+            0.5999999940395355,
+            0.3499999940395355,
+            0.10000000149011612,
+            -0.05000000447034836,
+            0.25,
+            -0.29999999701976776
+          ]
+        },
+        "queryMs": {
+          "before": 0,
+          "after": 0,
+          "deltaPercent": null,
+          "pairedDeltaMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sessions": [
+        {
+          "run": 0,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.3999999910593,
+            "lastTileDataMs": 72.65000000596046,
+            "readyToRenderMs": 9.149999998509884,
+            "startRafPhaseMs": 3.6999999955296516,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 0,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 87.39999999850988,
+            "lastTileDataMs": 81.60000000149012,
+            "readyToRenderMs": 11.649999998509884,
+            "startRafPhaseMs": 3.7999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 71.29999999701977,
+            "readyToRenderMs": 11.099999994039536,
+            "startRafPhaseMs": 3.6000000089406967,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 1,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.94999999552965,
+            "lastTileDataMs": 75.89999999850988,
+            "readyToRenderMs": 7.950000002980232,
+            "startRafPhaseMs": 3.6999999955296516,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.75,
+            "lastTileDataMs": 73.70000000298023,
+            "readyToRenderMs": 8.850000008940697,
+            "startRafPhaseMs": 3.2000000029802322,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 2,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 97.20000000298023,
+            "lastTileDataMs": 83.19999999552965,
+            "readyToRenderMs": 9.350000008940697,
+            "startRafPhaseMs": 3.7999999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 82.35000000149012,
+            "lastTileDataMs": 79.50000000745058,
+            "readyToRenderMs": 7.999999992549419,
+            "startRafPhaseMs": 3.5499999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 3,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 71.35000000149012,
+            "readyToRenderMs": 10.450000002980232,
+            "startRafPhaseMs": 3.2000000029802322,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.10000000149012,
+            "lastTileDataMs": 68.95000000298023,
+            "readyToRenderMs": 11.74999999254942,
+            "startRafPhaseMs": 3.5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 4,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.49999999254942,
+            "lastTileDataMs": 72.55000000447035,
+            "readyToRenderMs": 9.99999999254942,
+            "startRafPhaseMs": 3.600000001490116,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.75,
+            "lastTileDataMs": 73.05000000447035,
+            "readyToRenderMs": 11.350000001490116,
+            "startRafPhaseMs": 3.5499999970197678,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 5,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.45000000298023,
+            "lastTileDataMs": 68.14999999850988,
+            "readyToRenderMs": 12.75,
+            "startRafPhaseMs": 3.600000001490116,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 6,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 81.5,
+            "lastTileDataMs": 71.94999999552965,
+            "readyToRenderMs": 9.549999997019768,
+            "startRafPhaseMs": 3.5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 6,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 81.29999999701977,
+            "lastTileDataMs": 68.95000000298023,
+            "readyToRenderMs": 11.300000004470348,
+            "startRafPhaseMs": 3.75,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 7,
+          "version": "after",
+          "medians": {
+            "firstRenderMs": 113.80000000447035,
+            "lastTileDataMs": 101.64999999850988,
+            "readyToRenderMs": 10.299999997019768,
+            "startRafPhaseMs": 4.5,
+            "queryMs": 0
+          },
+          "profiles": []
+        },
+        {
+          "run": 7,
+          "version": "before",
+          "medians": {
+            "firstRenderMs": 125.80000000447035,
+            "lastTileDataMs": 116.35000000149012,
+            "readyToRenderMs": 10.149999998509884,
+            "startRafPhaseMs": 4.799999997019768,
+            "queryMs": 0
+          },
+          "profiles": []
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "test/bench/baselines/overzoom-diagnostic-timing-20260913/results.json": "38229c101c38ddf66ba7dfe0f38c2a394864d1ab0816d4366e7143af1d201bb7",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl-worker.mjs": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl-shared.mjs": "554fb26320fefff1f14b2fc8ba723394ef9253a7b110c523411b1f008b95f54a",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "test/bench/e2e/index.html": "44a5622d2f12c099c47458259c0c2330f74c2009cce24c6acfcbf7c50a944714",
+    "test/integration/assets/tiles/0-0-0.mvt": "b7d73613cece1eb32b95befa3b88aa5a548e2483c655cff6837dbd05da6eeceb",
+    "test/integration/assets/tiles/14-8802-5374.mvt": "cb54ebf28300dfe4f212eea6be2eb09b39c6c373ba492be76bd93b65fe6dacc2",
+    "test/integration/assets/tiles/14-8802-5375.mvt": "b2ad38f74c6b7f30660e558a36f38698d1e593c1f8a9edee6565c09b4d1c8c14",
+    "test/integration/assets/tiles/14-8803-5374.mvt": "922065aba50b847cefac7ff7a6e113dad0397267bba02cb95c98fcb2c5f1e74e",
+    "test/integration/assets/tiles/14-8803-5375.mvt": "1245fe2f4a73a9e1acfeb26109eeb705fd1cd810996ad1419573224c88d583cb",
+    "test/integration/assets/tiles/mlt/gl-js/0-0-0.mlt": "b0411769ab7de04389aacdd6e245dd8904d764293531b2ea9b32246af2e13d72",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5374.mlt": "417bd45b28f657c123ed33c4d1da3ed89adae87576ab41dd78af822af3da56e2",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5375.mlt": "753390227f2041c6cdc53449757b3d7a8a1916f9462a57e7e0554c5e75a376ac",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5374.mlt": "981afa69b47bf8944b7cc709221abed0e95ba0d6e5a08703a368645bddc7bb76",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5375.mlt": "e1937409ce51fd19b181970fa07a2c88952ad6e29e2058e97e826f366510c2a6",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/0-255.pbf": "8f5d61ce38db04dd51a54d1695c6feaa58192da3773f9e5fd57ea4407bb0b4a0",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/256-511.pbf": "fa1cac72decd017d18b3656c40c749a1d521f33a7a7c9f93f4b2f3f6bffd2772",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/8192-8447.pbf": "dedbf3d5ac34b44c95ac8c5d9798be4dfafc03571f4069b25dd762cff8792a1c",
+    "test/integration/assets/sprites/sprite.json": "45195aec08af9e5c8ffa95805d4e746432a4fcf62911f149eed2f16b7e098ece",
+    "test/integration/assets/sprites/sprite.png": "6de3ad41e56e7e004cacf4604680ce344dde180d7157c628fdebb9aaadc86d30",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl-worker.mjs": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl-shared.mjs": "a2c02d1937968ea3acc13dfc0d5a4430537c66111abe599dda2c3d743499caa2",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "test/bench/e2e/mlt-overzoom-diagnostic.ts": "e8f2d5db27107540093dead6c063df87a3402f1c5ec2df1f28a213ef2da7fa79",
+    "test/bench/e2e/mlt-geography.ts": "84e51b6e9db58a5560056ed2b38c409816f149acccefd968486e47e75c124a08",
+    "test/bench/e2e/mlt-lifecycle-page.ts": "873d031fc4cf3b64ae03e26b1b3a2c7013992a30148c053636afb64b5ca7baa7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/after-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-timing-20260913/before-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "test/bench/baselines/overzoom-diagnostic-control-20260913/results.json": "b0a04dc97a21e60503b0b584d5162f045a83d732c57a8615a2471823bb105645",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/after-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-control-20260913/before-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "test/bench/baselines/overzoom-diagnostic-profile-20260913/results.json": "6071ac81e7a1aa4738e7654db415956a8e56751c0547984ee81b14978bd67b53",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-0-main.cpuprofile.gz": "c00da0bda443f0087dad0f39845a085d822355264ab09e3af1b965df95239a2c",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl.mjs.map": "9be4ba8b12f040ee6cc0d2d68444a2de924560e34c28e3d074497f41be95dd1d",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl-worker.mjs.map": "ce010f55687c1a4de2ec583b556e444f62aa52e6842bc4742b4c263208774842",
+    "/tmp/mlt-overzoom-reference-20260913-80skvu9j/maplibre-gl-js/dist/maplibre-gl-shared.mjs.map": "c88d5b69c2009e81100ddca47b56ec6f2187e9b9c3c8d6c7c8ea6ef56cafc13f",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-0-worker.cpuprofile.gz": "f857c353ea5cb24d8ea159fc7898c734e2c7cb5fed06fade720c156bdd7710aa",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-0-main.cpuprofile.gz": "6fa36c0d08eb59587492c0cd6bd508948a3edc2d5f6324c42bcddf655794f29c",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl.mjs.map": "9be4ba8b12f040ee6cc0d2d68444a2de924560e34c28e3d074497f41be95dd1d",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl-worker.mjs.map": "ce010f55687c1a4de2ec583b556e444f62aa52e6842bc4742b4c263208774842",
+    "/data/Projet/maplibre/maplibre-gl-js/dist/maplibre-gl-shared.mjs.map": "32ad934db85b7027960e3571b9a1409fe98390efb1f3fffb82fa941f29e98b05",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-0-worker.cpuprofile.gz": "a99910715e603542cff3e5ddd45a8de21cc5e571604e81605d6abc177a644155",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-1-main.cpuprofile.gz": "f193bd8a4dc2f404ece53a695309b436ca2e7b296ca42e7a46e04135f59a5740",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/after-1-worker.cpuprofile.gz": "f2d212b39d43fd8d6fbafdd6ee2c40b98efb834588d646ac5c24abf8bec75352",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-1-main.cpuprofile.gz": "731a7369eca69e388e22e5139d5162fa970ecfceba651b50481115314895feb3",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-diagnostic-profile-20260913/before-1-worker.cpuprofile.gz": "cb7958ea26483fc4ef72214482c8dbc38fa0bee3ab576e01ffb9ae2cb5cc2e91",
+    "test/bench/baselines/overzoom-hoist-profile-20260913/results.json": "c81a0c1c9bdade2d89242c9dd0e6fe5de19667506c2fade2e6213c0c21e56fb6",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl-worker.mjs": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl-shared.mjs": "05ee4fe5228682762b26c1053ad2ceca6bdf20ac94ebeafdc79ec9850e60094b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-0-main.cpuprofile.gz": "40d3b7d156a989b63193f605c9ecc0923ffabd32483d0534a8f27137b81ba940",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-0-worker.cpuprofile.gz": "c4d03063abd0846bb4952e2cfb75b8cdd54bc8991c1f02c4af84cb7d286efb9a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-0-main.cpuprofile.gz": "21a3b0d8a65ab01943abebb1ac41002af6607390dc286f3cd475beb595d05034",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl.mjs.map": "3fd6acda37d6e6ce4c147b84c3fe67510ef69dca6fe823e0f1ab95c2f4c3861b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl-worker.mjs.map": "8e4302d5f4f3bf34f009a5693da777db1770bb3409cbe541e45db846b47a4079",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-build-20260913/maplibre-gl-shared.mjs.map": "72851729a8d67e920569c2625dccedfd5558e2b05e50cbcf0861f3a6d5bfd80c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-0-worker.cpuprofile.gz": "5a6c1251f68b8a32a3f7a07108ddb59ce88f2adbc18c77cb80588758a0de1f23",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-1-main.cpuprofile.gz": "618c6bfb678e7490d32f303c6c4b08669ab871aa76ea44fd70181b42f2b41278",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/after-1-worker.cpuprofile.gz": "ef878b893ca0f80aafc92cf07a8ed98f69153a207c16304e2266e5bcddb223e9",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-1-main.cpuprofile.gz": "85b5b5348d121dd5f337eb89b389b111faa7cedf3d2def7db15d23a69f059a78",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-profile-20260913/before-1-worker.cpuprofile.gz": "a70dc28005e60513f7142298f8d21fede330933943b763c1a89a2e9405fc0332",
+    "test/bench/baselines/overzoom-hoist-timing-20260913/results.json": "fdb7f2874ad5d3a6cbe1d5f75bfe69e5ae260482e6a747168b552a32f771da89",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/after-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-20260913/before-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "test/bench/baselines/overzoom-hoist-timing-repeat-20260913/results.json": "8b92c092ff4a9fe0a823d5cf9484e2b41991dc1ab01d9cbe632128745f32689d",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-0.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-1.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-2.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-3.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-3.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-4.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-4.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-5.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-5.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-6.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-6.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-6.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-6.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-7.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/after-7.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-7.json.gz": "b3da2e21e410945f73e4f796389e36c4b3db8f46821e609b2fdd2e008ca1b43c",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/overzoom-hoist-timing-repeat-20260913/before-7.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b"
+  },
+  "limitation": "Diagnostic campaigns differ from the historical exhaustive-query harness. CPU profile samples are not benchmark times. Exact captured parity is not universal GPU qualification; same-build variation must not be subtracted as a causal correction."
+}

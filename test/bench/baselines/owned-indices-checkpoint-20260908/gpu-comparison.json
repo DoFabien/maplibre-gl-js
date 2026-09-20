@@ -1,0 +1,42 @@
+{
+  "status": "compared-selected-gpu-failures",
+  "images": [
+    {
+      "name": "Render tests tests/mlt/filter-parity/mlt-fill-arithmetic",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mlt-line-filter-matrix",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mvt-fill-arithmetic",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/filter-parity/mvt-line-filter-matrix",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-fill-extrusion",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-fill-extrusion-pattern",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    },
+    {
+      "name": "Render tests tests/mlt/render-layers/render-symbol-visibility-visible",
+      "pixels": 0,
+      "maxChannelDelta": 0
+    }
+  ],
+  "archive": "test/bench/baselines/owned-indices-checkpoint-20260908/gpu-failure-images.tar.gz",
+  "sha256": "d68baaa6ec25360416156a743ed8b22456faaf08a8d519e606d802506aebb868"
+}

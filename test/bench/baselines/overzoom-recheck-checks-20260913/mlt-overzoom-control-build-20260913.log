@@ -1,0 +1,9 @@
+<DIR>/maplibre-gl-worker.mjs.map  asset │ size:   215.32 kB
+<DIR>/maplibre-gl.mjs.map         asset │ size: 2,596.34 kB
+<DIR>/maplibre-gl-shared.mjs.map  asset │ size: 3,214.89 kB
+<DIR>/maplibre-gl-worker.mjs      chunk │ size:    50.45 kB
+<DIR>/maplibre-gl.mjs             chunk │ size:   585.48 kB
+<DIR>/maplibre-gl-shared.mjs      chunk │ size:   653.91 kB
+<DIR>/maplibre-gl.d.ts  chunk │ size: 704.46 kB
+
+✔ rolldown v1.2.7 Finished in 1.09 s

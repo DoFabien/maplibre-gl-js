@@ -1,0 +1,57 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "timeout": 60000,
+            "width": 128,
+            "height": 128
+        }
+    },
+    "center": [0, 0],
+    "zoom": 0,
+    "sources": {
+        "gradient": {
+            "type": "vector",
+            "encoding": "mlt",
+            "maxzoom": 0,
+            "tiles": ["local://tiles/mlt/line-gradient-synthetic.mlt"]
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "line",
+            "type": "line",
+            "source": "gradient",
+            "source-layer": "gradient",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-width": 24,
+                "line-gradient": [
+                    "interpolate",
+                    ["linear"],
+                    ["line-progress"],
+                    0,
+                    "royalblue",
+                    0.25,
+                    "cyan",
+                    0.5,
+                    "lime",
+                    0.75,
+                    "yellow",
+                    1,
+                    "red"
+                ]
+            }
+        }
+    ]
+}

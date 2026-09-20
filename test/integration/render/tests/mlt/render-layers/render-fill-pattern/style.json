@@ -1,0 +1,44 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "debug": true,
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [
+        0,
+        0
+    ],
+    "zoom": 0,
+    "sources": {
+        "synthetic": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/synthetic/0/0/poly_tes.mlt"],
+            "maxzoom": 0
+        }
+    },
+    "sprite": "local://sprites/emerald",
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "building-pattern",
+            "type": "fill",
+            "source": "synthetic",
+            "source-layer": "layer1",
+            "paint": {
+                "fill-pattern": "generic_icon",
+                "fill-opacity": 0.95
+            }
+        }
+    ]
+}

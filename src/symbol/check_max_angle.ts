@@ -1,4 +1,13 @@
-import type Point from '@mapbox/point-geometry';
+import {
+    getCoordinateDistance,
+    getSymbolLineAngle,
+    getSymbolLineDistance,
+    getSymbolLinePointCount,
+    getSymbolLineX,
+    getSymbolLineY,
+    type SymbolLine,
+} from './symbol_line.ts';
+
 import type {Anchor} from './anchor.ts';
 
 /**
@@ -13,12 +22,13 @@ import type {Anchor} from './anchor.ts';
  *
  * @returns whether the label should be placed
  */
-export function checkMaxAngle(line: Point[], anchor: Anchor, labelLength: number, windowSize: number, maxAngle: number): boolean {
+export function checkMaxAngle(line: SymbolLine, anchor: Anchor, labelLength: number, windowSize: number, maxAngle: number): boolean {
 
     // horizontal labels and labels with length 0 always pass
     if (anchor.segment === undefined || labelLength === 0) return true;
 
-    let p = anchor;
+    let pointX = anchor.x;
+    let pointY = anchor.y;
     let index = anchor.segment + 1;
     let anchorDistance = 0;
 
@@ -29,11 +39,14 @@ export function checkMaxAngle(line: Point[], anchor: Anchor, labelLength: number
         // there isn't enough room for the label after the beginning of the line
         if (index < 0) return false;
 
-        anchorDistance -= line[index].dist(p);
-        p = line[index];
+        const x = getSymbolLineX(line, index);
+        const y = getSymbolLineY(line, index);
+        anchorDistance -= getCoordinateDistance(x, y, pointX, pointY);
+        pointX = x;
+        pointY = y;
     }
 
-    anchorDistance += line[index].dist(line[index + 1]);
+    anchorDistance += getSymbolLineDistance(line, index, index + 1);
     index++;
 
     // store recent corners and their total angle difference
@@ -42,14 +55,10 @@ export function checkMaxAngle(line: Point[], anchor: Anchor, labelLength: number
 
     // move forwards by the length of the label and check angles along the way
     while (anchorDistance < labelLength / 2) {
-        const prev = line[index - 1];
-        const current = line[index];
-        const next = line[index + 1];
-
         // there isn't enough room for the label before the end of the line
-        if (!next) return false;
+        if (index + 1 >= getSymbolLinePointCount(line)) return false;
 
-        let angleDelta = prev.angleTo(current) - current.angleTo(next);
+        let angleDelta = getSymbolLineAngle(line, index - 1, index) - getSymbolLineAngle(line, index, index + 1);
         // restrict angle to -pi..pi range
         angleDelta = Math.abs(((angleDelta + 3 * Math.PI) % (Math.PI * 2)) - Math.PI);
 
@@ -68,7 +77,7 @@ export function checkMaxAngle(line: Point[], anchor: Anchor, labelLength: number
         if (recentAngleDelta > maxAngle) return false;
 
         index++;
-        anchorDistance += current.dist(next);
+        anchorDistance += getSymbolLineDistance(line, index - 1, index);
     }
 
     // no part of the line had an angle greater than the maximum allowed. check passes.

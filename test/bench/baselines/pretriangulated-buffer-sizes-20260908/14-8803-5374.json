@@ -1,0 +1,92 @@
+{
+  "name": "14-8803-5374",
+  "buffers": [
+    {
+      "layer": "water",
+      "before": {
+        "vertices": 48,
+        "triangles": 44,
+        "lines": 48,
+        "bytes": 648
+      },
+      "after": {
+        "vertices": 48,
+        "triangles": 44,
+        "lines": 48,
+        "bytes": 648
+      }
+    },
+    {
+      "layer": "building",
+      "before": {
+        "vertices": 6357,
+        "triangles": 4633,
+        "lines": 6357,
+        "bytes": 78654
+      },
+      "after": {
+        "vertices": 6357,
+        "triangles": 4633,
+        "lines": 6357,
+        "bytes": 78654
+      }
+    },
+    {
+      "layer": "hillshade",
+      "before": {
+        "vertices": 6,
+        "triangles": 4,
+        "lines": 6,
+        "bytes": 72
+      },
+      "after": {
+        "vertices": 6,
+        "triangles": 4,
+        "lines": 6,
+        "bytes": 72
+      }
+    },
+    {
+      "layer": "landuse",
+      "before": {
+        "vertices": 587,
+        "triangles": 407,
+        "lines": 587,
+        "bytes": 7138
+      },
+      "after": {
+        "vertices": 587,
+        "triangles": 407,
+        "lines": 587,
+        "bytes": 7138
+      }
+    }
+  ],
+  "counters": {
+    "workerFilterFallbackFeatures": 0,
+    "vectorTileFeatureWrappers": 0,
+    "propertyObjects": 0,
+    "propertyProxyMisses": 0,
+    "pointObjects": 0,
+    "geometryPartsMaterialized": 0,
+    "queryCandidates": 0,
+    "queryResults": 0,
+    "estimatedQueryResultBytes": 0,
+    "queryGeometriesLoaded": 0,
+    "overzoomFeaturesClipped": 0,
+    "overzoomPointObjects": 0,
+    "mvtReencodes": 0,
+    "rawTileBytesCopied": 0,
+    "rawTileMainThreadDecodes": 0,
+    "decodedLayers": 0,
+    "decodedColumns": 0,
+    "decodedValues": 0,
+    "decodedColumnBytes": 0,
+    "temporaryScalarBuffers": 0,
+    "temporaryScalarValues": 0,
+    "coordinateTuples": 0,
+    "propertyDescriptors": 0,
+    "pretriangulatedFillFeatures": 992,
+    "pretriangulatedFillTriangles": 5088
+  }
+}

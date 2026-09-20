@@ -1,0 +1,142 @@
+{
+  "generatedAt": "2026-08-11T14:27:43.827Z",
+  "commit": "ffb19ff3e37aed79c06326592ad2247667cca351",
+  "node": "v24.14.0",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+  "platform": "linux-x64",
+  "iterations": 20,
+  "warmup": 5,
+  "processIsolation": true,
+  "benchmarks": [
+    {
+      "benchmark": "MltRealTileScanMVT",
+      "durationMs": {
+        "median": 2.7204199999998764,
+        "p95": 3.9524280000000545,
+        "min": 2.589715999999953,
+        "max": 8.233141999999816
+      },
+      "memoryBytes": {
+        "initialHeap": 66992520,
+        "maxObservedHeap": 131893080,
+        "retainedHeapAfterGc": 66706528
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileScanMLT",
+      "durationMs": {
+        "median": 0.18747400000006564,
+        "p95": 0.24405799999999545,
+        "min": 0.1436029999999846,
+        "max": 0.2735090000001037
+      },
+      "memoryBytes": {
+        "initialHeap": 67073792,
+        "maxObservedHeap": 76384000,
+        "retainedHeapAfterGc": 66761920
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileDecodeMVT",
+      "durationMs": {
+        "median": 2.7229869999998755,
+        "p95": 3.5581469999999626,
+        "min": 2.5575189999999566,
+        "max": 9.160788000000139
+      },
+      "memoryBytes": {
+        "initialHeap": 67000288,
+        "maxObservedHeap": 131748832,
+        "retainedHeapAfterGc": 66708696
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileDecodeMLTProjected",
+      "durationMs": {
+        "median": 1.132380000000012,
+        "p95": 2.5536509999999453,
+        "min": 1.0167989999999918,
+        "max": 3.4403389999999945
+      },
+      "memoryBytes": {
+        "initialHeap": 67523176,
+        "maxObservedHeap": 99350312,
+        "retainedHeapAfterGc": 67313016
+      },
+      "materializationsPerIteration": {
+        "decodedLayers": 4,
+        "decodedColumns": 24,
+        "decodedValues": 14610,
+        "decodedColumnBytes": 188137
+      }
+    },
+    {
+      "benchmark": "MltRealTileParseOnlyMVT",
+      "durationMs": {
+        "median": 7.573861000000079,
+        "p95": 13.7925180000002,
+        "min": 6.812154999999848,
+        "max": 26.119177000000036
+      },
+      "memoryBytes": {
+        "initialHeap": 69294728,
+        "maxObservedHeap": 134952992,
+        "retainedHeapAfterGc": 69068672
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileParseOnlyMLTNative",
+      "durationMs": {
+        "median": 6.08189799999991,
+        "p95": 9.28549299999986,
+        "min": 5.1188660000000255,
+        "max": 14.92525599999999
+      },
+      "memoryBytes": {
+        "initialHeap": 68719904,
+        "maxObservedHeap": 136156120,
+        "retainedHeapAfterGc": 68396432
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileEndToEndMVT",
+      "durationMs": {
+        "median": 11.568534,
+        "p95": 17.494989000000032,
+        "min": 9.682920999999851,
+        "max": 37.850999
+      },
+      "memoryBytes": {
+        "initialHeap": 68074976,
+        "maxObservedHeap": 133722408,
+        "retainedHeapAfterGc": 67887552
+      },
+      "materializationsPerIteration": {}
+    },
+    {
+      "benchmark": "MltRealTileEndToEndMLT",
+      "durationMs": {
+        "median": 8.66636399999993,
+        "p95": 14.353699000000006,
+        "min": 7.812059999999974,
+        "max": 23.352104999999938
+      },
+      "memoryBytes": {
+        "initialHeap": 68591992,
+        "maxObservedHeap": 136834064,
+        "retainedHeapAfterGc": 68477088
+      },
+      "materializationsPerIteration": {
+        "decodedLayers": 4,
+        "decodedColumns": 24,
+        "decodedValues": 14610,
+        "decodedColumnBytes": 188137
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "debug": true,
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [
+        11.534169,
+        48.145262
+    ],
+    "zoom": 15.8,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/{z}/{x}/{y}.mlt"],
+            "maxzoom": 14
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#081120"
+            }
+        },
+        {
+            "id": "road-dash",
+            "type": "line",
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "filter": [
+                "all",
+                ["!=", ["get", "class"], "path"],
+                ["!=", ["get", "class"], "track"],
+                ["!=", ["get", "brunnel"], "tunnel"]
+            ],
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#f8fafc",
+                "line-width": 8,
+                "line-opacity": 0.95,
+                "line-dasharray": [2, 1]
+            }
+        }
+    ]
+}

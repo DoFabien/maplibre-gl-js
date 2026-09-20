@@ -1,0 +1,32 @@
+{
+  "sourceBase": "bdbe31b2edd36020942d1bd26fa2be8eb3ec1c20",
+  "mlt": "ddf2840008e833b3dc5f0fbbd41668e74820b7a3",
+  "sources": {
+    "src/data/bucket/columnar/columnar_fill_bucket.ts": "3ff6e3840ef0842c8cc3e3072b6a3e92a5a9f927ffc817836a17d633cac3fb7c",
+    "test/bench/e2e/mlt-overzoom-diagnostic.ts": "e8f2d5db27107540093dead6c063df87a3402f1c5ec2df1f28a213ef2da7fa79",
+    "test/bench/e2e/mlt-overzoom-verify.mjs": "418eeee6eb40b3e4e5b9b3023703bc73fb15008217e45c6b6191099716e426e3"
+  },
+  "bundles": {
+    "maplibre-gl.mjs": {
+      "rebuiltControlMatchesPrototype": true,
+      "before": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+      "after": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+      "rawDelta": 0,
+      "gzipDelta": 0
+    },
+    "maplibre-gl-worker.mjs": {
+      "rebuiltControlMatchesPrototype": true,
+      "before": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+      "after": "74b7d78952511fb81f0bc6a7e29cd75b432ccd822675516a50fe6dbcf0e9b67d",
+      "rawDelta": 0,
+      "gzipDelta": 0
+    },
+    "maplibre-gl-shared.mjs": {
+      "rebuiltControlMatchesPrototype": true,
+      "before": "a2c02d1937968ea3acc13dfc0d5a4430537c66111abe599dda2c3d743499caa2",
+      "after": "05ee4fe5228682762b26c1053ad2ceca6bdf20ac94ebeafdc79ec9850e60094b",
+      "rawDelta": 32,
+      "gzipDelta": 7
+    }
+  }
+}

@@ -62,6 +62,9 @@ export class VectorTileOverzoomed implements VectorTileLike {
 
 /**
  * This function slices a source tile layer into an overzoomed tile layer for a target tile ID.
+ * Rounds absolute coordinates once after both clipping axes, matching native MLT
+ * slicing and keeping worker geometry identical to the integer MVT sent to queries.
+ * Encoding fractional deltas would otherwise truncate them and accumulate drift.
  * @param sourceLayer - the source tile layer to slice
  * @param maxZoomTileID - the maximum zoom tile ID
  * @param targetTileID - the target tile ID
@@ -94,6 +97,9 @@ export function sliceVectorTileLayer(sourceLayer: VectorTileLayerLike, maxZoomTi
         geometry = clipGeometry(geometry, feature.type, -buffer, -buffer, extent + buffer, extent + buffer);
         if (geometry.length === 0) {
             continue;
+        }
+        for (const ring of geometry) {
+            for (const point of ring) point._round();
         }
         
         featureWrappers.push(new VectorTileFeatureOverzoomed(

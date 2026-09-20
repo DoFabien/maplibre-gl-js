@@ -1,0 +1,849 @@
+{
+  "status": "verified-browser-comparison",
+  "checkedAt": "2026-09-07T23:41:00.471Z",
+  "limitation": "Local HTTP, reload-to-first-render with fully loaded source, not GPU execution/presentation time; queries and forced-GC memory sampled separately. Historical cold/warm labels mean unique/reused URLs, not decoded-content cache state: content-addressed implementations may reuse identical bytes across URLs. firstOverzoom measures the first overzoom in a fresh map/worker after native-zoom setup, before warmups.",
+  "evidence": {
+    "test/bench/baselines/browser-shared-parent-production-v2-20260908/results.json": "bb40b3fb1ad4108571712d7b68859f578a14773b41d0cd1c5e857e165a6835df",
+    "/tmp/mlt-shared-before-LXyjaO/maplibre-gl-js/dist/maplibre-gl.mjs": "d046033d654f2da540e7646dedc96742bd13e78f493b7295bf7ef554670dcaea",
+    "/tmp/mlt-shared-before-LXyjaO/maplibre-gl-js/dist/maplibre-gl-worker.mjs": "36f446b59bbb676000b65602f7a718e36aca47a0ba288af51caacd569f8bdeff",
+    "/tmp/mlt-shared-before-LXyjaO/maplibre-gl-js/dist/maplibre-gl-shared.mjs": "e10abb78f76d0d6111fdd0152f46e3fcaffdd8efb26d03ed4effe8a9f2c74c69",
+    "/tmp/mlt-shared-before-LXyjaO/maplibre-gl-js/dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "test/bench/e2e/index.html": "44a5622d2f12c099c47458259c0c2330f74c2009cce24c6acfcbf7c50a944714",
+    "test/integration/assets/tiles/0-0-0.mvt": "b7d73613cece1eb32b95befa3b88aa5a548e2483c655cff6837dbd05da6eeceb",
+    "test/integration/assets/tiles/14-8802-5374.mvt": "cb54ebf28300dfe4f212eea6be2eb09b39c6c373ba492be76bd93b65fe6dacc2",
+    "test/integration/assets/tiles/14-8802-5375.mvt": "b2ad38f74c6b7f30660e558a36f38698d1e593c1f8a9edee6565c09b4d1c8c14",
+    "test/integration/assets/tiles/14-8803-5374.mvt": "922065aba50b847cefac7ff7a6e113dad0397267bba02cb95c98fcb2c5f1e74e",
+    "test/integration/assets/tiles/14-8803-5375.mvt": "1245fe2f4a73a9e1acfeb26109eeb705fd1cd810996ad1419573224c88d583cb",
+    "test/integration/assets/tiles/mlt/gl-js/0-0-0.mlt": "b0411769ab7de04389aacdd6e245dd8904d764293531b2ea9b32246af2e13d72",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5374.mlt": "417bd45b28f657c123ed33c4d1da3ed89adae87576ab41dd78af822af3da56e2",
+    "test/integration/assets/tiles/mlt/gl-js/14-8802-5375.mlt": "753390227f2041c6cdc53449757b3d7a8a1916f9462a57e7e0554c5e75a376ac",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5374.mlt": "981afa69b47bf8944b7cc709221abed0e95ba0d6e5a08703a368645bddc7bb76",
+    "test/integration/assets/tiles/mlt/gl-js/14-8803-5375.mlt": "e1937409ce51fd19b181970fa07a2c88952ad6e29e2058e97e826f366510c2a6",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/0-255.pbf": "8f5d61ce38db04dd51a54d1695c6feaa58192da3773f9e5fd57ea4407bb0b4a0",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/256-511.pbf": "fa1cac72decd017d18b3656c40c749a1d521f33a7a7c9f93f4b2f3f6bffd2772",
+    "test/integration/assets/glyphs/Open Sans Semibold,Arial Unicode MS Bold/8192-8447.pbf": "dedbf3d5ac34b44c95ac8c5d9798be4dfafc03571f4069b25dd762cff8792a1c",
+    "test/integration/assets/sprites/sprite.json": "45195aec08af9e5c8ffa95805d4e746432a4fcf62911f149eed2f16b7e098ece",
+    "test/integration/assets/sprites/sprite.png": "6de3ad41e56e7e004cacf4604680ce344dde180d7157c628fdebb9aaadc86d30",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "dist/maplibre-gl.mjs": "79c85096cd5bfc5dbc982650202102e64fbfafe9c5ba8f04bd62a62fb5757c18",
+    "dist/maplibre-gl-worker.mjs": "77bcca6204e9ac1497a85187509b25e7359bd5ba32d1ff71c0638c8b9ed09158",
+    "dist/maplibre-gl-shared.mjs": "ad60532f503ace124ed8b9fec1add9b5e721274c0d57cdd8b44429981f21c3f2",
+    "dist/maplibre-gl.css": "8e2dbbab312dc57656fbb76e9fa5308c75c9d7c7ba5808a7d55bcdb64cc813fa",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after/dem-local-12-2200-1343.png": "dd7af38b7b897fcc9493521aff1cbba67b0fdf42923777e982545b0976f35316",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after/dem-local-12-2201-1343.png": "6446f925e72373e9a8d3e3e8749791ddbf563d85dd3ce173cbb34300cb24e5ae",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after/dem-local-12-2200-1344.png": "1c801a40aea8569cbaf112ba282bfe5e5262c1cc998f1e4bf92152f952611599",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after/dem-local-12-2201-1344.png": "0473f4e4105e03024d2124652b2ac3f1cdcc11f25943dc2d235b5815b686957a",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after/dem-world-0-0-0.png": "439e698553e29148fdf1b4a2c506fa8b00e4b5aa4193406e44cd2d93b712a111",
+    "test/bench/e2e/mlt-direct-browser.ts": "1092e28d7d5bd7d1aa140019ad3287bf60ab0df06316b90cd24b8d73e3488089",
+    "test/bench/e2e/mlt-geography.ts": "84e51b6e9db58a5560056ed2b38c409816f149acccefd968486e47e75c124a08",
+    "test/bench/e2e/mlt-lifecycle-page.ts": "873d031fc4cf3b64ae03e26b1b3a2c7013992a30148c053636afb64b5ca7baa7",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mvt-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mlt-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mvt-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mlt-0.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mlt-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mvt-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mlt-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mvt-1.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mvt-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/after-mlt-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mvt-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/browser-shared-parent-production-v2-20260908/before-mlt-2.png": "7e170925261763e59960e244d9e0ccb85955c6581970cd3edee9121b36ff949b"
+  },
+  "imageComparisons": 12,
+  "queryHashes": [
+    "{\"source\":\"a9dceae6c10cf21e4b9632ca56e3939acbbc57e09fd73899b1bf4c57c48fac15\",\"rendered\":\"eb17308170aa1d0234fc325e3d120229f5bb18be8bca223639e2f80602efddb8\"}"
+  ],
+  "runs": 3,
+  "samplesPerURLStatePerRun": 20,
+  "variants": [
+    {
+      "version": "before",
+      "encoding": "mvt",
+      "urlReloads": {
+        "uniqueURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 99.7000000178814,
+              "idleMs": 99.75000001490116,
+              "firstQueryMs": 28.75
+            },
+            {
+              "firstRenderMs": 106.70000000298023,
+              "idleMs": 106.75,
+              "firstQueryMs": 25.950000002980232
+            },
+            {
+              "firstRenderMs": 102,
+              "idleMs": 102.09999999403954,
+              "firstQueryMs": 29.100000008940697
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 102,
+            "idleMs": 102.09999999403954,
+            "firstQueryMs": 28.75
+          }
+        },
+        "reusedURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 70.5,
+              "idleMs": 70.65000000596046,
+              "firstQueryMs": 26.5
+            },
+            {
+              "firstRenderMs": 70.25000001490116,
+              "idleMs": 70.25000001490116,
+              "firstQueryMs": 26.149999991059303
+            },
+            {
+              "firstRenderMs": 75.5499999821186,
+              "idleMs": 75.59999999403954,
+              "firstQueryMs": 27.80000001192093
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 70.5,
+            "idleMs": 70.65000000596046,
+            "firstQueryMs": 26.5
+          }
+        }
+      },
+      "firstOverzoom": {
+        "firstRenderMs": {
+          "samples": [
+            217.30000001192093,
+            184.5,
+            163.30000001192093
+          ],
+          "median": 184.5
+        },
+        "idleMs": {
+          "samples": [
+            217.5,
+            184.80000001192093,
+            163.5
+          ],
+          "median": 184.80000001192093
+        },
+        "firstQueryMs": {
+          "samples": [
+            79,
+            81.30000001192093,
+            60.70000001788139
+          ],
+          "median": 79
+        }
+      },
+      "memory": {
+        "loaded": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                6481672,
+                6474584,
+                6475084
+              ],
+              "median": 6475084
+            },
+            "backingStorageSize": {
+              "samples": [
+                2496979,
+                2496979,
+                2496979
+              ],
+              "median": 2496979
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3169176,
+                3159640,
+                3165328
+              ],
+              "median": 3165328
+            },
+            "backingStorageSize": {
+              "samples": [
+                13127006,
+                13127006,
+                13127006
+              ],
+              "median": 13127006
+            }
+          }
+        },
+        "source-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                5573856,
+                5567144,
+                5570104
+              ],
+              "median": 5570104
+            },
+            "backingStorageSize": {
+              "samples": [
+                1372723,
+                1372723,
+                1372723
+              ],
+              "median": 1372723
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                2799224,
+                2790896,
+                2792632
+              ],
+              "median": 2792632
+            },
+            "backingStorageSize": {
+              "samples": [
+                13087440,
+                13087440,
+                13087440
+              ],
+              "median": 13087440
+            }
+          }
+        },
+        "map-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                4839684,
+                4834804,
+                4838088
+              ],
+              "median": 4838088
+            },
+            "backingStorageSize": {
+              "samples": [
+                1235866,
+                1235866,
+                1235866
+              ],
+              "median": 1235866
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                2737448,
+                2729156,
+                2730868
+              ],
+              "median": 2730868
+            },
+            "backingStorageSize": {
+              "samples": [
+                701136,
+                701136,
+                701136
+              ],
+              "median": 701136
+            }
+          }
+        }
+      }
+    },
+    {
+      "version": "before",
+      "encoding": "mlt",
+      "urlReloads": {
+        "uniqueURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 101.7000000178814,
+              "idleMs": 101.7000000178814,
+              "firstQueryMs": 94.15000002086163
+            },
+            {
+              "firstRenderMs": 94.29999999701977,
+              "idleMs": 94.3999999910593,
+              "firstQueryMs": 90.84999999403954
+            },
+            {
+              "firstRenderMs": 93,
+              "idleMs": 93,
+              "firstQueryMs": 93.04999999701977
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 94.29999999701977,
+            "idleMs": 94.3999999910593,
+            "firstQueryMs": 93.04999999701977
+          }
+        },
+        "reusedURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 70.09999999403954,
+              "idleMs": 70.24999998509884,
+              "firstQueryMs": 91.3999999910593
+            },
+            {
+              "firstRenderMs": 68.8999999910593,
+              "idleMs": 69.00000001490116,
+              "firstQueryMs": 88.3999999910593
+            },
+            {
+              "firstRenderMs": 72.3500000089407,
+              "idleMs": 72.45000000298023,
+              "firstQueryMs": 92.90000000596046
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 70.09999999403954,
+            "idleMs": 70.24999998509884,
+            "firstQueryMs": 91.3999999910593
+          }
+        }
+      },
+      "firstOverzoom": {
+        "firstRenderMs": {
+          "samples": [
+            177.80000001192093,
+            159.90000000596046,
+            156.09999999403954
+          ],
+          "median": 159.90000000596046
+        },
+        "idleMs": {
+          "samples": [
+            178.19999998807907,
+            160.09999999403954,
+            156.40000000596046
+          ],
+          "median": 160.09999999403954
+        },
+        "firstQueryMs": {
+          "samples": [
+            240.40000000596046,
+            195.19999998807907,
+            184.90000000596046
+          ],
+          "median": 195.19999998807907
+        }
+      },
+      "memory": {
+        "loaded": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                7706968,
+                7714984,
+                7715488
+              ],
+              "median": 7714984
+            },
+            "backingStorageSize": {
+              "samples": [
+                6819155,
+                6819155,
+                6819155
+              ],
+              "median": 6819155
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                8423904,
+                8424352,
+                8417372
+              ],
+              "median": 8423904
+            },
+            "backingStorageSize": {
+              "samples": [
+                61150153,
+                61150153,
+                61150153
+              ],
+              "median": 61150153
+            }
+          }
+        },
+        "source-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                6034676,
+                5969512,
+                6052508
+              ],
+              "median": 6034676
+            },
+            "backingStorageSize": {
+              "samples": [
+                1372740,
+                1372740,
+                1372740
+              ],
+              "median": 1372740
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                7919044,
+                7917936,
+                7917412
+              ],
+              "median": 7917936
+            },
+            "backingStorageSize": {
+              "samples": [
+                57478306,
+                57478306,
+                57478306
+              ],
+              "median": 57478306
+            }
+          }
+        },
+        "map-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                5367620,
+                5382956,
+                5385512
+              ],
+              "median": 5382956
+            },
+            "backingStorageSize": {
+              "samples": [
+                1235879,
+                1235879,
+                1235879
+              ],
+              "median": 1235879
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3333048,
+                3331944,
+                3331340
+              ],
+              "median": 3331944
+            },
+            "backingStorageSize": {
+              "samples": [
+                701140,
+                701140,
+                701140
+              ],
+              "median": 701140
+            }
+          }
+        }
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mvt",
+      "urlReloads": {
+        "uniqueURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 100.54999999701977,
+              "idleMs": 100.54999999701977,
+              "firstQueryMs": 29.150000005960464
+            },
+            {
+              "firstRenderMs": 101.1000000089407,
+              "idleMs": 101.15000000596046,
+              "firstQueryMs": 27.25
+            },
+            {
+              "firstRenderMs": 105.34999999403954,
+              "idleMs": 105.3999999910593,
+              "firstQueryMs": 24.950000002980232
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 101.1000000089407,
+            "idleMs": 101.15000000596046,
+            "firstQueryMs": 27.25
+          }
+        },
+        "reusedURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 68.5499999821186,
+              "idleMs": 68.59999997913837,
+              "firstQueryMs": 27.19999998807907
+            },
+            {
+              "firstRenderMs": 69.55000001192093,
+              "idleMs": 69.65000000596046,
+              "firstQueryMs": 25.950000002980232
+            },
+            {
+              "firstRenderMs": 68.2999999821186,
+              "idleMs": 68.40000000596046,
+              "firstQueryMs": 26.099999994039536
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 68.5499999821186,
+            "idleMs": 68.59999997913837,
+            "firstQueryMs": 26.099999994039536
+          }
+        }
+      },
+      "firstOverzoom": {
+        "firstRenderMs": {
+          "samples": [
+            181.09999999403954,
+            185.30000001192093,
+            163.2000000178814
+          ],
+          "median": 181.09999999403954
+        },
+        "idleMs": {
+          "samples": [
+            181.40000000596046,
+            185.5,
+            163.40000000596046
+          ],
+          "median": 181.40000000596046
+        },
+        "firstQueryMs": {
+          "samples": [
+            80.09999999403954,
+            59,
+            64.30000001192093
+          ],
+          "median": 64.30000001192093
+        }
+      },
+      "memory": {
+        "loaded": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                6477544,
+                6481648,
+                6479472
+              ],
+              "median": 6479472
+            },
+            "backingStorageSize": {
+              "samples": [
+                2501245,
+                2501245,
+                2501245
+              ],
+              "median": 2501245
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3171532,
+                3183264,
+                3169348
+              ],
+              "median": 3171532
+            },
+            "backingStorageSize": {
+              "samples": [
+                13129413,
+                13129413,
+                13129413
+              ],
+              "median": 13129413
+            }
+          }
+        },
+        "source-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                5574440,
+                5600724,
+                5572348
+              ],
+              "median": 5574440
+            },
+            "backingStorageSize": {
+              "samples": [
+                1376989,
+                1376989,
+                1376989
+              ],
+              "median": 1376989
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                2797988,
+                2795644,
+                2796136
+              ],
+              "median": 2796136
+            },
+            "backingStorageSize": {
+              "samples": [
+                13089847,
+                13089847,
+                13089847
+              ],
+              "median": 13089847
+            }
+          }
+        },
+        "map-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                4840240,
+                4844500,
+                4840184
+              ],
+              "median": 4840240
+            },
+            "backingStorageSize": {
+              "samples": [
+                1240132,
+                1240132,
+                1240132
+              ],
+              "median": 1240132
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                2736240,
+                2733896,
+                2734388
+              ],
+              "median": 2734388
+            },
+            "backingStorageSize": {
+              "samples": [
+                703543,
+                703543,
+                703543
+              ],
+              "median": 703543
+            }
+          }
+        }
+      }
+    },
+    {
+      "version": "after",
+      "encoding": "mlt",
+      "urlReloads": {
+        "uniqueURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 61.79999999701977,
+              "idleMs": 61.8500000089407,
+              "firstQueryMs": 50.900000005960464
+            },
+            {
+              "firstRenderMs": 60.25,
+              "idleMs": 60.29999999701977,
+              "firstQueryMs": 48.95000000298023
+            },
+            {
+              "firstRenderMs": 62.25,
+              "idleMs": 62.25,
+              "firstQueryMs": 52.849999994039536
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 61.79999999701977,
+            "idleMs": 61.8500000089407,
+            "firstQueryMs": 50.900000005960464
+          }
+        },
+        "reusedURL": {
+          "sessionMedians": [
+            {
+              "firstRenderMs": 59.95000000298023,
+              "idleMs": 60,
+              "firstQueryMs": 51.04999999701977
+            },
+            {
+              "firstRenderMs": 62.95000000298023,
+              "idleMs": 63,
+              "firstQueryMs": 52.29999999701977
+            },
+            {
+              "firstRenderMs": 65.04999999701977,
+              "idleMs": 65.04999999701977,
+              "firstQueryMs": 52
+            }
+          ],
+          "medianOfSessionMedians": {
+            "firstRenderMs": 62.95000000298023,
+            "idleMs": 63,
+            "firstQueryMs": 52
+          }
+        }
+      },
+      "firstOverzoom": {
+        "firstRenderMs": {
+          "samples": [
+            176,
+            202.90000000596046,
+            154.40000000596046
+          ],
+          "median": 176
+        },
+        "idleMs": {
+          "samples": [
+            176.2999999821186,
+            203.30000001192093,
+            154.7000000178814
+          ],
+          "median": 176.2999999821186
+        },
+        "firstQueryMs": {
+          "samples": [
+            181.30000001192093,
+            214.5,
+            177.59999999403954
+          ],
+          "median": 181.30000001192093
+        }
+      },
+      "memory": {
+        "loaded": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                7537856,
+                7521104,
+                7545816
+              ],
+              "median": 7537856
+            },
+            "backingStorageSize": {
+              "samples": [
+                4403733,
+                4403733,
+                4403733
+              ],
+              "median": 4403733
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3991836,
+                3985996,
+                3994384
+              ],
+              "median": 3991836
+            },
+            "backingStorageSize": {
+              "samples": [
+                2562183,
+                2562183,
+                2562183
+              ],
+              "median": 2562183
+            }
+          }
+        },
+        "source-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                6023056,
+                6010720,
+                6031920
+              ],
+              "median": 6023056
+            },
+            "backingStorageSize": {
+              "samples": [
+                1377006,
+                1377006,
+                1377006
+              ],
+              "median": 1377006
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3666796,
+                3662764,
+                3666400
+              ],
+              "median": 3666400
+            },
+            "backingStorageSize": {
+              "samples": [
+                2471414,
+                2471414,
+                2471414
+              ],
+              "median": 2471414
+            }
+          }
+        },
+        "map-removed": {
+          "main": {
+            "usedSize": {
+              "samples": [
+                5385044,
+                5371564,
+                5389864
+              ],
+              "median": 5385044
+            },
+            "backingStorageSize": {
+              "samples": [
+                1240145,
+                1240145,
+                1240145
+              ],
+              "median": 1240145
+            }
+          },
+          "workers": {
+            "usedSize": {
+              "samples": [
+                3306884,
+                3303692,
+                3305804
+              ],
+              "median": 3305804
+            },
+            "backingStorageSize": {
+              "samples": [
+                703547,
+                703547,
+                703547
+              ],
+              "median": 703547
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -40,27 +40,37 @@ export function fillLargeMeshArrays(
 
     if (numVertices < SegmentVector.MAX_VERTEX_ARRAY_LENGTH) {
         // The fast path - no segmentation needed
+        const trianglePrimitiveCount = triangleIndices.length / 3;
         const triangleSegment = segmentsTriangles.prepareSegment(numVertices, vertexArray, triangleIndexArray);
         const triangleIndex = triangleSegment.vertexLength;
+        const trianglePrimitiveOffset = triangleIndexArray.length;
+
+        vertexArray.reserve(vertexArray.length + numVertices);
+        triangleIndexArray.resize(trianglePrimitiveOffset + trianglePrimitiveCount);
 
         for (let i = 0; i < triangleIndices.length; i += 3) {
-            triangleIndexArray.emplaceBack(
+            triangleIndexArray.emplace(
+                trianglePrimitiveOffset + i / 3,
                 triangleIndex + triangleIndices[i],
                 triangleIndex + triangleIndices[i + 1],
                 triangleIndex + triangleIndices[i + 2]);
         }
 
         triangleSegment.vertexLength += numVertices;
-        triangleSegment.primitiveLength += triangleIndices.length / 3;
+        triangleSegment.primitiveLength += trianglePrimitiveCount;
 
         let lineIndicesStart: number;
         let lineSegment: Segment;
+        let linePrimitiveCount = 0;
 
         if (hasLines) {
             // Note that segment creation must happen *before* we add vertices into the vertex buffer
             lineSegment = segmentsLines.prepareSegment(numVertices, vertexArray, lineIndexArray);
             lineIndicesStart = lineSegment.vertexLength;
             lineSegment.vertexLength += numVertices;
+
+            linePrimitiveCount = countLinePrimitives(lineList);
+            lineIndexArray.resize(lineIndexArray.length + linePrimitiveCount);
         }
 
         // Add vertices into vertex buffer
@@ -69,10 +79,12 @@ export function fillLargeMeshArrays(
         }
 
         if (hasLines) {
+            const linePrimitiveOffset = lineIndexArray.length - linePrimitiveCount;
+            let linePrimitiveIndex = 0;
             for (const lineIndices of lineList) {
-
                 for (let i = 1; i < lineIndices.length; i += 2) {
-                    lineIndexArray.emplaceBack(
+                    lineIndexArray.emplace(
+                        linePrimitiveOffset + linePrimitiveIndex++,
                         lineIndicesStart + lineIndices[i - 1],
                         lineIndicesStart + lineIndices[i]);
                 }
@@ -106,6 +118,14 @@ export function fillLargeMeshArrays(
         segmentsTriangles.forceNewSegmentOnNextPrepare();
         segmentsLines?.forceNewSegmentOnNextPrepare();
     }
+}
+
+function countLinePrimitives(lineList: number[][]): number {
+    let primitiveCount = 0;
+    for (const lineIndices of lineList) {
+        primitiveCount += lineIndices.length / 2;
+    }
+    return primitiveCount;
 }
 
 /**

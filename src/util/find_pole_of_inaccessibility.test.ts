@@ -2,7 +2,21 @@ import {describe, test, expect} from 'vitest';
 import Point from '@mapbox/point-geometry';
 import {findPoleOfInaccessibility, getCentroidCell} from './find_pole_of_inaccessibility.ts';
 
-describe('findPoleOfInaccessibility', () => {
+import type {FeatureGeometry} from './geometry_view.ts';
+
+/** The read-only implementation deliberately forbids compatibility materialization. */
+function polygonInput(rings: Point[][], mode: string): FeatureGeometry {
+    if (mode === 'points') return rings;
+    return {
+        partCount: rings.length,
+        getPartLength: part => rings[part].length,
+        getX: (part, index) => rings[part][index].x,
+        getY: (part, index) => rings[part][index].y,
+        materialize() { throw new Error('Unexpected polygon materialization'); }
+    };
+}
+
+describe.each(['points', 'view'])('findPoleOfInaccessibility (%s)', mode => {
     test('should find the pole of inaccessibility for a simple polygon', () => {
         const closedRing = [
             new Point(0, 0),
@@ -11,9 +25,9 @@ describe('findPoleOfInaccessibility', () => {
             new Point(0, 10),
             new Point(0, 0)
         ];
-        const result = findPoleOfInaccessibility([closedRing], 0.1);
+        const result = findPoleOfInaccessibility(polygonInput([closedRing], mode), 0.1);
         expect(result).toEqual(new Point(5, 5));
-        const centroid = getCentroidCell([closedRing]).p;
+        const centroid = getCentroidCell(polygonInput([closedRing], mode)).p;
         expect(result).toEqual(centroid);
     });
 
@@ -30,9 +44,9 @@ describe('findPoleOfInaccessibility', () => {
             new Point(6, 1),
             new Point(2, 1)
         ];
-        const result = findPoleOfInaccessibility([closedRing, closedRingHole], 0.1);
+        const result = findPoleOfInaccessibility(polygonInput([closedRing, closedRingHole], mode), 0.1);
         expect(result).toEqual(new Point(7.96875, 2.03125));
-        const centroid = getCentroidCell([closedRing, closedRingHole]).p;
+        const centroid = getCentroidCell(polygonInput([closedRing, closedRingHole], mode)).p;
         expect(result).not.toEqual(centroid);
     });
 
@@ -43,9 +57,9 @@ describe('findPoleOfInaccessibility', () => {
             new Point(10, 0),
             new Point(0, 0)
         ];
-        const result = findPoleOfInaccessibility([closedRing], 1);
+        const result = findPoleOfInaccessibility(polygonInput([closedRing], mode), 1);
         expect(result).toEqual(new Point(40/6, 20/6));
-        const centroid = getCentroidCell([closedRing]).p;
+        const centroid = getCentroidCell(polygonInput([closedRing], mode)).p;
         expect(result).toEqual(centroid);
     });
 
@@ -62,9 +76,9 @@ describe('findPoleOfInaccessibility', () => {
             new Point(0, 10),
             new Point(0, 0)
         ];
-        const result = findPoleOfInaccessibility([uShape], 0.1);
+        const result = findPoleOfInaccessibility(polygonInput([uShape], mode), 0.1);
         expect(result).toEqual(new Point(8.828125, 1.171875));
-        const centroid = getCentroidCell([uShape]).p;
+        const centroid = getCentroidCell(polygonInput([uShape], mode)).p;
         expect(result).not.toEqual(centroid);
     });
 });

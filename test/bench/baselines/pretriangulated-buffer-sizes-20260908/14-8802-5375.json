@@ -1,0 +1,107 @@
+{
+  "name": "14-8802-5375",
+  "buffers": [
+    {
+      "layer": "landcover",
+      "before": {
+        "vertices": 59,
+        "triangles": 51,
+        "lines": 59,
+        "bytes": 778
+      },
+      "after": {
+        "vertices": 59,
+        "triangles": 51,
+        "lines": 59,
+        "bytes": 778
+      }
+    },
+    {
+      "layer": "water",
+      "before": {
+        "vertices": 72,
+        "triangles": 64,
+        "lines": 72,
+        "bytes": 960
+      },
+      "after": {
+        "vertices": 72,
+        "triangles": 64,
+        "lines": 72,
+        "bytes": 960
+      }
+    },
+    {
+      "layer": "building",
+      "before": {
+        "vertices": 6618,
+        "triangles": 5131,
+        "lines": 6619,
+        "bytes": 83734
+      },
+      "after": {
+        "vertices": 6619,
+        "triangles": 5131,
+        "lines": 6619,
+        "bytes": 83738
+      }
+    },
+    {
+      "layer": "hillshade",
+      "before": {
+        "vertices": 31,
+        "triangles": 25,
+        "lines": 31,
+        "bytes": 398
+      },
+      "after": {
+        "vertices": 31,
+        "triangles": 25,
+        "lines": 31,
+        "bytes": 398
+      }
+    },
+    {
+      "layer": "landuse",
+      "before": {
+        "vertices": 1122,
+        "triangles": 924,
+        "lines": 1122,
+        "bytes": 14520
+      },
+      "after": {
+        "vertices": 1122,
+        "triangles": 924,
+        "lines": 1122,
+        "bytes": 14520
+      }
+    }
+  ],
+  "counters": {
+    "workerFilterFallbackFeatures": 0,
+    "vectorTileFeatureWrappers": 0,
+    "propertyObjects": 0,
+    "propertyProxyMisses": 0,
+    "pointObjects": 0,
+    "geometryPartsMaterialized": 0,
+    "queryCandidates": 0,
+    "queryResults": 0,
+    "estimatedQueryResultBytes": 0,
+    "queryGeometriesLoaded": 0,
+    "overzoomFeaturesClipped": 0,
+    "overzoomPointObjects": 0,
+    "mvtReencodes": 0,
+    "rawTileBytesCopied": 0,
+    "rawTileMainThreadDecodes": 0,
+    "decodedLayers": 0,
+    "decodedColumns": 0,
+    "decodedValues": 0,
+    "decodedColumnBytes": 0,
+    "temporaryScalarBuffers": 0,
+    "temporaryScalarValues": 0,
+    "coordinateTuples": 0,
+    "propertyDescriptors": 0,
+    "pretriangulatedFillFeatures": 917,
+    "pretriangulatedFillTriangles": 6195
+  }
+}

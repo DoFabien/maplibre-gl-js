@@ -26,7 +26,7 @@
             "type": "fill",
             "source": "openmaptiles",
             "source-layer": "water",
-            "filter": ["!=", "intermittent", 1],
+            "filter": ["!=", ["get", "intermittent"], 1],
             "paint": {
                 "fill-color": "#F08000"
             }
@@ -36,7 +36,7 @@
             "type": "line",
             "source": "openmaptiles",
             "source-layer": "waterway",
-            "filter": ["!=", "intermittent", 1],
+            "filter": ["!=", ["get", "intermittent"], 1],
             "paint": {
                 "line-color": "#008000"
             }

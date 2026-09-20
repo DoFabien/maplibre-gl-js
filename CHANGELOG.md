@@ -1,5 +1,18 @@
 ## main
 ### ✨ Features and improvements
+
+- Avoid repeated mesh checks when rendering clipped MLT fills.
+- Write eligible pretriangulated MLT fills directly into render buffers at native Mercator zoom, avoiding browser triangulation while retaining outlines and queries.
+- Remap and orient MLT polygon triangles in place when finer subdivision is not needed, avoiding a winding-correction index copy.
+- Stream MLT overzoom clipping into the child geometry, avoiding transformed and per-axis coordinate buffers while preserving MVT clipping order and rounding.
+- Reuse polygon vertex remapping when preparing MLT buffers, avoiding repeated coordinate lookups and an intermediate triangle-index array.
+- Share MLT overzoom parents and bind child properties through indexed column views, avoiding repeated parent transfers and per-child value copies.
+- Render overzoomed MLT tables without encoding an intermediate child tile, keeping complete public query properties available on demand.
+- Cache the current columnar geometry part bounds to reduce repeated topology lookups in rendered MLT queries without materializing geometry.
+- Support columnar MLT heatmaps and runtime-aware `zoom`/`is-supported-script` filters without worker feature materialization.
+- Reduce property allocations when public MLT GeoJSON query results are read or serialized.
+- Project rendered MLT query geometries directly to GeoJSON without intermediate Point objects, preserving polygon ring classification.
+
 - Fire a `contextmenu` map event on long press for touch devices ([#373](https://github.com/maplibre/maplibre-gl-js/issues/373)) (by [@kirthi-b](https://github.com/kirthi-b))
 - Transition paint, light and sky properties that read `global-state` from the value they had when the state changes, where they snapped to the new value while holding `idle` for the transition duration ([#8395](https://github.com/maplibre/maplibre-gl-js/issues/8395)) (by [@avosa](https://github.com/avosa))
 - Speed up cross-tile symbol matching for sources with `promoteId` by keying symbols on their feature id as well as their label ([#8470](https://github.com/maplibre/maplibre-gl-js/pull/8470), continues [#7665](https://github.com/maplibre/maplibre-gl-js/pull/7665)) (by [@bradymadden97](https://github.com/bradymadden97) and [@johncarmack1984](https://github.com/johncarmack1984))
@@ -7,6 +20,17 @@
 - _...Add new stuff here..._
 
 ### 🐞 Bug fixes
+- Repaint after releasing symbol-fade tiles so `idle` is emitted only after rendering the final tile set, preventing stale symbol pixels after camera changes.
+- Honor literal projection blend tuples and restore the automatic globe projection when switching from a custom projection expression.
+- Preserve the current wheel event in `originalEvent` on camera movement events when a single scroll tick needs delayed device classification.
+- Preserve absent values in legacy `!in` filters on generic MLT columns, including indexed overzoom views.
+- Resolve deferred property dependencies before transferring columnar feature-state data so later state updates use the correct values.
+- Preserve MVT-compatible rendered queries for points and degenerate parts in unfiltered MLT line layers without generating extra line geometry.
+- Subdivide columnar MLT fills and lines at the canonical tile zoom so globe rendering follows the same curved geometry as MVT without materializing Point objects.
+- Round clipped overzoom coordinates consistently in MVT and MLT so rendering and public queries use the same integer geometry, including changed query matches at rounding boundaries.
+- Preserve projected MLT source-layer indices across worker transfer so rendered queries resolve the correct layer.
+- Preserve unstyled property columns when overzooming MLT tiles so public queries retain their complete attributes.
+- Resolve deferred MLT columns when evaluating public query paint/layout properties instead of using stale empty bindings.
 - Fade the globe atmosphere in with the camera's altitude, so the sky keeps the horizon until the atmosphere takes over from space ([#8464](https://github.com/maplibre/maplibre-gl-js/pull/8464)) (by [@birkskyum](https://github.com/birkskyum))
 - Report worker script failures through the map `error` event ([#8018](https://github.com/maplibre/maplibre-gl-js/issues/8018)) (by [@xavierjs](https://github.com/xavierjs))
 - Fix slow panning and zooming in Firefox on macOS since 6.8.0 ([#8468](https://github.com/maplibre/maplibre-gl-js/issues/8468)) (by [@timsluis](https://github.com/timsluis) and [@birkskyum](https://github.com/birkskyum))

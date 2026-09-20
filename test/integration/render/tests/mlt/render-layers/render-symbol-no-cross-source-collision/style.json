@@ -1,0 +1,206 @@
+{
+  "version": 8,
+  "metadata": {
+    "test": {
+      "crossSourceCollisions": false,
+      "width": 256,
+      "height": 192,
+      "timeout": 60000
+    }
+  },
+  "center": [
+    11.529107,
+    48.146443
+  ],
+  "zoom": 17.81,
+  "sources": {
+    "source1": {
+      "type": "vector",
+      "encoding": "mlt",
+      "tiles": [
+        "local://tiles/mlt/{z}/{x}/{y}.mlt"
+      ],
+      "maxzoom": 14
+    },
+    "source2": {
+      "type": "vector",
+      "encoding": "mlt",
+      "tiles": [
+        "local://tiles/mlt/{z}/{x}/{y}.mlt"
+      ],
+      "maxzoom": 14
+    },
+    "source3": {
+      "type": "vector",
+      "encoding": "mlt",
+      "tiles": [
+        "local://tiles/mlt/{z}/{x}/{y}.mlt"
+      ],
+      "maxzoom": 14
+    }
+  },
+  "glyphs": "local://glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8fafc"
+      }
+    },
+    {
+      "id": "source1-group1",
+      "type": "symbol",
+      "source": "source1",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S1-A",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20
+      },
+      "paint": {
+        "text-color": "#0f172a"
+      }
+    },
+    {
+      "id": "source1-group2",
+      "type": "symbol",
+      "source": "source1",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S1-B",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20
+      },
+      "paint": {
+        "text-color": "#15803d"
+      }
+    },
+    {
+      "id": "source2-group1",
+      "type": "symbol",
+      "source": "source2",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S2-A",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20,
+        "text-offset": [
+          0,
+          0.8
+        ]
+      },
+      "paint": {
+        "text-color": "#0369a1"
+      }
+    },
+    {
+      "id": "source2-group2",
+      "type": "symbol",
+      "source": "source2",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S2-B",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20,
+        "text-offset": [
+          0,
+          0.8
+        ]
+      },
+      "paint": {
+        "text-color": "#c2410c"
+      }
+    },
+    {
+      "id": "source3-group1",
+      "type": "symbol",
+      "source": "source3",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S3-A",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20,
+        "text-offset": [
+          0,
+          1.6
+        ]
+      },
+      "paint": {
+        "text-color": "#a16207"
+      }
+    },
+    {
+      "id": "source3-group2",
+      "type": "symbol",
+      "source": "source3",
+      "source-layer": "housenumber",
+      "filter": [
+        "all",
+        [
+          "has",
+          "housenumber"
+        ]
+      ],
+      "layout": {
+        "text-field": "S3-B",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-size": 20,
+        "text-offset": [
+          0,
+          1.6
+        ]
+      },
+      "paint": {
+        "text-color": "#b91c1c"
+      }
+    }
+  ]
+}

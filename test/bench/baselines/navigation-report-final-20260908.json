@@ -1,0 +1,744 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "MVT et MLT en navigation",
+    "generatedAt": "2026-09-08T13:02:17.958Z",
+    "sources": [
+      {
+        "id": "verification",
+        "label": "Navigation : vérification indépendante",
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-comparison-final-20260908.json"
+      },
+      {
+        "id": "protocol",
+        "label": "Protocole et limites du benchmark",
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/MLT_NAVIGATION_20260908.md"
+      },
+      {
+        "id": "startup",
+        "label": "Vue initiale : médianes des durées mesurées par session",
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-navigation-startup.sql",
+        "query": {
+          "sql": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding ORDER BY initial_ms) AS position,\n        COUNT(*) OVER (PARTITION BY network, encoding) AS n\n    FROM initial_sessions\n)\nSELECT network, encoding, COUNT(*) AS sessions,\n    AVG(CASE WHEN position IN ((n + 1) / 2, (n + 2) / 2) THEN initial_ms END) AS initialMs,\n    MIN(payload_bytes) AS minPayloadBytes, MAX(payload_bytes) AS maxPayloadBytes\nFROM ranked\nGROUP BY network, encoding\nORDER BY network, encoding;\n",
+          "engine": "SQLite",
+          "language": "sql",
+          "executed_at": "2026-09-08T13:02:17.958Z",
+          "description": "Médiane des durées observées dans les cartes neuves, par format et réseau, recalculée en SQL depuis les 24 sessions et comparée au calcul JavaScript. Aucune observation retirée.",
+          "tables_used": [
+            "main.initial_sessions"
+          ],
+          "metric_definitions": {
+            "initialMs": "Millisecondes entre création de carte et première soumission render déclarée chargée ; import JavaScript exclu, tuiles et ressources de style incluses. Médiane des six sessions."
+          }
+        }
+      },
+      {
+        "id": "statistics",
+        "label": "Quantiles recalculés depuis les horodatages bruts",
+        "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-navigation-statistics.sql",
+        "query": {
+          "sql": "WITH lagged AS (\n    SELECT *, LAG(t) OVER (PARTITION BY network, encoding, run, phase ORDER BY idx) AS previous\n    FROM raw_raf\n), frame_samples AS (\n    SELECT network, encoding, run, phase, t - previous AS value, 'raf' AS metric\n    FROM lagged r\n    WHERE EXISTS (SELECT 1 FROM motion_windows w\n        WHERE w.network = r.network AND w.encoding = r.encoding AND w.run = r.run AND w.phase = r.phase\n          AND r.previous >= w.started AND r.t <= w.ended)\n), ranked_events AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding, run, phase, tile_key, kind ORDER BY idx) AS ordinal\n    FROM raw_tile_events\n), arrivals AS (\n    SELECT s.network, s.encoding, s.run, s.phase, s.t AS started,\n        (SELECT MIN(r.t) FROM raw_render r WHERE r.network = s.network AND r.encoding = s.encoding\n            AND r.run = s.run AND r.phase = s.phase AND r.t >= d.t) AS submitted\n    FROM ranked_events s JOIN ranked_events d\n      ON s.network = d.network AND s.encoding = d.encoding AND s.run = d.run AND s.phase = d.phase\n     AND s.tile_key = d.tile_key AND s.ordinal = d.ordinal\n    WHERE s.kind = 'dataloading' AND d.kind = 'sourcedata'\n), samples AS (\n    SELECT * FROM frame_samples\n    UNION ALL\n    SELECT network, encoding, run, phase, submitted - started, 'tileLoad' FROM arrivals WHERE submitted IS NOT NULL\n), ranked_samples AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding, run, phase, metric ORDER BY value) AS position,\n        COUNT(*) OVER (PARTITION BY network, encoding, run, phase, metric) AS n\n    FROM samples\n), quantiles(label, q) AS (VALUES ('P50Ms', 0.5), ('P95Ms', 0.95), ('P99Ms', 0.99)),\npositions AS (\n    SELECT *, CAST((n - 1) * q AS INTEGER) AS lower_position, (n - 1) * q - CAST((n - 1) * q AS INTEGER) AS fraction\n    FROM ranked_samples CROSS JOIN quantiles\n)\nSELECT network, encoding, run, phase, metric || label AS metric, n,\n    SUM(CASE WHEN position = lower_position + 1 THEN value * (1 - fraction)\n             WHEN position = lower_position + 2 THEN value * fraction ELSE 0 END) AS value\nFROM positions\nGROUP BY network, encoding, run, phase, metric, label\nORDER BY network, encoding, run, phase, metric;\n",
+          "engine": "SQLite",
+          "language": "sql",
+          "executed_at": "2026-09-08T13:02:17.958Z",
+          "description": "Recalcul des intervalles RAF et des délais de chargement depuis les horodatages bruts, puis quantiles R7 par session. Le vérificateur compare ces résultats aux agrégats JavaScript et calcule la médiane des six sessions. Les données de démarrage et de trafic proviennent des mêmes sessions archivées.",
+          "tables_used": [
+            "main.raw_raf",
+            "main.motion_windows",
+            "main.raw_tile_events",
+            "main.raw_render"
+          ],
+          "filters": [
+            "Six sessions indépendantes par format et profil réseau, premier passage puis même parcours à chaud.",
+            "Intervalles RAF entièrement dans les mouvements ; aucun profilage, aucune requête GeoJSON ou capture dans les mesures."
+          ],
+          "metric_definitions": {
+            "tileLoadP50Ms": "Médiane de six médianes par session du délai dataloading vers première soumission render suivant sourcedata ; préparations de surzoom incluses.",
+            "rafP95Ms": "Médiane des p95 R7 des intervalles RAF à l’intérieur des fenêtres de mouvement ; pas des durées GPU ou de présentation."
+          }
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# MVT et MLT en navigation"
+      },
+      {
+        "id": "summary",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Résumé technique\n\n**Le test porte bien sur l’affichage pendant un parcours, sans extraction GeoJSON.** Mêmes données, style avec labels et icônes, moteur identique, premier passage puis réutilisation des caches.\n\n**Local gzip :** 68,9 ms en MVT contre 52,4 ms en MLT (−23,9 %). Les écarts appariés vont de −32,4 % à −13,6 % ; 6 paires sur 6 favorisent MLT.\n\n**20 Mbit/s · 40 ms :** 135,3 ms en MVT contre 118,5 ms en MLT (−12,4 %). Les écarts appariés vont de −12,7 % à −6,9 % ; 6 paires sur 6 favorisent MLT.\n\n**La cadence observée reste très proche entre les formats.** Le bénéfice se situe surtout dans la disponibilité des tuiles, pas dans un gain de FPS démontré.\n\nLa parité des 66 captures arrêtées et des 66 archives de requêtes est exacte. Ce contrôle est séparé des mesures et ne certifie pas chaque image transitoire des animations."
+      },
+      {
+        "id": "arrival",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Disponibilité des tuiles pendant le premier parcours\n\nLe chronomètre part de l’événement de chargement et s’arrête à la première soumission de rendu suivant la réception des données préparées. Ce délai comprend téléchargement, travail worker et préparation du dessin, mais aussi les préparations de surzoom depuis un parent en cache. **Ce n’est pas une mesure de fin GPU ni une preuve de visibilité pixel par pixel.**\n\nLes barres comparent la médiane des six médianes de session, en millisecondes ; plus bas est meilleur.\n\n**Local gzip :** 68,9 ms en MVT contre 52,4 ms en MLT (−23,9 %). Les écarts appariés vont de −32,4 % à −13,6 % ; 6 paires sur 6 favorisent MLT.\n\n**20 Mbit/s · 40 ms :** 135,3 ms en MVT contre 118,5 ms en MLT (−12,4 %). Les écarts appariés vont de −12,7 % à −6,9 % ; 6 paires sur 6 favorisent MLT."
+      },
+      {
+        "id": "arrival-plot",
+        "type": "chart",
+        "chartId": "arrival"
+      },
+      {
+        "id": "initial",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Chargement de la vue initiale\n\nCréation d’une carte dans un contexte navigateur neuf jusqu’à sa première soumission de rendu déclarée chargée, tuiles et ressources du style incluses. L’import principal JavaScript est exclu. Le processus navigateur et les caches du pilote GPU ne redémarrent pas à chaque session : ce n’est pas un démarrage complet de l’application.\n\nLocal gzip : **389,8 ms en MVT, 355,1 ms en MLT** (−8,9 %).\n\n20 Mbit/s · 40 ms : **503,8 ms en MVT, 453,5 ms en MLT** (−10 %).\n\nCes médianes sont distinctes de la vitesse d’apparition des nouvelles tuiles pendant le parcours. Le premier lancement est conservé dans les résultats ; sa sensibilité est discutée dans les notes techniques."
+      },
+      {
+        "id": "initial-table",
+        "type": "table",
+        "tableId": "initial"
+      },
+      {
+        "id": "cadence",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Cadence à froid et avec les caches\n\nLe tableau compare les p95/p99 des intervalles de callbacks navigateur, ainsi que le nombre d’intervalles supérieurs à 50 ms. Chaque cellule est une médiane de six sessions. Les pauses de lecture sont exclues. **Des callbacks réguliers ne garantissent pas que le GPU présente toutes les images à cette cadence.**\n\nLe p95 ne distingue pratiquement pas les formats sur ce matériel. Il serait trompeur de convertir les gains de chargement en une promesse d’augmentation des FPS.\n\nLes passages chauds ne génèrent aucune requête HTTP au serveur et aucune nouvelle préparation de tuile sur ce parcours ; leur délai d’arrivée est donc non applicable, pas artificiellement mis à zéro."
+      },
+      {
+        "id": "cadence-table",
+        "type": "table",
+        "tableId": "cadence"
+      },
+      {
+        "id": "traffic",
+        "type": "markdown",
+        "sourceId": "verification",
+        "body": "## Trafic réellement transféré\n\nPendant le premier parcours, hors chargement initial, le serveur transmet **1 221,3 ko en MVT contre 876,5 ko en MLT**, soit −28,2 %. Les réponses sont effectivement compressées en gzip ; les deux formats utilisent les mêmes règles de cache et le même budget réseau partagé.\n\nCe gain concerne les tuiles demandées par la trajectoire, pas la somme de tout le corpus. Le second passage reste à zéro octet réseau pour les deux formats."
+      },
+      {
+        "id": "method",
+        "type": "markdown",
+        "sourceId": "protocol",
+        "body": "## Périmètre et méthode\n\nCorpus OMT réel de Dortmund : 42 tuiles disponibles, niveaux 10 à 13, dont les octets MVT sont conservés. MLT est encodé avec triangles et contours fournis, sans FastPFOR. Style avec routes, bâtiments, occupation du sol, eau, lieux, labels de routes, POI et icônes.\n\nDix mouvements en temps réel, zoom 11,6–14,4 avec pan, surzoom, rotation et inclinaison, puis retour à la pose initiale. Pas d’attente de chargement au milieu d’un mouvement. Les transitions de labels et les caches ordinaires restent actifs pendant les chronométrages.\n\nChrome matériel Intel Iris Xe, un worker, 800 × 600, DPR 1. Six paires par profil, ordre MVT/MLT alterné ; premier passage puis même parcours chaud dans la même carte. Deux profils gzip : réseau local et modèle de 20 Mbit/s partagés avec 40 ms d’attente par requête. Les scripts du moteur restent servis localement sans bridage.\n\nLes tests, compilations, contrôles GeoJSON et captures sont hors des campagnes chronométrées. Les quantiles ont été recalculés indépendamment en SQLite depuis les horodatages bruts ; les fichiers, corpus et bundles sont identifiés par SHA-256."
+      },
+      {
+        "id": "limits",
+        "type": "markdown",
+        "sourceId": "protocol",
+        "body": "## Limites et robustesse\n\nIl s’agit d’un parcours scripté utilisant les animations ordinaires du moteur, pas d’un test de gestes physiques ou d’un trajet libre sur toute une planète. Le réseau est un modèle borné sans pertes ni TLS, pas une trace Internet réelle. La charge ambiante du bureau n’est pas contrôlée comme en laboratoire.\n\nLes intervalles RAF et les soumissions render sont des indicateurs côté navigateur, pas des durées GPU ni des images présentées. Les plages appariées sont des observations, pas des intervalles de confiance. L’étude ne mesure pas la RAM maximale ou la mémoire GPU.\n\nLa parité est exacte aux onze poses arrêtées, en GPU et logiciel. Les captures de validation désactivent les fades ; les mesures conservent les fades normaux. L’égalité de toutes les images transitoires, de tous les styles et de la suite GPU complète n’est pas revendiquée.\n\nUn ancien encodeur tronquait certains IDs du corpus. Il a été archivé puis reconstruit depuis les sources Java existantes. Le corpus final passe l’audit complet des 427 couches, sans modifier les données MVT ni le code du moteur. Les pilotes en échec restent archivés et ne contribuent à aucun chiffre final."
+      },
+      {
+        "id": "next",
+        "type": "markdown",
+        "body": "## Ce que ce test permet de décider\n\nPour cet usage, il faut juger MLT sur la disponibilité des tuiles et la fluidité du parcours, pas sur l’extraction exhaustive de GeoJSON. Les deux dimensions sont maintenant mesurées séparément.\n\nLa généralisation reste à établir sur un écran plus grand, du matériel plus contraint et un second corpus urbain. Une mesure de présentation ou une trace GPU distincte serait nécessaire pour conclure précisément sur les images réellement affichées. FastPFOR n’a pas été retesté ni qualifié par cette campagne."
+      }
+    ],
+    "charts": [
+      {
+        "id": "arrival",
+        "title": "Délai de chargement jusqu’à la soumission suivante",
+        "subtitle": "Le délai médian MLT est inférieur sur les deux profils testés.",
+        "showDescription": true,
+        "type": "bar",
+        "intent": "comparison",
+        "question": "Le format change-t-il la disponibilité des tuiles pendant le parcours ?",
+        "rationale": "Deux profils réseau et deux formats : quatre barres groupées, avec les quantiles et volumes adjacents conservés dans le jeu de données.",
+        "dataset": "cold",
+        "sourceId": "statistics",
+        "encodings": {
+          "x": {
+            "field": "reseau",
+            "type": "nominal",
+            "label": "Réseau"
+          },
+          "y": {
+            "field": "tileLoadP50Ms",
+            "type": "quantitative",
+            "label": "Délai (ms)"
+          },
+          "color": {
+            "field": "format",
+            "type": "nominal",
+            "label": "Format"
+          },
+          "tooltip": [
+            {
+              "field": "tileLoadP95Ms",
+              "type": "quantitative",
+              "label": "p95 de chargement (ms)"
+            },
+            {
+              "field": "tileLoadsCompleted",
+              "type": "quantitative",
+              "label": "Préparations par passage"
+            },
+            {
+              "field": "sessions",
+              "type": "quantitative",
+              "label": "Sessions"
+            }
+          ]
+        },
+        "palette": {
+          "kind": "categorical"
+        },
+        "legend": {
+          "position": "bottom",
+          "sort": "spec",
+          "title": "Format"
+        },
+        "labels": {
+          "values": "all"
+        },
+        "settings": {
+          "orientation": "vertical",
+          "groupMode": "grouped",
+          "sort": "none"
+        },
+        "unit": "ms",
+        "valueFormat": "number",
+        "layout": "full"
+      }
+    ],
+    "tables": [
+      {
+        "id": "initial",
+        "title": "Temps de chargement initial",
+        "subtitle": "Médiane de six cartes neuves par format et profil ; millisecondes.",
+        "dataset": "cold",
+        "sourceId": "startup",
+        "defaultSort": {
+          "field": "reseau",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "reseau",
+            "label": "Réseau",
+            "type": "text"
+          },
+          {
+            "field": "format",
+            "label": "Format",
+            "type": "text"
+          },
+          {
+            "field": "initialMs",
+            "label": "Vue initiale (ms)",
+            "format": "number"
+          }
+        ]
+      },
+      {
+        "id": "cadence",
+        "title": "Intervalles de callbacks pendant les mouvements",
+        "subtitle": "Médiane des mesures par session ; p95/p99 en ms, pauses de lecture exclues.",
+        "dataset": "passes",
+        "sourceId": "statistics",
+        "defaultSort": {
+          "field": "reseau",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "reseau",
+            "label": "Réseau",
+            "type": "text"
+          },
+          {
+            "field": "passage",
+            "label": "Passage",
+            "type": "text"
+          },
+          {
+            "field": "format",
+            "label": "Format",
+            "type": "text"
+          },
+          {
+            "field": "rafP95Ms",
+            "label": "p95 (ms)",
+            "format": "number"
+          },
+          {
+            "field": "rafP99Ms",
+            "label": "p99 (ms)",
+            "format": "number"
+          },
+          {
+            "field": "rafOver50ms",
+            "label": "Intervalles > 50 ms",
+            "format": "number"
+          }
+        ]
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "status": "ready",
+    "generatedAt": "2026-09-08T13:02:17.958Z",
+    "datasets": {
+      "cold": [
+        {
+          "network": "lan",
+          "phase": "cold",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22357.54999999702,
+          "motionMs": 19655.600000053644,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 20.200000000000273,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 559.1500000059605,
+          "observedRenderMs": 19645.800000041723,
+          "pendingSourceFraction": 0.02846314943969372,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 68.9,
+          "tileLoadP95Ms": 120.9,
+          "requests": 16,
+          "payloadBytes": 1221263,
+          "initialMs": 389.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "Local gzip",
+          "format": "MVT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "lan",
+          "phase": "cold",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22362.600000023842,
+          "motionMs": 19660.55000001192,
+          "finalSettleMs": 0.09999999403953552,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 21.750000000000227,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 432.5,
+          "observedRenderMs": 19645.45000000298,
+          "pendingSourceFraction": 0.022018211330288466,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 52.4,
+          "tileLoadP95Ms": 101.89,
+          "requests": 16,
+          "payloadBytes": 876488,
+          "initialMs": 355.05,
+          "initialPayloadBytes": 418739,
+          "reseau": "Local gzip",
+          "format": "MLT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "cold",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22363.59999999404,
+          "motionMs": 19661.950000032783,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.75,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 22.549999999999272,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 1258.0999999940395,
+          "observedRenderMs": 19647.15000002086,
+          "pendingSourceFraction": 0.06403770378236148,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 135.3,
+          "tileLoadP95Ms": 260.39,
+          "requests": 16,
+          "payloadBytes": 1221263,
+          "initialMs": 503.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MVT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "cold",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22361.0000000149,
+          "motionMs": 19658.95000000298,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 20.050000000001546,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 1034.4000000059605,
+          "observedRenderMs": 19644.7499999851,
+          "pendingSourceFraction": 0.052652839875255805,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 118.48,
+          "tileLoadP95Ms": 201.44,
+          "requests": 16,
+          "payloadBytes": 876488,
+          "initialMs": 453.45,
+          "initialPayloadBytes": 418739,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MLT",
+          "passage": "Premier passage"
+        }
+      ],
+      "passes": [
+        {
+          "network": "lan",
+          "phase": "cold",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22357.54999999702,
+          "motionMs": 19655.600000053644,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 20.200000000000273,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 559.1500000059605,
+          "observedRenderMs": 19645.800000041723,
+          "pendingSourceFraction": 0.02846314943969372,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 68.9,
+          "tileLoadP95Ms": 120.9,
+          "requests": 16,
+          "payloadBytes": 1221263,
+          "initialMs": 389.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "Local gzip",
+          "format": "MVT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "lan",
+          "phase": "cold",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22362.600000023842,
+          "motionMs": 19660.55000001192,
+          "finalSettleMs": 0.09999999403953552,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 21.750000000000227,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 432.5,
+          "observedRenderMs": 19645.45000000298,
+          "pendingSourceFraction": 0.022018211330288466,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 52.4,
+          "tileLoadP95Ms": 101.89,
+          "requests": 16,
+          "payloadBytes": 876488,
+          "initialMs": 355.05,
+          "initialPayloadBytes": 418739,
+          "reseau": "Local gzip",
+          "format": "MLT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "lan",
+          "phase": "warm",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22361.90000000596,
+          "motionMs": 19659.85000000894,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.69999999999709,
+          "rafP95Ms": 16.78,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 16.80000000000291,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 0,
+          "observedRenderMs": 19651.400000065565,
+          "pendingSourceFraction": 0,
+          "tileLoadsCompleted": 0,
+          "tileLoadsUnmatched": 0,
+          "requests": 0,
+          "payloadBytes": 0,
+          "tileLoadP50Ms": null,
+          "tileLoadP95Ms": null,
+          "initialMs": 389.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "Local gzip",
+          "format": "MVT",
+          "passage": "Passage chaud"
+        },
+        {
+          "network": "lan",
+          "phase": "warm",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22360.69999998808,
+          "motionMs": 19659.35000000894,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.69999999999709,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 18.850000000000364,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 0,
+          "observedRenderMs": 19650.950000047684,
+          "pendingSourceFraction": 0,
+          "tileLoadsCompleted": 0,
+          "tileLoadsUnmatched": 0,
+          "requests": 0,
+          "payloadBytes": 0,
+          "tileLoadP50Ms": null,
+          "tileLoadP95Ms": null,
+          "initialMs": 355.05,
+          "initialPayloadBytes": 418739,
+          "reseau": "Local gzip",
+          "format": "MLT",
+          "passage": "Passage chaud"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "cold",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22363.59999999404,
+          "motionMs": 19661.950000032783,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.75,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 22.549999999999272,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 1258.0999999940395,
+          "observedRenderMs": 19647.15000002086,
+          "pendingSourceFraction": 0.06403770378236148,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 135.3,
+          "tileLoadP95Ms": 260.39,
+          "requests": 16,
+          "payloadBytes": 1221263,
+          "initialMs": 503.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MVT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "cold",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22361.0000000149,
+          "motionMs": 19658.95000000298,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.699999999999818,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 20.050000000001546,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 1034.4000000059605,
+          "observedRenderMs": 19644.7499999851,
+          "pendingSourceFraction": 0.052652839875255805,
+          "tileLoadsCompleted": 22,
+          "tileLoadsUnmatched": 0,
+          "tileLoadP50Ms": 118.48,
+          "tileLoadP95Ms": 201.44,
+          "requests": 16,
+          "payloadBytes": 876488,
+          "initialMs": 453.45,
+          "initialPayloadBytes": 418739,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MLT",
+          "passage": "Premier passage"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "warm",
+          "encoding": "mvt",
+          "sessions": 6,
+          "durationMs": 22364.70000000298,
+          "motionMs": 19663.0000000149,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.69999999999709,
+          "rafP95Ms": 16.78,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 18.500000000003638,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 0,
+          "observedRenderMs": 19651.399999946356,
+          "pendingSourceFraction": 0,
+          "tileLoadsCompleted": 0,
+          "tileLoadsUnmatched": 0,
+          "requests": 0,
+          "payloadBytes": 0,
+          "tileLoadP50Ms": null,
+          "tileLoadP95Ms": null,
+          "initialMs": 503.75,
+          "initialPayloadBytes": 446719,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MVT",
+          "passage": "Passage chaud"
+        },
+        {
+          "network": "20mbps-40ms",
+          "phase": "warm",
+          "encoding": "mlt",
+          "sessions": 6,
+          "durationMs": 22362.59999999404,
+          "motionMs": 19661.10000000894,
+          "finalSettleMs": 0,
+          "rafIntervals": 1170,
+          "rafP50Ms": 16.69999999999709,
+          "rafP95Ms": 16.8,
+          "rafP99Ms": 16.8,
+          "rafMaxMs": 16.80000000000291,
+          "rafOver33ms": 0,
+          "rafOver50ms": 0,
+          "longTasks": 0,
+          "longTaskOverlapMs": 0,
+          "pendingSourceMs": 0,
+          "observedRenderMs": 19650.949999958277,
+          "pendingSourceFraction": 0,
+          "tileLoadsCompleted": 0,
+          "tileLoadsUnmatched": 0,
+          "requests": 0,
+          "payloadBytes": 0,
+          "tileLoadP50Ms": null,
+          "tileLoadP95Ms": null,
+          "initialMs": 453.45,
+          "initialPayloadBytes": 418739,
+          "reseau": "20 Mbit/s · 40 ms",
+          "format": "MLT",
+          "passage": "Passage chaud"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "verification",
+      "label": "Navigation : vérification indépendante",
+      "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-comparison-final-20260908.json"
+    },
+    {
+      "id": "protocol",
+      "label": "Protocole et limites du benchmark",
+      "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/MLT_NAVIGATION_20260908.md"
+    },
+    {
+      "id": "startup",
+      "label": "Vue initiale : médianes des durées mesurées par session",
+      "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-navigation-startup.sql",
+      "query": {
+        "sql": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding ORDER BY initial_ms) AS position,\n        COUNT(*) OVER (PARTITION BY network, encoding) AS n\n    FROM initial_sessions\n)\nSELECT network, encoding, COUNT(*) AS sessions,\n    AVG(CASE WHEN position IN ((n + 1) / 2, (n + 2) / 2) THEN initial_ms END) AS initialMs,\n    MIN(payload_bytes) AS minPayloadBytes, MAX(payload_bytes) AS maxPayloadBytes\nFROM ranked\nGROUP BY network, encoding\nORDER BY network, encoding;\n",
+        "engine": "SQLite",
+        "language": "sql",
+        "executed_at": "2026-09-08T13:02:17.958Z",
+        "description": "Médiane des durées observées dans les cartes neuves, par format et réseau, recalculée en SQL depuis les 24 sessions et comparée au calcul JavaScript. Aucune observation retirée.",
+        "tables_used": [
+          "main.initial_sessions"
+        ],
+        "metric_definitions": {
+          "initialMs": "Millisecondes entre création de carte et première soumission render déclarée chargée ; import JavaScript exclu, tuiles et ressources de style incluses. Médiane des six sessions."
+        }
+      }
+    },
+    {
+      "id": "statistics",
+      "label": "Quantiles recalculés depuis les horodatages bruts",
+      "path": "/data/Projet/maplibre/maplibre-gl-js/test/bench/e2e/mlt-navigation-statistics.sql",
+      "query": {
+        "sql": "WITH lagged AS (\n    SELECT *, LAG(t) OVER (PARTITION BY network, encoding, run, phase ORDER BY idx) AS previous\n    FROM raw_raf\n), frame_samples AS (\n    SELECT network, encoding, run, phase, t - previous AS value, 'raf' AS metric\n    FROM lagged r\n    WHERE EXISTS (SELECT 1 FROM motion_windows w\n        WHERE w.network = r.network AND w.encoding = r.encoding AND w.run = r.run AND w.phase = r.phase\n          AND r.previous >= w.started AND r.t <= w.ended)\n), ranked_events AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding, run, phase, tile_key, kind ORDER BY idx) AS ordinal\n    FROM raw_tile_events\n), arrivals AS (\n    SELECT s.network, s.encoding, s.run, s.phase, s.t AS started,\n        (SELECT MIN(r.t) FROM raw_render r WHERE r.network = s.network AND r.encoding = s.encoding\n            AND r.run = s.run AND r.phase = s.phase AND r.t >= d.t) AS submitted\n    FROM ranked_events s JOIN ranked_events d\n      ON s.network = d.network AND s.encoding = d.encoding AND s.run = d.run AND s.phase = d.phase\n     AND s.tile_key = d.tile_key AND s.ordinal = d.ordinal\n    WHERE s.kind = 'dataloading' AND d.kind = 'sourcedata'\n), samples AS (\n    SELECT * FROM frame_samples\n    UNION ALL\n    SELECT network, encoding, run, phase, submitted - started, 'tileLoad' FROM arrivals WHERE submitted IS NOT NULL\n), ranked_samples AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY network, encoding, run, phase, metric ORDER BY value) AS position,\n        COUNT(*) OVER (PARTITION BY network, encoding, run, phase, metric) AS n\n    FROM samples\n), quantiles(label, q) AS (VALUES ('P50Ms', 0.5), ('P95Ms', 0.95), ('P99Ms', 0.99)),\npositions AS (\n    SELECT *, CAST((n - 1) * q AS INTEGER) AS lower_position, (n - 1) * q - CAST((n - 1) * q AS INTEGER) AS fraction\n    FROM ranked_samples CROSS JOIN quantiles\n)\nSELECT network, encoding, run, phase, metric || label AS metric, n,\n    SUM(CASE WHEN position = lower_position + 1 THEN value * (1 - fraction)\n             WHEN position = lower_position + 2 THEN value * fraction ELSE 0 END) AS value\nFROM positions\nGROUP BY network, encoding, run, phase, metric, label\nORDER BY network, encoding, run, phase, metric;\n",
+        "engine": "SQLite",
+        "language": "sql",
+        "executed_at": "2026-09-08T13:02:17.958Z",
+        "description": "Recalcul des intervalles RAF et des délais de chargement depuis les horodatages bruts, puis quantiles R7 par session. Le vérificateur compare ces résultats aux agrégats JavaScript et calcule la médiane des six sessions. Les données de démarrage et de trafic proviennent des mêmes sessions archivées.",
+        "tables_used": [
+          "main.raw_raf",
+          "main.motion_windows",
+          "main.raw_tile_events",
+          "main.raw_render"
+        ],
+        "filters": [
+          "Six sessions indépendantes par format et profil réseau, premier passage puis même parcours à chaud.",
+          "Intervalles RAF entièrement dans les mouvements ; aucun profilage, aucune requête GeoJSON ou capture dans les mesures."
+        ],
+        "metric_definitions": {
+          "tileLoadP50Ms": "Médiane de six médianes par session du délai dataloading vers première soumission render suivant sourcedata ; préparations de surzoom incluses.",
+          "rafP95Ms": "Médiane des p95 R7 des intervalles RAF à l’intérieur des fenêtres de mouvement ; pas des durées GPU ou de présentation."
+        }
+      }
+    }
+  ],
+  "notes": {
+    "audience": "technical",
+    "delivery": "mcp-app",
+    "skills": [
+      "design-kpis",
+      "validate-data",
+      "build-report",
+      "visualize-data"
+    ],
+    "chartContract": "Comparison: one grouped bar chart, four rows with two non-neutral native palette roots (blue/orange), visible format legend and value labels, zero baseline; table for near-equal scheduling percentiles and distinct startup definition.",
+    "sourceFiles": [
+      "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-timing-final-lan-20260908",
+      "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-timing-final-network-20260908",
+      "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-parity-final-gpu-20260908",
+      "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-parity-final-software-20260908",
+      "/data/Projet/maplibre/maplibre-gl-js/test/bench/baselines/navigation-comparison-final-20260908.json"
+    ],
+    "structure": "Title; technical summary; metric definitions before each finding; arrival visual; startup and cadence exact tables; traffic; scope/method; limits; next steps and remaining questions."
+  }
+}

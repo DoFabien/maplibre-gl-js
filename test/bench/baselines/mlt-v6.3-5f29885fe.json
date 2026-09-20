@@ -1,0 +1,4598 @@
+{
+  "generatedAt": "2026-08-11T21:22:55.041Z",
+  "iterations": 10,
+  "warmup": 3,
+  "processIsolation": true,
+  "benchmarks": [
+    {
+      "benchmark": "MltRealTileScanMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "phase": "scan"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 5.676034000000072,
+        "p95": 9.140259999999671,
+        "min": 5.532120000000305,
+        "max": 9.140259999999671
+      },
+      "throughputPerSecond": {
+        "median": 704.717413602517,
+        "p05": 437.62431265632966
+      },
+      "memoryBytes": {
+        "initialHeap": 72660152,
+        "maxObservedHeap": 104312104,
+        "retainedHeapAfterGc": 72325464,
+        "initialRss": 443441152,
+        "maxObservedRss": 443703296,
+        "retainedRssAfterGc": 443465728,
+        "initialExternal": 10040555,
+        "maxObservedExternal": 10040555,
+        "retainedExternalAfterGc": 7787646,
+        "initialArrayBuffers": 2215811,
+        "maxObservedArrayBuffers": 2215811,
+        "retainedArrayBuffersAfterGc": 2215811
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileScanMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "phase": "scan"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 0.5205989999999474,
+        "p95": 0.7410799999997835,
+        "min": 0.3957310000000689,
+        "max": 0.7410799999997835
+      },
+      "throughputPerSecond": {
+        "median": 7683.456940947647,
+        "p05": 5397.527932208626
+      },
+      "memoryBytes": {
+        "initialHeap": 72649888,
+        "maxObservedHeap": 77524864,
+        "retainedHeapAfterGc": 72333776,
+        "initialRss": 448798720,
+        "maxObservedRss": 448798720,
+        "retainedRssAfterGc": 448798720,
+        "initialExternal": 8676890,
+        "maxObservedExternal": 8676890,
+        "retainedExternalAfterGc": 7361267,
+        "initialArrayBuffers": 1789432,
+        "maxObservedArrayBuffers": 1789432,
+        "retainedArrayBuffersAfterGc": 1789432
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileDecodeMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "phase": "decode",
+          "access": "layers",
+          "projection": "all"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 6.117923999999675,
+        "p95": 9.917103000000225,
+        "min": 5.840749999999844,
+        "max": 9.917103000000225
+      },
+      "throughputPerSecond": {
+        "median": 653.8165560736309,
+        "p05": 403.34359741951954
+      },
+      "memoryBytes": {
+        "initialHeap": 72658776,
+        "maxObservedHeap": 104528272,
+        "retainedHeapAfterGc": 72322992,
+        "initialRss": 454328320,
+        "maxObservedRss": 454328320,
+        "retainedRssAfterGc": 454328320,
+        "initialExternal": 9529440,
+        "maxObservedExternal": 9529440,
+        "retainedExternalAfterGc": 7787646,
+        "initialArrayBuffers": 2215811,
+        "maxObservedArrayBuffers": 2215811,
+        "retainedArrayBuffersAfterGc": 2215811
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileDecodeMLTProjected",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "phase": "decode",
+          "access": "layers",
+          "projection": "style"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 2.1104800000002797,
+        "p95": 5.716546000000108,
+        "min": 1.8285369999998693,
+        "max": 5.716546000000108
+      },
+      "throughputPerSecond": {
+        "median": 1895.3034380801855,
+        "p05": 699.7232244785444
+      },
+      "memoryBytes": {
+        "initialHeap": 73094216,
+        "maxObservedHeap": 79149256,
+        "retainedHeapAfterGc": 72816088,
+        "initialRss": 454000640,
+        "maxObservedRss": 454000640,
+        "retainedRssAfterGc": 454131712,
+        "initialExternal": 9425095,
+        "maxObservedExternal": 9818087,
+        "retainedExternalAfterGc": 9818087,
+        "initialArrayBuffers": 1789432,
+        "maxObservedArrayBuffers": 4246252,
+        "retainedArrayBuffersAfterGc": 3381296
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 40,
+          "decodedColumns": 120,
+          "decodedValues": 73050,
+          "decodedColumnBytes": 1475270
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 4,
+          "decodedColumns": 12,
+          "decodedValues": 7305,
+          "decodedColumnBytes": 147527
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileParseOnlyMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "phase": "parse-only",
+          "sourceLayer": "road"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 17.796250999999756,
+        "p95": 41.494766000000254,
+        "min": 15.514251999999942,
+        "max": 41.494766000000254
+      },
+      "throughputPerSecond": {
+        "median": 224.7664409768133,
+        "p05": 96.39769989304133
+      },
+      "memoryBytes": {
+        "initialHeap": 74973088,
+        "maxObservedHeap": 107270248,
+        "retainedHeapAfterGc": 74737136,
+        "initialRss": 452296704,
+        "maxObservedRss": 452296704,
+        "retainedRssAfterGc": 451723264,
+        "initialExternal": 9086038,
+        "maxObservedExternal": 12390014,
+        "retainedExternalAfterGc": 11975294,
+        "initialArrayBuffers": 2221955,
+        "maxObservedArrayBuffers": 6818179,
+        "retainedArrayBuffersAfterGc": 2221955
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileParseOnlyMLTNative",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "phase": "parse-only",
+          "sourceLayer": "road"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 15.10699300000033,
+        "p95": 24.631090999999742,
+        "min": 11.713627000000088,
+        "max": 24.631090999999742
+      },
+      "throughputPerSecond": {
+        "median": 264.77804020958456,
+        "p05": 162.39637943768068
+      },
+      "memoryBytes": {
+        "initialHeap": 74031808,
+        "maxObservedHeap": 105474584,
+        "retainedHeapAfterGc": 73984416,
+        "initialRss": 471040000,
+        "maxObservedRss": 478511104,
+        "retainedRssAfterGc": 478511104,
+        "initialExternal": 15882307,
+        "maxObservedExternal": 21909684,
+        "retainedExternalAfterGc": 21909684,
+        "initialArrayBuffers": 1942718,
+        "maxObservedArrayBuffers": 16337849,
+        "retainedArrayBuffersAfterGc": 11311953
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileEndToEndMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "phase": "end-to-end"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 25.309655999999904,
+        "p95": 33.76957700000003,
+        "min": 24.423059000000194,
+        "max": 33.76957700000003
+      },
+      "throughputPerSecond": {
+        "median": 158.04244830510598,
+        "p05": 118.44981060911711
+      },
+      "memoryBytes": {
+        "initialHeap": 73704848,
+        "maxObservedHeap": 106214264,
+        "retainedHeapAfterGc": 73522016,
+        "initialRss": 471769088,
+        "maxObservedRss": 474128384,
+        "retainedRssAfterGc": 472219648,
+        "initialExternal": 15445862,
+        "maxObservedExternal": 17101257,
+        "retainedExternalAfterGc": 11545910,
+        "initialArrayBuffers": 9874067,
+        "maxObservedArrayBuffers": 11529422,
+        "retainedArrayBuffersAfterGc": 2221955
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 2026424,
+          "p95": 2026424,
+          "min": 2026424,
+          "max": 2026424
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltRealTileEndToEndMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "14-8802-5374",
+          "14-8802-5375",
+          "14-8803-5374",
+          "14-8803-5375"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "phase": "end-to-end"
+        },
+        "operation": "tile",
+        "operationsPerIteration": 4
+      },
+      "durationMs": {
+        "median": 25.612167000000227,
+        "p95": 54.609669000000395,
+        "min": 18.361409000000094,
+        "max": 54.609669000000395
+      },
+      "throughputPerSecond": {
+        "median": 156.17577380312898,
+        "p05": 73.24710208369824
+      },
+      "memoryBytes": {
+        "initialHeap": 74172104,
+        "maxObservedHeap": 104265352,
+        "retainedHeapAfterGc": 74064264,
+        "initialRss": 472358912,
+        "maxObservedRss": 481927168,
+        "retainedRssAfterGc": 481927168,
+        "initialExternal": 19438198,
+        "maxObservedExternal": 25274086,
+        "retainedExternalAfterGc": 23510107,
+        "initialArrayBuffers": 1795576,
+        "maxObservedArrayBuffers": 19702251,
+        "retainedArrayBuffersAfterGc": 17593160
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 1600045,
+          "p95": 1600045,
+          "min": 1600045,
+          "max": 1600045
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 10554930,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 40,
+          "decodedColumns": 120,
+          "decodedValues": 73050,
+          "decodedColumnBytes": 1475270
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 1055493,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 4,
+          "decodedColumns": 12,
+          "decodedValues": 7305,
+          "decodedColumnBytes": 147527
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtBuildingDecodeMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "corpus": "building",
+          "layers": "building",
+          "propertyColumns": 4
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 23.42962200000011,
+        "p95": 38.705547000000024,
+        "min": 22.5423209999999,
+        "max": 38.705547000000024
+      },
+      "throughputPerSecond": {
+        "median": 42.68101295018739,
+        "p05": 25.836090108738144
+      },
+      "memoryBytes": {
+        "initialHeap": 72706496,
+        "maxObservedHeap": 104635672,
+        "retainedHeapAfterGc": 72390056,
+        "initialRss": 460775424,
+        "maxObservedRss": 461037568,
+        "retainedRssAfterGc": 461037568,
+        "initialExternal": 7339833,
+        "maxObservedExternal": 7339833,
+        "retainedExternalAfterGc": 7192417,
+        "initialArrayBuffers": 1620582,
+        "maxObservedArrayBuffers": 1620582,
+        "retainedArrayBuffersAfterGc": 1620582
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtBuildingDecodeMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "corpus": "building",
+          "layers": "building",
+          "propertyColumns": 4
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 7.90142700000024,
+        "p95": 22.537329000000227,
+        "min": 6.855082999999922,
+        "max": 22.537329000000227
+      },
+      "throughputPerSecond": {
+        "median": 126.55941768492826,
+        "p05": 44.37083027895586
+      },
+      "memoryBytes": {
+        "initialHeap": 72996904,
+        "maxObservedHeap": 89981488,
+        "retainedHeapAfterGc": 72731384,
+        "initialRss": 457535488,
+        "maxObservedRss": 467300352,
+        "retainedRssAfterGc": 467132416,
+        "initialExternal": 15010562,
+        "maxObservedExternal": 24427927,
+        "retainedExternalAfterGc": 24427927,
+        "initialArrayBuffers": 1481182,
+        "maxObservedArrayBuffers": 18856092,
+        "retainedArrayBuffersAfterGc": 4921156
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 60,
+          "decodedValues": 262560,
+          "decodedColumnBytes": 8914620
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 6,
+          "decodedValues": 26256,
+          "decodedColumnBytes": 891462
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtRoadLabelsDecodeMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "corpus": "roads-labels",
+          "layers": "transportation,transportation_name,poi",
+          "propertyColumns": 15
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 14.824619999999868,
+        "p95": 42.8839710000002,
+        "min": 13.67338400000017,
+        "max": 42.8839710000002
+      },
+      "throughputPerSecond": {
+        "median": 67.45535467350994,
+        "p05": 23.318736037760946
+      },
+      "memoryBytes": {
+        "initialHeap": 72690184,
+        "maxObservedHeap": 99909184,
+        "retainedHeapAfterGc": 72405024,
+        "initialRss": 453345280,
+        "maxObservedRss": 453345280,
+        "retainedRssAfterGc": 453177344,
+        "initialExternal": 7351200,
+        "maxObservedExternal": 7351200,
+        "retainedExternalAfterGc": 7192417,
+        "initialArrayBuffers": 1620582,
+        "maxObservedArrayBuffers": 1620582,
+        "retainedArrayBuffersAfterGc": 1620582
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtRoadLabelsDecodeMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "corpus": "roads-labels",
+          "layers": "transportation,transportation_name,poi",
+          "propertyColumns": 15
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 24.90591799999993,
+        "p95": 66.0700509999997,
+        "min": 22.69523500000014,
+        "max": 66.0700509999997
+      },
+      "throughputPerSecond": {
+        "median": 40.151099830972015,
+        "p05": 15.135450705191746
+      },
+      "memoryBytes": {
+        "initialHeap": 73144608,
+        "maxObservedHeap": 121630328,
+        "retainedHeapAfterGc": 72905024,
+        "initialRss": 464936960,
+        "maxObservedRss": 472883200,
+        "retainedRssAfterGc": 472883200,
+        "initialExternal": 10952545,
+        "maxObservedExternal": 15067001,
+        "retainedExternalAfterGc": 14682217,
+        "initialArrayBuffers": 1481182,
+        "maxObservedArrayBuffers": 9495166,
+        "retainedArrayBuffersAfterGc": 7104011
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 30,
+          "decodedColumns": 210,
+          "decodedValues": 792820,
+          "decodedColumnBytes": 6471660
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 3,
+          "decodedColumns": 21,
+          "decodedValues": 79282,
+          "decodedColumnBytes": 647166
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtLowZoomLabelsDecodeMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/3/4/2"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "corpus": "lowzoom-labels",
+          "layers": "boundary,place,water_name",
+          "propertyColumns": 12
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 22.634892000000036,
+        "p95": 37.028069000000414,
+        "min": 21.221761000000242,
+        "max": 37.028069000000414
+      },
+      "throughputPerSecond": {
+        "median": 44.17957903223034,
+        "p05": 27.00653928240192
+      },
+      "memoryBytes": {
+        "initialHeap": 72695336,
+        "maxObservedHeap": 106004976,
+        "retainedHeapAfterGc": 72375024,
+        "initialRss": 455053312,
+        "maxObservedRss": 455446528,
+        "retainedRssAfterGc": 455446528,
+        "initialExternal": 6858940,
+        "maxObservedExternal": 6858940,
+        "retainedExternalAfterGc": 6700157,
+        "initialArrayBuffers": 1128322,
+        "maxObservedArrayBuffers": 1128322,
+        "retainedArrayBuffersAfterGc": 1128322
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOmtLowZoomLabelsDecodeMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/3/4/2"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "corpus": "lowzoom-labels",
+          "layers": "boundary,place,water_name",
+          "propertyColumns": 12
+        },
+        "operation": "tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 7.940078000000085,
+        "p95": 19.171065999999882,
+        "min": 7.569373999999698,
+        "max": 19.171065999999882
+      },
+      "throughputPerSecond": {
+        "median": 125.94334715603415,
+        "p05": 52.161940290644566
+      },
+      "memoryBytes": {
+        "initialHeap": 73128384,
+        "maxObservedHeap": 96732744,
+        "retainedHeapAfterGc": 72916520,
+        "initialRss": 449589248,
+        "maxObservedRss": 453128192,
+        "retainedRssAfterGc": 452816896,
+        "initialExternal": 9847968,
+        "maxObservedExternal": 13546670,
+        "retainedExternalAfterGc": 13546670,
+        "initialArrayBuffers": 975005,
+        "maxObservedArrayBuffers": 7974835,
+        "retainedArrayBuffersAfterGc": 5893834
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 30,
+          "decodedColumns": 180,
+          "decodedValues": 134380,
+          "decodedColumnBytes": 3410470
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 3,
+          "decodedColumns": 18,
+          "decodedValues": 13438,
+          "decodedColumnBytes": 341047
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltWorkerParseOnlySyntheticSymbolMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/lines-polygons-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "layerFamily": "symbol",
+          "featuresPerLayer": 640
+        },
+        "operation": "bucket feature",
+        "operationsPerIteration": 640
+      },
+      "durationMs": {
+        "median": 31.55663800000002,
+        "p95": 87.25160100000039,
+        "min": 28.45168700000022,
+        "max": 87.25160100000039
+      },
+      "throughputPerSecond": {
+        "median": 20280.99444560601,
+        "p05": 7335.108956911829
+      },
+      "memoryBytes": {
+        "initialHeap": 75558832,
+        "maxObservedHeap": 108235248,
+        "retainedHeapAfterGc": 75252216,
+        "initialRss": 454189056,
+        "maxObservedRss": 455237632,
+        "retainedRssAfterGc": 452751360,
+        "initialExternal": 7515345,
+        "maxObservedExternal": 9959898,
+        "retainedExternalAfterGc": 7566482,
+        "initialArrayBuffers": 740083,
+        "maxObservedArrayBuffers": 4388063,
+        "retainedArrayBuffersAfterGc": 740083
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltWorkerParseOnlySyntheticSymbolMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/lines-polygons-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "layerFamily": "symbol",
+          "featuresPerLayer": 640
+        },
+        "operation": "bucket feature",
+        "operationsPerIteration": 640
+      },
+      "durationMs": {
+        "median": 31.545298000000003,
+        "p95": 55.49170400000003,
+        "min": 27.895364999999856,
+        "max": 55.49170400000003
+      },
+      "throughputPerSecond": {
+        "median": 20288.285119386095,
+        "p05": 11533.255493469793
+      },
+      "memoryBytes": {
+        "initialHeap": 74362000,
+        "maxObservedHeap": 107596400,
+        "retainedHeapAfterGc": 74150992,
+        "initialRss": 460038144,
+        "maxObservedRss": 460038144,
+        "retainedRssAfterGc": 460038144,
+        "initialExternal": 7702747,
+        "maxObservedExternal": 10184938,
+        "retainedExternalAfterGc": 8817472,
+        "initialArrayBuffers": 894967,
+        "maxObservedArrayBuffers": 4600303,
+        "retainedArrayBuffersAfterGc": 894967
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 4800,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 480,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltWorkerParseOnlySyntheticLineSymbolMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/lines-polygons-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "layerFamily": "symbol-line",
+          "featuresPerLayer": 640
+        },
+        "operation": "bucket feature",
+        "operationsPerIteration": 640
+      },
+      "durationMs": {
+        "median": 19.495314999999664,
+        "p95": 29.16969300000028,
+        "min": 15.688560999999936,
+        "max": 29.16969300000028
+      },
+      "throughputPerSecond": {
+        "median": 32828.400054064834,
+        "p05": 21940.5805882151
+      },
+      "memoryBytes": {
+        "initialHeap": 75468384,
+        "maxObservedHeap": 109141128,
+        "retainedHeapAfterGc": 75323944,
+        "initialRss": 467419136,
+        "maxObservedRss": 468205568,
+        "retainedRssAfterGc": 468205568,
+        "initialExternal": 6584753,
+        "maxObservedExternal": 6584753,
+        "retainedExternalAfterGc": 6495098,
+        "initialArrayBuffers": 740083,
+        "maxObservedArrayBuffers": 923263,
+        "retainedArrayBuffersAfterGc": 740083
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltWorkerParseOnlySyntheticLineSymbolMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/lines-polygons-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "layerFamily": "symbol-line",
+          "featuresPerLayer": 640
+        },
+        "operation": "bucket feature",
+        "operationsPerIteration": 640
+      },
+      "durationMs": {
+        "median": 19.848998000000392,
+        "p95": 32.24624199999971,
+        "min": 16.252204999999776,
+        "max": 32.24624199999971
+      },
+      "throughputPerSecond": {
+        "median": 32243.441205444593,
+        "p05": 19847.27398622158
+      },
+      "memoryBytes": {
+        "initialHeap": 74403928,
+        "maxObservedHeap": 104888384,
+        "retainedHeapAfterGc": 74320136,
+        "initialRss": 457900032,
+        "maxObservedRss": 460128256,
+        "retainedRssAfterGc": 457117696,
+        "initialExternal": 6742715,
+        "maxObservedExternal": 6742715,
+        "retainedExternalAfterGc": 6662282,
+        "initialArrayBuffers": 1170920,
+        "maxObservedArrayBuffers": 1170920,
+        "retainedArrayBuffersAfterGc": 894967
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 6400,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 640,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered0MVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "rendered",
+          "cardinality": "0",
+          "expectedResults": 0
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.1717239999998128,
+        "p95": 1.6735239999998157,
+        "min": 0.888901999999689,
+        "max": 1.6735239999998157
+      },
+      "throughputPerSecond": {
+        "median": 853.4433023477882,
+        "p05": 597.54147535387
+      },
+      "memoryBytes": {
+        "initialHeap": 73470816,
+        "maxObservedHeap": 79416952,
+        "retainedHeapAfterGc": 73201888,
+        "initialRss": 443723776,
+        "maxObservedRss": 443723776,
+        "retainedRssAfterGc": 443723776,
+        "initialExternal": 6632743,
+        "maxObservedExternal": 6632743,
+        "retainedExternalAfterGc": 6312046,
+        "initialArrayBuffers": 740211,
+        "maxObservedArrayBuffers": 740211,
+        "retainedArrayBuffersAfterGc": 740211
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered0MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "rendered",
+          "cardinality": "0",
+          "expectedResults": 0
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.0193160000003445,
+        "p95": 2.489498999999796,
+        "min": 0.5915500000000975,
+        "max": 2.489498999999796
+      },
+      "throughputPerSecond": {
+        "median": 981.0500374757798,
+        "p05": 401.6872471128054
+      },
+      "memoryBytes": {
+        "initialHeap": 73367752,
+        "maxObservedHeap": 78028104,
+        "retainedHeapAfterGc": 73128160,
+        "initialRss": 447807488,
+        "maxObservedRss": 447807488,
+        "retainedRssAfterGc": 447807488,
+        "initialExternal": 6664316,
+        "maxObservedExternal": 6664316,
+        "retainedExternalAfterGc": 6343698,
+        "initialArrayBuffers": 771863,
+        "maxObservedArrayBuffers": 771863,
+        "retainedArrayBuffersAfterGc": 771863
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered1MVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "rendered",
+          "cardinality": "1",
+          "expectedResults": 1
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.3478989999998703,
+        "p95": 1.908172000000377,
+        "min": 1.0765780000001541,
+        "max": 1.908172000000377
+      },
+      "throughputPerSecond": {
+        "median": 741.8953497258298,
+        "p05": 524.0617722091102
+      },
+      "memoryBytes": {
+        "initialHeap": 73476568,
+        "maxObservedHeap": 79480600,
+        "retainedHeapAfterGc": 73234040,
+        "initialRss": 451522560,
+        "maxObservedRss": 451784704,
+        "retainedRssAfterGc": 451784704,
+        "initialExternal": 6621376,
+        "maxObservedExternal": 6621376,
+        "retainedExternalAfterGc": 6312046,
+        "initialArrayBuffers": 740211,
+        "maxObservedArrayBuffers": 740211,
+        "retainedArrayBuffersAfterGc": 740211
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered1MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "rendered",
+          "cardinality": "1",
+          "expectedResults": 1
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.2415109999997185,
+        "p95": 1.9407000000001062,
+        "min": 0.8691020000001117,
+        "max": 1.9407000000001062
+      },
+      "throughputPerSecond": {
+        "median": 805.4701086017174,
+        "p05": 515.2779924769131
+      },
+      "memoryBytes": {
+        "initialHeap": 73384536,
+        "maxObservedHeap": 78116560,
+        "retainedHeapAfterGc": 73187384,
+        "initialRss": 452923392,
+        "maxObservedRss": 452923392,
+        "retainedRssAfterGc": 452923392,
+        "initialExternal": 6664316,
+        "maxObservedExternal": 6664316,
+        "retainedExternalAfterGc": 6343698,
+        "initialArrayBuffers": 771863,
+        "maxObservedArrayBuffers": 771863,
+        "retainedArrayBuffersAfterGc": 771863
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 10,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 10,
+          "queryGeometriesLoaded": 10,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 1,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 1,
+          "queryGeometriesLoaded": 1,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered10MVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "rendered",
+          "cardinality": "10",
+          "expectedResults": 10
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.3120069999999942,
+        "p95": 2.302516000000196,
+        "min": 1.033002000000124,
+        "max": 2.302516000000196
+      },
+      "throughputPerSecond": {
+        "median": 762.191055383092,
+        "p05": 434.30751404112493
+      },
+      "memoryBytes": {
+        "initialHeap": 73506040,
+        "maxObservedHeap": 79640616,
+        "retainedHeapAfterGc": 73254816,
+        "initialRss": 454828032,
+        "maxObservedRss": 454828032,
+        "retainedRssAfterGc": 454828032,
+        "initialExternal": 6632743,
+        "maxObservedExternal": 6632743,
+        "retainedExternalAfterGc": 6312046,
+        "initialArrayBuffers": 740211,
+        "maxObservedArrayBuffers": 740211,
+        "retainedArrayBuffersAfterGc": 740211
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRendered10MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "rendered",
+          "cardinality": "10",
+          "expectedResults": 10
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.2809460000003128,
+        "p95": 2.1326669999998558,
+        "min": 0.8092440000000352,
+        "max": 2.1326669999998558
+      },
+      "throughputPerSecond": {
+        "median": 780.6730338357401,
+        "p05": 468.89645687773464
+      },
+      "memoryBytes": {
+        "initialHeap": 73422328,
+        "maxObservedHeap": 78333392,
+        "retainedHeapAfterGc": 73203152,
+        "initialRss": 454569984,
+        "maxObservedRss": 454701056,
+        "retainedRssAfterGc": 454832128,
+        "initialExternal": 6664524,
+        "maxObservedExternal": 6664524,
+        "retainedExternalAfterGc": 6343698,
+        "initialArrayBuffers": 771863,
+        "maxObservedArrayBuffers": 771863,
+        "retainedArrayBuffersAfterGc": 771863
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 100,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 100,
+          "queryGeometriesLoaded": 100,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 10,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 10,
+          "queryGeometriesLoaded": 10,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRenderedManyMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "rendered",
+          "cardinality": "many",
+          "expectedResults": 640
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 2.888310000000274,
+        "p95": 5.03269999999975,
+        "min": 2.3993900000000394,
+        "max": 5.03269999999975
+      },
+      "throughputPerSecond": {
+        "median": 346.223223961384,
+        "p05": 198.70049873826173
+      },
+      "memoryBytes": {
+        "initialHeap": 73480864,
+        "maxObservedHeap": 89277608,
+        "retainedHeapAfterGc": 73139928,
+        "initialRss": 449376256,
+        "maxObservedRss": 449376256,
+        "retainedRssAfterGc": 449376256,
+        "initialExternal": 6632743,
+        "maxObservedExternal": 6632743,
+        "retainedExternalAfterGc": 6312046,
+        "initialArrayBuffers": 740211,
+        "maxObservedArrayBuffers": 740211,
+        "retainedArrayBuffersAfterGc": 740211
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQueryRenderedManyMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "rendered",
+          "cardinality": "many",
+          "expectedResults": 640
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 8.906233000000157,
+        "p95": 9.738795999999638,
+        "min": 8.669616000000133,
+        "max": 9.738795999999638
+      },
+      "throughputPerSecond": {
+        "median": 112.28091607304485,
+        "p05": 102.6820974584576
+      },
+      "memoryBytes": {
+        "initialHeap": 73438672,
+        "maxObservedHeap": 92974712,
+        "retainedHeapAfterGc": 73094216,
+        "initialRss": 443961344,
+        "maxObservedRss": 443961344,
+        "retainedRssAfterGc": 443961344,
+        "initialExternal": 6664108,
+        "maxObservedExternal": 6664108,
+        "retainedExternalAfterGc": 6343698,
+        "initialArrayBuffers": 771863,
+        "maxObservedArrayBuffers": 771863,
+        "retainedArrayBuffersAfterGc": 771863
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 6400,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 6400,
+          "queryGeometriesLoaded": 6400,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 640,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource1PctMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "source",
+          "selectivity": "1pct",
+          "expectedResults": 6
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 0.8797370000002047,
+        "p95": 1.1513449999997647,
+        "min": 0.7124830000002476,
+        "max": 1.1513449999997647
+      },
+      "throughputPerSecond": {
+        "median": 1136.7033556617118,
+        "p05": 868.5493922327403
+      },
+      "memoryBytes": {
+        "initialHeap": 73345032,
+        "maxObservedHeap": 75514312,
+        "retainedHeapAfterGc": 73038728,
+        "initialRss": 459534336,
+        "maxObservedRss": 459534336,
+        "retainedRssAfterGc": 459796480,
+        "initialExternal": 6620224,
+        "maxObservedExternal": 6620224,
+        "retainedExternalAfterGc": 6310894,
+        "initialArrayBuffers": 739059,
+        "maxObservedArrayBuffers": 739059,
+        "retainedArrayBuffersAfterGc": 739059
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource1PctMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "source",
+          "selectivity": "1pct",
+          "expectedResults": 6
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 0.1299410000001444,
+        "p95": 0.5424839999996038,
+        "min": 0.09660699999994904,
+        "max": 0.5424839999996038
+      },
+      "throughputPerSecond": {
+        "median": 7695.800401712228,
+        "p05": 1843.3723390933746
+      },
+      "memoryBytes": {
+        "initialHeap": 73191712,
+        "maxObservedHeap": 73425120,
+        "retainedHeapAfterGc": 72900440,
+        "initialRss": 450207744,
+        "maxObservedRss": 450207744,
+        "retainedRssAfterGc": 450207744,
+        "initialExternal": 6684563,
+        "maxObservedExternal": 6684563,
+        "retainedExternalAfterGc": 6368146,
+        "initialArrayBuffers": 770711,
+        "maxObservedArrayBuffers": 796311,
+        "retainedArrayBuffersAfterGc": 770711
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 60,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 60,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 6,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 6,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource10PctMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "source",
+          "selectivity": "10pct",
+          "expectedResults": 64
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 0.25384600000006685,
+        "p95": 0.4766509999999471,
+        "min": 0.22215200000027835,
+        "max": 0.4766509999999471
+      },
+      "throughputPerSecond": {
+        "median": 3939.396326905827,
+        "p05": 2097.971052195655
+      },
+      "memoryBytes": {
+        "initialHeap": 73535344,
+        "maxObservedHeap": 75539520,
+        "retainedHeapAfterGc": 73029136,
+        "initialRss": 454496256,
+        "maxObservedRss": 454496256,
+        "retainedRssAfterGc": 454496256,
+        "initialExternal": 6620432,
+        "maxObservedExternal": 6620432,
+        "retainedExternalAfterGc": 6310894,
+        "initialArrayBuffers": 739059,
+        "maxObservedArrayBuffers": 739059,
+        "retainedArrayBuffersAfterGc": 739059
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource10PctMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "source",
+          "selectivity": "10pct",
+          "expectedResults": 64
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 0.2929380000000492,
+        "p95": 0.673265999999785,
+        "min": 0.2448779999999715,
+        "max": 0.673265999999785
+      },
+      "throughputPerSecond": {
+        "median": 3413.691634406707,
+        "p05": 1485.2970445564151
+      },
+      "memoryBytes": {
+        "initialHeap": 73213752,
+        "maxObservedHeap": 74052832,
+        "retainedHeapAfterGc": 72953360,
+        "initialRss": 452767744,
+        "maxObservedRss": 452767744,
+        "retainedRssAfterGc": 452767744,
+        "initialExternal": 6684563,
+        "maxObservedExternal": 6684563,
+        "retainedExternalAfterGc": 6368146,
+        "initialArrayBuffers": 770711,
+        "maxObservedArrayBuffers": 796311,
+        "retainedArrayBuffersAfterGc": 770711
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource100PctMVT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mvt",
+          "query": "source",
+          "selectivity": "100pct",
+          "expectedResults": 640
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 0.35094800000024406,
+        "p95": 0.4380630000000565,
+        "min": 0.31795199999987744,
+        "max": 0.4380630000000565
+      },
+      "throughputPerSecond": {
+        "median": 2849.424986035836,
+        "p05": 2282.77667824005
+      },
+      "memoryBytes": {
+        "initialHeap": 73411904,
+        "maxObservedHeap": 75583200,
+        "retainedHeapAfterGc": 73104304,
+        "initialRss": 448561152,
+        "maxObservedRss": 448561152,
+        "retainedRssAfterGc": 448561152,
+        "initialExternal": 6620224,
+        "maxObservedExternal": 6620224,
+        "retainedExternalAfterGc": 6310894,
+        "initialArrayBuffers": 739059,
+        "maxObservedArrayBuffers": 739059,
+        "retainedArrayBuffersAfterGc": 739059
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltQuerySource100PctMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "query": "source",
+          "selectivity": "100pct",
+          "expectedResults": 640
+        },
+        "operation": "query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 1.316736000000219,
+        "p95": 1.9375569999997424,
+        "min": 1.296256000000085,
+        "max": 1.9375569999997424
+      },
+      "throughputPerSecond": {
+        "median": 759.4536794010596,
+        "p05": 516.1138485216864
+      },
+      "memoryBytes": {
+        "initialHeap": 73169320,
+        "maxObservedHeap": 80015336,
+        "retainedHeapAfterGc": 72820712,
+        "initialRss": 445460480,
+        "maxObservedRss": 445460480,
+        "retainedRssAfterGc": 445591552,
+        "initialExternal": 6664192,
+        "maxObservedExternal": 6664192,
+        "retainedExternalAfterGc": 6342546,
+        "initialArrayBuffers": 770711,
+        "maxObservedArrayBuffers": 770711,
+        "retainedArrayBuffersAfterGc": 770711
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 6400,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 6400,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltFeatureStateRepeatedMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "updatesPerIteration": 100,
+          "stateDependentColumns": 1
+        },
+        "operation": "feature-state update",
+        "operationsPerIteration": 100
+      },
+      "durationMs": {
+        "median": 0.6754210000003695,
+        "p95": 1.0548429999998916,
+        "min": 0.620274999999765,
+        "max": 1.0548429999998916
+      },
+      "throughputPerSecond": {
+        "median": 148055.80519401276,
+        "p05": 94800.83766021131
+      },
+      "memoryBytes": {
+        "initialHeap": 73521584,
+        "maxObservedHeap": 82459488,
+        "retainedHeapAfterGc": 73185304,
+        "initialRss": 461692928,
+        "maxObservedRss": 461692928,
+        "retainedRssAfterGc": 461692928,
+        "initialExternal": 6914236,
+        "maxObservedExternal": 6914276,
+        "retainedExternalAfterGc": 6385303,
+        "initialArrayBuffers": 1059035,
+        "maxObservedArrayBuffers": 1059035,
+        "retainedArrayBuffersAfterGc": 813468
+      },
+      "measurements": {
+        "retainedBytes": {
+          "median": 13452,
+          "p95": 13452,
+          "min": 13452,
+          "max": 13452
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltMemoryLifecycleMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-lines-640-polygons-640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "phases": "load,query,feature-state,overzoom,reload",
+          "querySelectivity": "10pct",
+          "reloadAddsProperty": "category"
+        },
+        "operation": "lifecycle",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 198.52638000000024,
+        "p95": 215.11793299999954,
+        "min": 180.65675999999985,
+        "max": 215.11793299999954
+      },
+      "throughputPerSecond": {
+        "median": 5.0371139593639835,
+        "p05": 4.648612907599861
+      },
+      "memoryBytes": {
+        "initialHeap": 74002264,
+        "maxObservedHeap": 74652368,
+        "retainedHeapAfterGc": 74272272,
+        "initialRss": 461090816,
+        "maxObservedRss": 461090816,
+        "retainedRssAfterGc": 461090816,
+        "initialExternal": 6647767,
+        "maxObservedExternal": 6920346,
+        "retainedExternalAfterGc": 6647767,
+        "initialArrayBuffers": 827065,
+        "maxObservedArrayBuffers": 1226303,
+        "retainedArrayBuffersAfterGc": 827065
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 220832,
+          "p95": 220832,
+          "min": 220832,
+          "max": 220832
+        },
+        "retainedBytes": {
+          "median": 96446,
+          "p95": 96446,
+          "min": 96446,
+          "max": 96446
+        },
+        "values": {
+          "queryResults": {
+            "median": 64,
+            "p95": 64,
+            "min": 64,
+            "max": 64
+          },
+          "overzoomBytes": {
+            "median": 3320,
+            "p95": 3320,
+            "min": 3320,
+            "max": 3320
+          }
+        },
+        "phaseMemoryBytes": {
+          "load": {
+            "heapUsed": {
+              "median": 74368016,
+              "p95": 74492448,
+              "min": 74122312,
+              "max": 74492448
+            },
+            "rss": {
+              "median": 461090816,
+              "p95": 461090816,
+              "min": 461090816,
+              "max": 461090816
+            },
+            "external": {
+              "median": 6920346,
+              "p95": 6920346,
+              "min": 6671479,
+              "max": 6920346
+            },
+            "arrayBuffers": {
+              "median": 1026684,
+              "p95": 1226303,
+              "min": 1026684,
+              "max": 1226303
+            }
+          },
+          "query": {
+            "heapUsed": {
+              "median": 74502808,
+              "p95": 74628760,
+              "min": 74255640,
+              "max": 74628760
+            },
+            "rss": {
+              "median": 461090816,
+              "p95": 461090816,
+              "min": 461090816,
+              "max": 461090816
+            },
+            "external": {
+              "median": 6643411,
+              "p95": 6643411,
+              "min": 6643411,
+              "max": 6643411
+            },
+            "arrayBuffers": {
+              "median": 1051096,
+              "p95": 1071576,
+              "min": 1051096,
+              "max": 1071576
+            }
+          },
+          "feature-state": {
+            "heapUsed": {
+              "median": 74380136,
+              "p95": 74506688,
+              "min": 74128696,
+              "max": 74506688
+            },
+            "rss": {
+              "median": 461090816,
+              "p95": 461090816,
+              "min": 461090816,
+              "max": 461090816
+            },
+            "external": {
+              "median": 6622931,
+              "p95": 6622931,
+              "min": 6622931,
+              "max": 6622931
+            },
+            "arrayBuffers": {
+              "median": 1051096,
+              "p95": 1051096,
+              "min": 1051096,
+              "max": 1051096
+            }
+          },
+          "overzoom": {
+            "heapUsed": {
+              "median": 74432528,
+              "p95": 74558152,
+              "min": 74179112,
+              "max": 74558152
+            },
+            "rss": {
+              "median": 461090816,
+              "p95": 461090816,
+              "min": 461090816,
+              "max": 461090816
+            },
+            "external": {
+              "median": 6681538,
+              "p95": 6681538,
+              "min": 6681538,
+              "max": 6681538
+            },
+            "arrayBuffers": {
+              "median": 1070808,
+              "p95": 1109703,
+              "min": 1070808,
+              "max": 1109703
+            }
+          },
+          "reload": {
+            "heapUsed": {
+              "median": 74556584,
+              "p95": 74649960,
+              "min": 74279368,
+              "max": 74649960
+            },
+            "rss": {
+              "median": 461090816,
+              "p95": 461090816,
+              "min": 461090816,
+              "max": 461090816
+            },
+            "external": {
+              "median": 6768906,
+              "p95": 6768906,
+              "min": 6768906,
+              "max": 6768906
+            },
+            "arrayBuffers": {
+              "median": 1075932,
+              "p95": 1075932,
+              "min": 1075932,
+              "max": 1075932
+            }
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 7040,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 3200,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 931260,
+          "rawTileMainThreadDecodes": 10,
+          "decodedLayers": 20,
+          "decodedColumns": 110,
+          "decodedValues": 70400,
+          "decodedColumnBytes": 549360
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 704,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 320,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 93126,
+          "rawTileMainThreadDecodes": 1,
+          "decodedLayers": 2,
+          "decodedColumns": 11,
+          "decodedValues": 7040,
+          "decodedColumnBytes": 54936
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltTransferRawCopyMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "transferStrategy": "raw-copy",
+          "querySelectivity": "10pct",
+          "outputPropertiesRead": true,
+          "outputGeometryRead": true
+        },
+        "operation": "transfer and first query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 2.1798429999998916,
+        "p95": 4.113256000000092,
+        "min": 1.83964399999968,
+        "max": 4.113256000000092
+      },
+      "throughputPerSecond": {
+        "median": 458.7486346493989,
+        "p05": 243.11640218843115
+      },
+      "memoryBytes": {
+        "initialHeap": 73338624,
+        "maxObservedHeap": 78693480,
+        "retainedHeapAfterGc": 73250600,
+        "initialRss": 449146880,
+        "maxObservedRss": 449146880,
+        "retainedRssAfterGc": 448991232,
+        "initialExternal": 7100868,
+        "maxObservedExternal": 7100868,
+        "retainedExternalAfterGc": 6993690,
+        "initialArrayBuffers": 1236330,
+        "maxObservedArrayBuffers": 1421855,
+        "retainedArrayBuffersAfterGc": 754735
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 20796,
+          "p95": 20796,
+          "min": 20796,
+          "max": 20796
+        },
+        "retainedBytes": {
+          "median": 20796,
+          "p95": 20796,
+          "min": 20796,
+          "max": 20796
+        },
+        "values": {
+          "transferDurationMs": {
+            "median": 0.06394799999998213,
+            "p95": 0.15399800000022879,
+            "min": 0.05507900000020527,
+            "max": 0.15399800000022879
+          },
+          "firstQueryDurationMs": {
+            "median": 2.0818169999997735,
+            "p95": 3.909515000000283,
+            "min": 1.7585109999999986,
+            "max": 3.909515000000283
+          },
+          "queryResults": {
+            "median": 64,
+            "p95": 64,
+            "min": 64,
+            "max": 64
+          },
+          "sharedBytes": {
+            "median": 0,
+            "p95": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 640,
+          "propertyProxyMisses": 0,
+          "pointObjects": 640,
+          "geometryPartsMaterialized": 640,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 207960,
+          "rawTileMainThreadDecodes": 10,
+          "decodedLayers": 10,
+          "decodedColumns": 70,
+          "decodedValues": 44800,
+          "decodedColumnBytes": 354920
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 64,
+          "propertyProxyMisses": 0,
+          "pointObjects": 64,
+          "geometryPartsMaterialized": 64,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 20796,
+          "rawTileMainThreadDecodes": 1,
+          "decodedLayers": 1,
+          "decodedColumns": 7,
+          "decodedValues": 4480,
+          "decodedColumnBytes": 35492
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltTransferRawSharedMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "transferStrategy": "raw-shared",
+          "querySelectivity": "10pct",
+          "outputPropertiesRead": true,
+          "outputGeometryRead": true
+        },
+        "operation": "transfer and first query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 2.0726990000002843,
+        "p95": 3.1271379999998317,
+        "min": 1.60120999999981,
+        "max": 3.1271379999998317
+      },
+      "throughputPerSecond": {
+        "median": 482.46272131161487,
+        "p05": 319.7812184815809
+      },
+      "memoryBytes": {
+        "initialHeap": 73577152,
+        "maxObservedHeap": 78634104,
+        "retainedHeapAfterGc": 73254328,
+        "initialRss": 444526592,
+        "maxObservedRss": 444526592,
+        "retainedRssAfterGc": 444289024,
+        "initialExternal": 7028843,
+        "maxObservedExternal": 7028843,
+        "retainedExternalAfterGc": 6785730,
+        "initialArrayBuffers": 913558,
+        "maxObservedArrayBuffers": 1421855,
+        "retainedArrayBuffersAfterGc": 754735
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 0,
+          "p95": 0,
+          "min": 0,
+          "max": 0
+        },
+        "retainedBytes": {
+          "median": 20796,
+          "p95": 20796,
+          "min": 20796,
+          "max": 20796
+        },
+        "values": {
+          "transferDurationMs": {
+            "median": 0.07130200000028708,
+            "p95": 0.13361399999985224,
+            "min": 0.06273899999996502,
+            "max": 0.13361399999985224
+          },
+          "firstQueryDurationMs": {
+            "median": 1.9881089999998949,
+            "p95": 2.94710299999997,
+            "min": 1.5098829999997179,
+            "max": 2.94710299999997
+          },
+          "queryResults": {
+            "median": 64,
+            "p95": 64,
+            "min": 64,
+            "max": 64
+          },
+          "sharedBytes": {
+            "median": 20796,
+            "p95": 20796,
+            "min": 20796,
+            "max": 20796
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 640,
+          "propertyProxyMisses": 0,
+          "pointObjects": 640,
+          "geometryPartsMaterialized": 640,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 10,
+          "decodedLayers": 10,
+          "decodedColumns": 70,
+          "decodedValues": 44800,
+          "decodedColumnBytes": 354920
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 64,
+          "propertyProxyMisses": 0,
+          "pointObjects": 64,
+          "geometryPartsMaterialized": 64,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 1,
+          "decodedLayers": 1,
+          "decodedColumns": 7,
+          "decodedValues": 4480,
+          "decodedColumnBytes": 35492
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltTransferQuerySnapshotMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "transferStrategy": "query-snapshot",
+          "querySelectivity": "10pct",
+          "outputPropertiesRead": true,
+          "outputGeometryRead": true
+        },
+        "operation": "transfer and first query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 3.2600470000002133,
+        "p95": 10.577612000000045,
+        "min": 2.380979000000025,
+        "max": 10.577612000000045
+      },
+      "throughputPerSecond": {
+        "median": 306.744043874194,
+        "p05": 94.53929677133135
+      },
+      "memoryBytes": {
+        "initialHeap": 73313136,
+        "maxObservedHeap": 80624912,
+        "retainedHeapAfterGc": 73258624,
+        "initialRss": 448704512,
+        "maxObservedRss": 448704512,
+        "retainedRssAfterGc": 448512000,
+        "initialExternal": 7323128,
+        "maxObservedExternal": 7547290,
+        "retainedExternalAfterGc": 7547290,
+        "initialArrayBuffers": 754735,
+        "maxObservedArrayBuffers": 1975455,
+        "retainedArrayBuffersAfterGc": 916575
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 31178,
+          "p95": 31178,
+          "min": 31178,
+          "max": 31178
+        },
+        "retainedBytes": {
+          "median": 31178,
+          "p95": 31178,
+          "min": 31178,
+          "max": 31178
+        },
+        "values": {
+          "transferDurationMs": {
+            "median": 0.3309009999998125,
+            "p95": 0.9078859999999622,
+            "min": 0.2806080000000293,
+            "max": 0.9078859999999622
+          },
+          "firstQueryDurationMs": {
+            "median": 2.8792539999999462,
+            "p95": 9.604287000000113,
+            "min": 2.075431000000208,
+            "max": 9.604287000000113
+          },
+          "queryResults": {
+            "median": 64,
+            "p95": 64,
+            "min": 64,
+            "max": 64
+          },
+          "sharedBytes": {
+            "median": 0,
+            "p95": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 640,
+          "propertyProxyMisses": 0,
+          "pointObjects": 640,
+          "geometryPartsMaterialized": 640,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 207960,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 40,
+          "decodedColumns": 120,
+          "decodedValues": 76800,
+          "decodedColumnBytes": 677320
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 64,
+          "propertyProxyMisses": 0,
+          "pointObjects": 64,
+          "geometryPartsMaterialized": 64,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 20796,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 4,
+          "decodedColumns": 12,
+          "decodedValues": 7680,
+          "decodedColumnBytes": 67732
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltTransferFeatureTablesMLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/640-points"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "transferStrategy": "feature-tables",
+          "querySelectivity": "10pct",
+          "outputPropertiesRead": true,
+          "outputGeometryRead": true
+        },
+        "operation": "transfer and first query",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 3.125426999999945,
+        "p95": 4.711999999999989,
+        "min": 2.7434799999996358,
+        "max": 4.711999999999989
+      },
+      "throughputPerSecond": {
+        "median": 319.95628117374605,
+        "p05": 212.22410865874411
+      },
+      "memoryBytes": {
+        "initialHeap": 73075088,
+        "maxObservedHeap": 84690448,
+        "retainedHeapAfterGc": 73037088,
+        "initialRss": 453275648,
+        "maxObservedRss": 453799936,
+        "retainedRssAfterGc": 453742592,
+        "initialExternal": 7030447,
+        "maxObservedExternal": 7030447,
+        "retainedExternalAfterGc": 6789740,
+        "initialArrayBuffers": 1075005,
+        "maxObservedArrayBuffers": 1217905,
+        "retainedArrayBuffersAfterGc": 1203364
+      },
+      "measurements": {
+        "transferredBytes": {
+          "median": 35149,
+          "p95": 35149,
+          "min": 35149,
+          "max": 35149
+        },
+        "retainedBytes": {
+          "median": 35149,
+          "p95": 35149,
+          "min": 35149,
+          "max": 35149
+        },
+        "values": {
+          "transferDurationMs": {
+            "median": 1.8463980000001357,
+            "p95": 2.7095730000000913,
+            "min": 1.6988620000001902,
+            "max": 2.7095730000000913
+          },
+          "firstQueryDurationMs": {
+            "median": 1.2974599999997736,
+            "p95": 1.9534410000001117,
+            "min": 0.9205809999998564,
+            "max": 1.9534410000001117
+          },
+          "queryResults": {
+            "median": 64,
+            "p95": 64,
+            "min": 64,
+            "max": 64
+          },
+          "sharedBytes": {
+            "median": 0,
+            "p95": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 640,
+          "propertyObjects": 640,
+          "propertyProxyMisses": 0,
+          "pointObjects": 640,
+          "geometryPartsMaterialized": 640,
+          "queryCandidates": 6400,
+          "queryResults": 640,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 64,
+          "propertyObjects": 64,
+          "propertyProxyMisses": 0,
+          "pointObjects": 64,
+          "geometryPartsMaterialized": 64,
+          "queryCandidates": 640,
+          "queryResults": 64,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOverzoomZPlus1MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "zoomDelta": 1,
+          "sourceLayers": "building,transportation"
+        },
+        "operation": "overzoomed tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 27.188094000000092,
+        "p95": 39.434788000000026,
+        "min": 21.505634999999984,
+        "max": 39.434788000000026
+      },
+      "throughputPerSecond": {
+        "median": 36.78080559821503,
+        "p05": 25.35832067868602
+      },
+      "memoryBytes": {
+        "initialHeap": 73282600,
+        "maxObservedHeap": 107738112,
+        "retainedHeapAfterGc": 73023528,
+        "initialRss": 458514432,
+        "maxObservedRss": 461660160,
+        "retainedRssAfterGc": 460840960,
+        "initialExternal": 9590539,
+        "maxObservedExternal": 13011653,
+        "retainedExternalAfterGc": 10599711,
+        "initialArrayBuffers": 2404158,
+        "maxObservedArrayBuffers": 6737754,
+        "retainedArrayBuffersAfterGc": 4980996
+      },
+      "measurements": {
+        "retainedBytes": {
+          "median": 64523,
+          "p95": 64523,
+          "min": 64523,
+          "max": 64523
+        },
+        "values": {
+          "outputFeatures": {
+            "median": 1783,
+            "p95": 1783,
+            "min": 1783,
+            "max": 1783
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 17830,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 1783,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOverzoomZPlus2MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "zoomDelta": 2,
+          "sourceLayers": "building,transportation"
+        },
+        "operation": "overzoomed tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 22.197414999999637,
+        "p95": 34.05396799999971,
+        "min": 15.303989999999885,
+        "max": 34.05396799999971
+      },
+      "throughputPerSecond": {
+        "median": 45.05029076583991,
+        "p05": 29.365153570356572
+      },
+      "memoryBytes": {
+        "initialHeap": 73249880,
+        "maxObservedHeap": 106527912,
+        "retainedHeapAfterGc": 73002696,
+        "initialRss": 470118400,
+        "maxObservedRss": 471429120,
+        "retainedRssAfterGc": 471289856,
+        "initialExternal": 10089380,
+        "maxObservedExternal": 10445149,
+        "retainedExternalAfterGc": 10413421,
+        "initialArrayBuffers": 4221361,
+        "maxObservedArrayBuffers": 4873314,
+        "retainedArrayBuffersAfterGc": 4808834
+      },
+      "measurements": {
+        "retainedBytes": {
+          "median": 14235,
+          "p95": 14235,
+          "min": 14235,
+          "max": 14235
+        },
+        "values": {
+          "outputFeatures": {
+            "median": 405,
+            "p95": 405,
+            "min": 405,
+            "max": 405
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 4050,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 405,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltOverzoomZPlus4MLT",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "omt/14/8299/5635"
+        ],
+        "parameters": {
+          "encoding": "mlt",
+          "zoomDelta": 4,
+          "sourceLayers": "building,transportation"
+        },
+        "operation": "overzoomed tile",
+        "operationsPerIteration": 1
+      },
+      "durationMs": {
+        "median": 14.280640999999832,
+        "p95": 21.430421999999908,
+        "min": 11.883196000000225,
+        "max": 21.430421999999908
+      },
+      "throughputPerSecond": {
+        "median": 70.02486793134928,
+        "p05": 46.6626368813458
+      },
+      "memoryBytes": {
+        "initialHeap": 73238048,
+        "maxObservedHeap": 106866448,
+        "retainedHeapAfterGc": 72984064,
+        "initialRss": 446169088,
+        "maxObservedRss": 447348736,
+        "retainedRssAfterGc": 447332352,
+        "initialExternal": 9032265,
+        "maxObservedExternal": 10041153,
+        "retainedExternalAfterGc": 10022197,
+        "initialArrayBuffers": 2923109,
+        "maxObservedArrayBuffers": 4469318,
+        "retainedArrayBuffersAfterGc": 4409562
+      },
+      "measurements": {
+        "retainedBytes": {
+          "median": 1766,
+          "p95": 1766,
+          "min": 1766,
+          "max": 1766
+        },
+        "values": {
+          "outputFeatures": {
+            "median": 44,
+            "p95": 44,
+            "min": 44,
+            "max": 44
+          }
+        }
+      },
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 440,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 44,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 0,
+          "decodedColumns": 0,
+          "decodedValues": 0,
+          "decodedColumnBytes": 0
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns5ReadFew",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 5,
+          "readColumns": 2,
+          "features": 640,
+          "readMode": "few",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 1280
+      },
+      "durationMs": {
+        "median": 0.5877749999999651,
+        "p95": 1.4185130000000754,
+        "min": 0.4362530000003062,
+        "max": 1.4185130000000754
+      },
+      "throughputPerSecond": {
+        "median": 2177704.053421932,
+        "p05": 902353.3799125789
+      },
+      "memoryBytes": {
+        "initialHeap": 73076016,
+        "maxObservedHeap": 73686224,
+        "retainedHeapAfterGc": 72796424,
+        "initialRss": 449871872,
+        "maxObservedRss": 449871872,
+        "retainedRssAfterGc": 450002944,
+        "initialExternal": 6989126,
+        "maxObservedExternal": 6989126,
+        "retainedExternalAfterGc": 6614690,
+        "initialArrayBuffers": 751495,
+        "maxObservedArrayBuffers": 1042855,
+        "retainedArrayBuffersAfterGc": 768295
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 40,
+          "decodedValues": 25600,
+          "decodedColumnBytes": 168000
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 4,
+          "decodedValues": 2560,
+          "decodedColumnBytes": 16800
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns5ReadMany",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 5,
+          "readColumns": 5,
+          "features": 640,
+          "readMode": "many",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 3200
+      },
+      "durationMs": {
+        "median": 1.017891000000418,
+        "p95": 1.785092000000077,
+        "min": 0.8679360000000997,
+        "max": 1.785092000000077
+      },
+      "throughputPerSecond": {
+        "median": 3143755.0778999776,
+        "p05": 1792624.6938532367
+      },
+      "memoryBytes": {
+        "initialHeap": 73073592,
+        "maxObservedHeap": 77682256,
+        "retainedHeapAfterGc": 72844296,
+        "initialRss": 456028160,
+        "maxObservedRss": 456028160,
+        "retainedRssAfterGc": 456159232,
+        "initialExternal": 7061181,
+        "maxObservedExternal": 7061181,
+        "retainedExternalAfterGc": 6766410,
+        "initialArrayBuffers": 1281475,
+        "maxObservedArrayBuffers": 1281475,
+        "retainedArrayBuffersAfterGc": 751495
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 70,
+          "decodedValues": 44800,
+          "decodedColumnBytes": 318750
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 7,
+          "decodedValues": 4480,
+          "decodedColumnBytes": 31875
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns50ReadFew",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 50,
+          "readColumns": 2,
+          "features": 640,
+          "readMode": "few",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 1280
+      },
+      "durationMs": {
+        "median": 0.8808060000001205,
+        "p95": 3.187901999999667,
+        "min": 0.6794370000002345,
+        "max": 3.187901999999667
+      },
+      "throughputPerSecond": {
+        "median": 1453214.4422265799,
+        "p05": 401517.98894700455
+      },
+      "memoryBytes": {
+        "initialHeap": 73199968,
+        "maxObservedHeap": 75708712,
+        "retainedHeapAfterGc": 72980368,
+        "initialRss": 452435968,
+        "maxObservedRss": 452435968,
+        "retainedRssAfterGc": 452435968,
+        "initialExternal": 8456322,
+        "maxObservedExternal": 8456322,
+        "retainedExternalAfterGc": 6725508,
+        "initialArrayBuffers": 2505317,
+        "maxObservedArrayBuffers": 2505317,
+        "retainedArrayBuffersAfterGc": 879113
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 40,
+          "decodedValues": 25600,
+          "decodedColumnBytes": 168000
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 4,
+          "decodedValues": 2560,
+          "decodedColumnBytes": 16800
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns50ReadMany",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 50,
+          "readColumns": 50,
+          "features": 640,
+          "readMode": "many",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 32000
+      },
+      "durationMs": {
+        "median": 6.74880499999972,
+        "p95": 10.061631999999918,
+        "min": 6.488248999999996,
+        "max": 10.061631999999918
+      },
+      "throughputPerSecond": {
+        "median": 4741580.176046178,
+        "p05": 3180398.567548511
+      },
+      "memoryBytes": {
+        "initialHeap": 73213024,
+        "maxObservedHeap": 104282768,
+        "retainedHeapAfterGc": 73032696,
+        "initialRss": 457547776,
+        "maxObservedRss": 457547776,
+        "retainedRssAfterGc": 457105408,
+        "initialExternal": 7315170,
+        "maxObservedExternal": 9067404,
+        "retainedExternalAfterGc": 7883636,
+        "initialArrayBuffers": 862313,
+        "maxObservedArrayBuffers": 3495569,
+        "retainedArrayBuffersAfterGc": 1954249
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 520,
+          "decodedValues": 332800,
+          "decodedColumnBytes": 2194700
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 52,
+          "decodedValues": 33280,
+          "decodedColumnBytes": 219470
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns200ReadFew",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 200,
+          "readColumns": 2,
+          "features": 640,
+          "readMode": "few",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 1280
+      },
+      "durationMs": {
+        "median": 1.4096559999998135,
+        "p95": 5.115709000000152,
+        "min": 1.2516590000000178,
+        "max": 5.115709000000152
+      },
+      "throughputPerSecond": {
+        "median": 908022.9502801885,
+        "p05": 250209.69722866607
+      },
+      "memoryBytes": {
+        "initialHeap": 73183792,
+        "maxObservedHeap": 82103936,
+        "retainedHeapAfterGc": 72978104,
+        "initialRss": 466755584,
+        "maxObservedRss": 466755584,
+        "retainedRssAfterGc": 466886656,
+        "initialExternal": 11951507,
+        "maxObservedExternal": 11980683,
+        "retainedExternalAfterGc": 7112117,
+        "initialArrayBuffers": 5013656,
+        "maxObservedArrayBuffers": 5013656,
+        "retainedArrayBuffersAfterGc": 1248922
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 40,
+          "decodedValues": 25600,
+          "decodedColumnBytes": 168000
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 4,
+          "decodedValues": 2560,
+          "decodedColumnBytes": 16800
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    },
+    {
+      "benchmark": "MltColumns200ReadMany",
+      "iterations": 10,
+      "warmup": 3,
+      "workload": {
+        "corpus": [
+          "synthetic/property-matrix"
+        ],
+        "parameters": {
+          "totalColumns": 200,
+          "readColumns": 200,
+          "features": 640,
+          "readMode": "many",
+          "nullableColumns": true,
+          "stringDictionaryColumns": true
+        },
+        "operation": "feature-column value",
+        "operationsPerIteration": 128000
+      },
+      "durationMs": {
+        "median": 26.584969999999885,
+        "p95": 38.15775500000018,
+        "min": 24.632434999999987,
+        "max": 38.15775500000018
+      },
+      "throughputPerSecond": {
+        "median": 4814750.590277159,
+        "p05": 3354495.043012866
+      },
+      "memoryBytes": {
+        "initialHeap": 73316440,
+        "maxObservedHeap": 103639016,
+        "retainedHeapAfterGc": 73347592,
+        "initialRss": 465522688,
+        "maxObservedRss": 465653760,
+        "retainedRssAfterGc": 465494016,
+        "initialExternal": 9731442,
+        "maxObservedExternal": 13374021,
+        "retainedExternalAfterGc": 13374021,
+        "initialArrayBuffers": 1248922,
+        "maxObservedArrayBuffers": 7802186,
+        "retainedArrayBuffersAfterGc": 7508322
+      },
+      "measurements": {},
+      "materializations": {
+        "total": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 10,
+          "decodedColumns": 2020,
+          "decodedValues": 1292800,
+          "decodedColumnBytes": 8597200
+        },
+        "perIteration": {
+          "workerFilterFallbackFeatures": 0,
+          "vectorTileFeatureWrappers": 0,
+          "propertyObjects": 0,
+          "propertyProxyMisses": 0,
+          "pointObjects": 0,
+          "geometryPartsMaterialized": 0,
+          "queryCandidates": 0,
+          "queryResults": 0,
+          "queryGeometriesLoaded": 0,
+          "overzoomFeaturesClipped": 0,
+          "overzoomPointObjects": 0,
+          "mvtReencodes": 0,
+          "rawTileBytesCopied": 0,
+          "rawTileMainThreadDecodes": 0,
+          "decodedLayers": 1,
+          "decodedColumns": 202,
+          "decodedValues": 129280,
+          "decodedColumnBytes": 859720
+        }
+      },
+      "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+      "node": "v26.7.0",
+      "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+      "platform": "linux-x64"
+    }
+  ],
+  "commit": "5f29885fe226bf712aaa127689a9cc70d0472eec",
+  "node": "v26.7.0",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1260P",
+  "platform": "linux-x64"
+}

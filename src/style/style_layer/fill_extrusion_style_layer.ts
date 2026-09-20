@@ -1,10 +1,12 @@
 import {type QueryIntersectsFeatureParams, StyleLayer} from '../style_layer.ts';
 import {FillExtrusionBucket} from '../../data/bucket/fill_extrusion_bucket.ts';
+import {ColumnarFillExtrusionBucket} from '../../data/bucket/columnar/columnar_fill_extrusion_bucket.ts';
 import {polygonIntersectsPolygon, polygonIntersectsMultiPolygon} from '../../util/intersection_tests.ts';
 import {translateDistance, translate} from '../query_utils.ts';
 import properties, {type FillExtrusionLayoutPropsPossiblyEvaluated, type FillExtrusionPaintPropsPossiblyEvaluated} from './fill_extrusion_style_layer_properties.g.ts';
 import {type mat4, vec4} from 'gl-matrix';
 import Point from '@mapbox/point-geometry';
+import {getGeometryPartCount, getGeometryPartLength, getGeometryX, getGeometryY, type FeatureGeometry} from '../../util/geometry_view.ts';
 
 import type {Layout, Transitionable, Transitioning, PossiblyEvaluated} from '../properties.ts';
 import type {LayerSpecification} from '@maplibre/maplibre-gl-style-spec';
@@ -29,7 +31,10 @@ export class FillExtrusionStyleLayer extends StyleLayer {
         super(layer, properties, globalState);
     }
 
-    createBucket(parameters: BucketParameters<FillExtrusionStyleLayer>): FillExtrusionBucket {
+    createBucket(parameters: BucketParameters<FillExtrusionStyleLayer>): FillExtrusionBucket | ColumnarFillExtrusionBucket {
+        if (parameters.encoding === 'mlt') {
+            return new ColumnarFillExtrusionBucket(parameters);
+        }
         return new FillExtrusionBucket(parameters);
     }
 
@@ -167,7 +172,7 @@ function checkIntersection(projectedBase: Point3D[][], projectedTop: Point3D[][]
  * different points can only be done once. This produced a measurable
  * performance improvement.
  */
-function projectExtrusion(geometry: Point[][], zBase: number, zTop: number, m: mat4): [Point3D[][], Point3D[][]] {
+function projectExtrusion(geometry: FeatureGeometry, zBase: number, zTop: number, m: mat4): [Point3D[][], Point3D[][]] {
     const projectedBase = [] as Point3D[][];
     const projectedTop = [] as Point3D[][];
     const baseXZ = m[8] * zBase;
@@ -179,12 +184,14 @@ function projectExtrusion(geometry: Point[][], zBase: number, zTop: number, m: m
     const topZZ = m[10] * zTop;
     const topWZ = m[11] * zTop;
 
-    for (const r of geometry) {
+    const partCount = getGeometryPartCount(geometry);
+    for (let partIndex = 0; partIndex < partCount; partIndex++) {
         const ringBase = [] as Point3D[];
         const ringTop = [] as Point3D[];
-        for (const p of r) {
-            const x = p.x;
-            const y = p.y;
+        const partLength = getGeometryPartLength(geometry, partIndex);
+        for (let pointIndex = 0; pointIndex < partLength; pointIndex++) {
+            const x = getGeometryX(geometry, partIndex, pointIndex);
+            const y = getGeometryY(geometry, partIndex, pointIndex);
 
             const sX = m[0] * x + m[4] * y + m[12];
             const sY = m[1] * x + m[5] * y + m[13];

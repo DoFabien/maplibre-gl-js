@@ -1,0 +1,92 @@
+{
+  "name": "14-8802-5374",
+  "buffers": [
+    {
+      "layer": "water",
+      "before": {
+        "vertices": 71,
+        "triangles": 59,
+        "lines": 71,
+        "bytes": 922
+      },
+      "after": {
+        "vertices": 71,
+        "triangles": 59,
+        "lines": 71,
+        "bytes": 922
+      }
+    },
+    {
+      "layer": "building",
+      "before": {
+        "vertices": 8032,
+        "triangles": 5552,
+        "lines": 8032,
+        "bytes": 97568
+      },
+      "after": {
+        "vertices": 8032,
+        "triangles": 5552,
+        "lines": 8032,
+        "bytes": 97568
+      }
+    },
+    {
+      "layer": "hillshade",
+      "before": {
+        "vertices": 16,
+        "triangles": 10,
+        "lines": 16,
+        "bytes": 188
+      },
+      "after": {
+        "vertices": 16,
+        "triangles": 10,
+        "lines": 16,
+        "bytes": 188
+      }
+    },
+    {
+      "layer": "landuse",
+      "before": {
+        "vertices": 784,
+        "triangles": 560,
+        "lines": 784,
+        "bytes": 9632
+      },
+      "after": {
+        "vertices": 784,
+        "triangles": 560,
+        "lines": 784,
+        "bytes": 9632
+      }
+    }
+  ],
+  "counters": {
+    "workerFilterFallbackFeatures": 0,
+    "vectorTileFeatureWrappers": 0,
+    "propertyObjects": 0,
+    "propertyProxyMisses": 0,
+    "pointObjects": 0,
+    "geometryPartsMaterialized": 0,
+    "queryCandidates": 0,
+    "queryResults": 0,
+    "estimatedQueryResultBytes": 0,
+    "queryGeometriesLoaded": 0,
+    "overzoomFeaturesClipped": 0,
+    "overzoomPointObjects": 0,
+    "mvtReencodes": 0,
+    "rawTileBytesCopied": 0,
+    "rawTileMainThreadDecodes": 0,
+    "decodedLayers": 0,
+    "decodedColumns": 0,
+    "decodedValues": 0,
+    "decodedColumnBytes": 0,
+    "temporaryScalarBuffers": 0,
+    "temporaryScalarValues": 0,
+    "coordinateTuples": 0,
+    "propertyDescriptors": 0,
+    "pretriangulatedFillFeatures": 1379,
+    "pretriangulatedFillTriangles": 6181
+  }
+}

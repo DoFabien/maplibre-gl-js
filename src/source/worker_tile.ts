@@ -1,4 +1,4 @@
-import {FeatureIndex} from '../data/feature_index.ts';
+import {FeatureIndex, type FeatureIndexBBox} from '../data/feature_index.ts';
 import {CollisionBoxArray} from '../data/array_types.g.ts';
 import {DictionaryCoder} from '../util/dictionary_coder.ts';
 import {warnOnce, mapObject} from '../util/util.ts';
@@ -7,6 +7,8 @@ import {GlyphAtlas} from '../render/glyph_atlas.ts';
 import {EvaluationParameters} from '../style/evaluation_parameters.ts';
 import {OverscaledTileID} from '../tile/tile_id.ts';
 import {type GetDashesResponse, MessageType, type GetGlyphsResponse, type GetImagesResponse} from '../util/actor_messages.ts';
+import {getMltFilterSupport, type MltFilterSupport} from '../data/filter/mlt/filter.ts';
+import {recordParseProfile, type ParseProfile} from '../data/bucket.ts';
 
 import type {Bucket, PopulateParameters} from '../data/bucket.ts';
 import type {IActor} from '../util/actor.ts';
@@ -14,11 +16,53 @@ import type {StyleLayer} from '../style/style_layer.ts';
 import type {StyleLayerIndex} from '../style/style_layer_index.ts';
 import type {
     WorkerTileParameters,
-    WorkerTileResult,
+    WorkerTileWithData,
 } from './worker_source.ts';
 import type {PromoteIdSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {VectorTileLike} from '@maplibre/vt-pbf';
 import type {SubdivisionGranularitySetting} from '../render/subdivision_granularity_settings.ts';
+import type {SelectionVector, TileLike} from '@maplibre/mlt';
+
+type ProfileContext = {
+    encoding?: 'mvt' | 'mlt';
+    sourceLayerId?: string;
+    layerId?: string;
+    layerType?: string;
+    featureCount?: number;
+    detail?: string;
+};
+
+const mltFilterSupportCache = new WeakMap<StyleLayer, {
+    filter: unknown;
+    support: MltFilterSupport;
+}>();
+
+const COLUMNAR_MLT_LAYER_TYPES = new Set(['fill', 'line', 'fill-extrusion', 'circle', 'symbol', 'heatmap']);
+
+function assertSupportedMltWorkerLayer(layer: StyleLayer, filterSupport: MltFilterSupport): void {
+    if (!COLUMNAR_MLT_LAYER_TYPES.has(layer.type)) {
+        throw new Error(`MLT no-materialization pipeline does not support ${layer.type} layer "${layer.id}".`);
+    }
+    if ('reason' in filterSupport) {
+        throw new Error(`MLT no-materialization pipeline does not support the filter for layer "${layer.id}": ${filterSupport.reason}`);
+    }
+}
+
+function getCachedMltFilterSupport(layer: StyleLayer, globalState: Record<string, unknown> | undefined): MltFilterSupport {
+    if (globalState && Object.keys(globalState).length > 0) {
+        return getMltFilterSupport(layer.filter, globalState);
+    }
+
+    const cached = mltFilterSupportCache.get(layer);
+    if (cached?.filter === layer.filter && cached !== undefined) {
+        return cached.support;
+    }
+
+    const support = getMltFilterSupport(layer.filter, globalState);
+    mltFilterSupportCache.set(layer, {filter: layer.filter, support});
+    return support;
+}
+
 export class WorkerTile {
     tileID: OverscaledTileID;
     uid: string | number;
@@ -31,6 +75,9 @@ export class WorkerTile {
     showCollisionBoxes: boolean;
     collectResourceTiming: boolean;
     returnDependencies: boolean;
+    encoding?: 'mvt' | 'mlt';
+    /** Parent coordinates for deferred queries of a columnar, directly clipped MLT tile. */
+    mltOverzoom?: TileLike;
 
     data: VectorTileLike;
     collisionBoxArray: CollisionBoxArray;
@@ -56,17 +103,28 @@ export class WorkerTile {
         this.collectResourceTiming = !!params.collectResourceTiming;
         this.returnDependencies = !!params.returnDependencies;
         this.promoteId = params.promoteId;
+        this.encoding = params.encoding;
+        if (params.encoding === 'mlt' && params.overzoomParameters) {
+            const {z, x, y} = params.overzoomParameters.maxZoomTileID;
+            this.mltOverzoom = {z, x, y};
+        }
         this.inFlightDependencies = [];
     }
 
-    async parse(data: VectorTileLike, layerIndex: StyleLayerIndex, availableImages: string[], actor: IActor, subdivisionGranularity: SubdivisionGranularitySetting): Promise<WorkerTileResult> {
+    async parse(data: VectorTileLike, layerIndex: StyleLayerIndex, availableImages: string[], actor: IActor, subdivisionGranularity: SubdivisionGranularitySetting, profile?: ParseProfile): Promise<WorkerTileWithData> {
+        const parseStart = performance.now();
+        const profileStartIndex = profile?.records.length ?? 0;
         this.data = data;
 
         this.collisionBoxArray = new CollisionBoxArray();
-        const sourceLayerCoder = new DictionaryCoder(Object.keys(data.layers).sort());
+        const sourceLayerNames = Object.keys(data.layers).sort();
+        const sourceLayerCoder = new DictionaryCoder(sourceLayerNames);
 
         const featureIndex = new FeatureIndex(this.tileID, this.promoteId);
+        featureIndex.mltOverzoom = this.mltOverzoom;
         featureIndex.bucketLayerIDs = [];
+        featureIndex.sourceLayerCoder = sourceLayerCoder;
+        if (this.encoding === 'mlt') featureIndex.sourceLayerNames = sourceLayerNames;
 
         const buckets: {[_: string]: Bucket} = {};
 
@@ -77,7 +135,29 @@ export class WorkerTile {
             glyphDependencies: {},
             dashDependencies: {},
             availableImages,
-            subdivisionGranularity
+            subdivisionGranularity,
+            profile
+        };
+        const recordProfileDuration = (phase: string, duration: number, context: ProfileContext = {}, kind: 'exclusive' | 'aggregate' = 'exclusive') => {
+            recordParseProfile(profile, {
+                phase,
+                duration,
+                kind,
+                encoding: this.encoding,
+                ...context
+            });
+        };
+        const recordProfile = (phase: string, start: number, context: ProfileContext = {}, kind: 'exclusive' | 'aggregate' = 'exclusive') => {
+            recordProfileDuration(phase, performance.now() - start, context, kind);
+        };
+        const finishNestedProfile = (phase: string, start: number, nestedRecordStart: number, context: ProfileContext = {}) => {
+            const duration = performance.now() - start;
+            const nestedExclusiveDuration = profile?.records
+                .slice(nestedRecordStart)
+                .filter((record) => record.kind !== 'aggregate')
+                .reduce((total, record) => total + record.duration, 0) ?? 0;
+            recordProfileDuration(`${phase}.self`, Math.max(0, duration - nestedExclusiveDuration), context);
+            recordProfileDuration(`${phase}.total`, duration, context, 'aggregate');
         };
 
         const layerFamilies = layerIndex.familiesBySource[this.source];
@@ -93,12 +173,30 @@ export class WorkerTile {
             }
 
             const sourceLayerIndex = sourceLayerCoder.encode(sourceLayerId);
-            const features = [];
-            for (let index = 0; index < sourceLayer.length; index++) {
-                const feature = sourceLayer.feature(index);
-                const id = featureIndex.getId(feature, sourceLayerId);
-                features.push({feature, id, index, sourceLayerIndex});
+            const featureTable = this.encoding === 'mlt' ? (sourceLayer as any).featureTable : undefined;
+            if (this.encoding === 'mlt' && !featureTable) {
+                throw new Error(`MLT layer "${sourceLayerId}" is missing its FeatureTable.`);
             }
+
+            // The legacy MVT pipeline consumes materialized features. MLT must never reach this
+            // helper: unsupported MLT layers and filters are rejected before bucket creation.
+            let allFeatures: Array<{feature: any; id: any; index: number; sourceLayerIndex: number}> | null = null;
+            const getAllFeatures = () => {
+                if (this.encoding === 'mlt') {
+                    throw new Error(`Internal error: MLT layer "${sourceLayerId}" reached the legacy feature materialization path.`);
+                }
+                if (!allFeatures) {
+                    const materializeStart = performance.now();
+                    allFeatures = [];
+                    for (let index = 0; index < sourceLayer.length; index++) {
+                        const feature = sourceLayer.feature(index);
+                        const id = featureIndex.getId(feature, sourceLayerId);
+                        allFeatures.push({feature, id, index, sourceLayerIndex});
+                    }
+                    recordProfile('materializeFeatures', materializeStart, {sourceLayerId, featureCount: sourceLayer.length});
+                }
+                return allFeatures;
+            };
 
             for (const family of layerFamilies[sourceLayerId]) {
                 const layer = family[0];
@@ -107,8 +205,21 @@ export class WorkerTile {
                     warnOnce(`layer.source = ${layer.source} does not equal this.source = ${this.source}`);
                 }
                 if (layer.isHidden(this.zoom, true)) continue;
+                const recalculateStart = performance.now();
                 recalculateLayers(family, this.zoom, availableImages);
+                recordProfile('recalculateLayer', recalculateStart, {sourceLayerId, layerId: layer.id, layerType: layer.type});
 
+                const globalState = layer.getGlobalState();
+                const filterSupportStart = performance.now();
+                const mltFilterSupport: MltFilterSupport = this.encoding === 'mlt'
+                    ? getCachedMltFilterSupport(layer, globalState)
+                    : {supported: true};
+                recordProfile('filterSupport', filterSupportStart, {sourceLayerId, layerId: layer.id, layerType: layer.type, detail: mltFilterSupport.supported ? 'supported' : ('reason' in mltFilterSupport ? mltFilterSupport.reason : 'unsupported')});
+                if (this.encoding === 'mlt') {
+                    assertSupportedMltWorkerLayer(layer, mltFilterSupport);
+                }
+
+                const createBucketStart = performance.now();
                 const bucket = buckets[layer.id] = layer.createBucket({
                     index: featureIndex.bucketLayerIDs.length,
                     layers: family,
@@ -117,14 +228,64 @@ export class WorkerTile {
                     overscaling: this.overscaling,
                     collisionBoxArray: this.collisionBoxArray,
                     sourceLayerIndex,
-                    sourceID: this.source
+                    sourceID: this.source,
+                    encoding: this.encoding
                 });
+                recordProfile('createBucket', createBucketStart, {sourceLayerId, layerId: layer.id, layerType: layer.type});
 
-                bucket.populate(features, options, this.tileID.canonical);
+                if (this.encoding === 'mlt') {
+                    if (!(bucket as any).isColumnar) {
+                        throw new Error(`MLT no-materialization v1 requires a columnar bucket for ${layer.type} layer "${layer.id}".`);
+                    }
+
+                    const populateStart = performance.now();
+                    const populateProfileStart = profile?.records.length ?? 0;
+                    options.skipLayerFeatureFilter = true;
+                    try {
+                        bucket.populate(featureTable, options, this.tileID.canonical);
+                    } finally {
+                        options.skipLayerFeatureFilter = false;
+                    }
+                    finishNestedProfile('bucket.populate', populateStart, populateProfileStart, {sourceLayerId, layerId: layer.id, layerType: layer.type, featureCount: featureTable.numFeatures, detail: 'columnar'});
+                    if (layer.type !== 'symbol' && featureTable.geometryVector) {
+                        const featureIndexStart = performance.now();
+                        const selectionVector = (bucket as any).featureIndexSelectionVector as SelectionVector | undefined;
+                        const bucketFeatureIndexBBoxes = (bucket as any).featureIndexBBoxes as Array<FeatureIndexBBox[] | FeatureIndexBBox> | undefined;
+                        if (!selectionVector) {
+                            throw new Error(`MLT columnar ${layer.type} bucket "${layer.id}" did not expose its feature-index selection.`);
+                        }
+                        for (let i = 0; i < selectionVector.limit; i++) {
+                            const selectedFeatureIndex = Number(selectionVector.getIndex(i));
+                            const bboxes = bucketFeatureIndexBBoxes?.[selectedFeatureIndex];
+                            if (bboxes) {
+                                if (typeof bboxes[0] === 'number') {
+                                    featureIndex.insertBBox(selectedFeatureIndex, sourceLayerIndex, featureIndex.bucketLayerIDs.length, bboxes as FeatureIndexBBox, layer.type === 'fill-extrusion');
+                                } else {
+                                    featureIndex.insertBBoxes(selectedFeatureIndex, sourceLayerIndex, featureIndex.bucketLayerIDs.length, bboxes as FeatureIndexBBox[], layer.type === 'fill-extrusion');
+                                }
+                            } else {
+                                featureIndex.insertFeatureTable(
+                                    featureTable,
+                                    selectedFeatureIndex,
+                                    sourceLayerIndex,
+                                    featureIndex.bucketLayerIDs.length,
+                                    layer.type === 'fill-extrusion'
+                                );
+                            }
+                        }
+                        recordProfile('featureIndex', featureIndexStart, {sourceLayerId, layerId: layer.id, layerType: layer.type, featureCount: selectionVector.limit, detail: bucketFeatureIndexBBoxes ? 'bucketBBoxes' : 'featureTable'});
+                    }
+                } else {
+                    const populateStart = performance.now();
+                    const populateProfileStart = profile?.records.length ?? 0;
+                    bucket.populate(getAllFeatures(), options, this.tileID.canonical);
+                    finishNestedProfile('bucket.populate', populateStart, populateProfileStart, {sourceLayerId, layerId: layer.id, layerType: layer.type, featureCount: allFeatures?.length, detail: 'legacy'});
+                }
                 featureIndex.bucketLayerIDs.push(family.map((l) => l.id));
             }
         }
 
+        const dependencyCollectStart = performance.now();
         const stacks = mapObject(options.glyphDependencies, (glyphs) => Object.keys(glyphs));
 
         for (const request of this.inFlightDependencies) {
@@ -162,16 +323,23 @@ export class WorkerTile {
             this.inFlightDependencies.push(abortController);
             getDashesPromise = actor.sendAsync({type: MessageType.getDashes, data: {dashes}}, abortController);
         }
+        recordProfile('dependencyCollect', dependencyCollectStart);
 
+        const dependencyFetchStart = performance.now();
         const [glyphMap, iconMap, patternMap, dashPositions] = await Promise.all([getGlyphsPromise, getIconsPromise, getPatternsPromise, getDashesPromise]);
+        recordProfile('dependencyFetch', dependencyFetchStart);
 
+        const atlasStart = performance.now();
         const glyphAtlas = new GlyphAtlas(glyphMap);
         const imageAtlas = new ImageAtlas(iconMap, patternMap);
+        recordProfile('atlasCreate', atlasStart);
 
         for (const key in buckets) {
             const bucket = buckets[key];
             if (!bucket.hasDependencies) continue;
 
+            const addFeaturesStart = performance.now();
+            const addFeaturesProfileStart = profile?.records.length ?? 0;
             recalculateLayers(bucket.layers, this.zoom, availableImages);
             bucket.addFeatures({
                 options,
@@ -185,9 +353,10 @@ export class WorkerTile {
                 dashPositions,
                 showCollisionBoxes: this.showCollisionBoxes
             });
+            finishNestedProfile(bucket.layers[0].type === 'symbol' ? 'symbolLayout' : 'bucket.addFeatures', addFeaturesStart, addFeaturesProfileStart, {layerId: key, layerType: bucket.layers[0].type});
         }
 
-        return {
+        const result = {
             buckets: Object.values(buckets).filter(b => !b.isEmpty()),
             featureIndex,
             collisionBoxArray: this.collisionBoxArray,
@@ -199,6 +368,14 @@ export class WorkerTile {
             iconMap: this.returnDependencies ? iconMap : null,
             glyphPositions: this.returnDependencies ? glyphAtlas.positions : null
         };
+        const parseDuration = performance.now() - parseStart;
+        const attributedDuration = profile?.records
+            .slice(profileStartIndex)
+            .filter((record) => record.kind !== 'aggregate')
+            .reduce((total, record) => total + record.duration, 0) ?? 0;
+        recordProfileDuration('parse.unattributed', Math.max(0, parseDuration - attributedDuration));
+        recordProfileDuration('parse.total', parseDuration, {}, 'aggregate');
+        return result;
     }
 }
 

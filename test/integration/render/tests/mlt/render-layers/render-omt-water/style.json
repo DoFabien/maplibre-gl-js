@@ -1,0 +1,49 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [22.5, 55.776573],
+    "zoom": 3.1,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/omt/{z}/{x}/{y}.mlt"],
+            "maxzoom": 14
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "water",
+            "type": "fill",
+            "source": "openmaptiles",
+            "source-layer": "water",
+            "paint": {
+                "fill-color": [
+                    "match",
+                    ["get", "class"],
+                    "ocean",
+                    "#60a5fa",
+                    "lakes",
+                    "#38bdf8",
+                    "lake",
+                    "#7dd3fc",
+                    "#93c5fd"
+                ],
+                "fill-opacity": 0.95
+            }
+        }
+    ]
+}

@@ -1,0 +1,135 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "height": 256
+        }
+    },
+    "center": [
+        13.418056,
+        52.499167
+    ],
+    "zoom": 14,
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/mlt/gl-js/{z}-{x}-{y}.mlt"
+            ],
+            "encoding": "mlt"
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f7f2e8"
+            }
+        },
+        {
+            "id": "road-odd-osm-context",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    "path"
+                ],
+                [
+                    "let",
+                    "osm",
+                    [
+                        "to-number",
+                        [
+                            "get",
+                            "osm_id"
+                        ]
+                    ],
+                    [
+                        "!=",
+                        [
+                            "%",
+                            [
+                                "var",
+                                "osm"
+                            ],
+                            2
+                        ],
+                        0
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-color": "#9da6ad",
+                "line-opacity": 0.8
+            }
+        },
+        {
+            "id": "road-even-osm",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    "path"
+                ],
+                [
+                    "let",
+                    "osm",
+                    [
+                        "to-number",
+                        [
+                            "get",
+                            "osm_id"
+                        ]
+                    ],
+                    [
+                        "==",
+                        [
+                            "%",
+                            [
+                                "var",
+                                "osm"
+                            ],
+                            2
+                        ],
+                        0
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 14,
+                "line-color": "#0047ff"
+            }
+        }
+    ]
+}

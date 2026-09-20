@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-09-06T08:17:19.023Z",
+  "campaigns": 3,
+  "iterationsPerCampaign": 30,
+  "warmupPerCampaign": 10,
+  "suite": "extended",
+  "reports": [
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-post-merge-ff84d7466-node26/campaign-1.json",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-post-merge-ff84d7466-node26/campaign-2.json",
+    "/data/Projet/maplibre/maplibre-gl-js/test/bench/results/mlt-post-merge-ff84d7466-node26/campaign-3.json"
+  ]
+}

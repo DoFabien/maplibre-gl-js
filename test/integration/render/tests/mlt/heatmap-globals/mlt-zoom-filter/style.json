@@ -1,0 +1,61 @@
+{
+  "version": 8,
+  "center": [
+    0,
+    0
+  ],
+  "zoom": 2,
+  "metadata": {
+    "test": {
+      "width": 256,
+      "height": 256
+    }
+  },
+  "sources": {
+    "points": {
+      "type": "vector",
+      "encoding": "mlt",
+      "minzoom": 0,
+      "maxzoom": 0,
+      "tiles": [
+        "local://tiles/mlt/heatmap-globals/points.mlt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f5f3ed"
+      }
+    },
+    {
+      "id": "layer",
+      "type": "heatmap",
+      "source": "points",
+      "source-layer": "points",
+      "filter": [
+        "==",
+        [
+          "zoom"
+        ],
+        2
+      ],
+      "paint": {
+        "heatmap-radius": [
+          "get",
+          "radius"
+        ],
+        "heatmap-weight": [
+          "/",
+          [
+            "get",
+            "weight"
+          ],
+          3
+        ]
+      }
+    }
+  ]
+}

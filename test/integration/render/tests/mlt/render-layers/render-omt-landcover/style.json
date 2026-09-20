@@ -1,0 +1,47 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [7.558594, 51.727028],
+    "zoom": 10.2,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/omt/{z}/{x}/{y}.mlt"],
+            "maxzoom": 14
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "landcover",
+            "type": "fill",
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "paint": {
+                "fill-color": [
+                    "match",
+                    ["get", "class"],
+                    "wood",
+                    "#86efac",
+                    "farmland",
+                    "#d9f99d",
+                    "#bbf7d0"
+                ],
+                "fill-opacity": 0.95
+            }
+        }
+    ]
+}

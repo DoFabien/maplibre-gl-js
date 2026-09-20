@@ -31,8 +31,10 @@ export class GlobeProjection extends Evented implements Projection {
         this._verticalPerspectiveProjection = new VerticalPerspectiveProjection();
     }
 
+    /** Literal tuples can remain unnormalized by style-spec, unlike expression results. */
     public get transitionState(): number {
-        const currentProjectionSpecValue = this.properties.get('type');
+        const value = this.properties.get('type');
+        const currentProjectionSpecValue = Array.isArray(value) ? ProjectionDefinition.parse(value) : value;
         if (typeof currentProjectionSpecValue === 'string' && currentProjectionSpecValue === 'mercator') {
             return 0;
         }

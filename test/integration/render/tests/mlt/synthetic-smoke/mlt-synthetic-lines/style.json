@@ -1,0 +1,74 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [0, 0],
+    "zoom": 0,
+    "sources": {
+        "routes": {
+            "type": "vector",
+            "encoding": "mlt",
+            "maxzoom": 0,
+            "tiles": ["local://tiles/mlt/synthetic/0/0/line.mlt"]
+        },
+        "gradient": {
+            "type": "vector",
+            "encoding": "mlt",
+            "maxzoom": 0,
+            "tiles": ["local://tiles/mlt/line-gradient-synthetic.mlt"]
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "route-context",
+            "type": "line",
+            "source": "routes",
+            "source-layer": "layer1",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-width": 7,
+                "line-color": "#64748b",
+                "line-opacity": 0.8
+            }
+        },
+        {
+            "id": "gradient-line",
+            "type": "line",
+            "source": "gradient",
+            "source-layer": "gradient",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-width": 18,
+                "line-gradient": [
+                    "interpolate",
+                    ["linear"],
+                    ["line-progress"],
+                    0,
+                    "#2563eb",
+                    0.5,
+                    "#16a34a",
+                    1,
+                    "#dc2626"
+                ]
+            }
+        }
+    ]
+}
