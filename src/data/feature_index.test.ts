@@ -75,6 +75,31 @@ describe('FeatureIndex', () => {
             expect(result.layer[0].feature.properties).toEqual(features[0].tags);
         });
 
+        test('evaluates the feature state of a feature whose id is 0', () => {
+            const features = [{id: 0, type: 1, geometry: [0, 0], tags: {}} as any as Feature];
+            const geojsonWrapper = new GeoJSONWrapper(features);
+            geojsonWrapper.name = GEOJSON_TILE_LAYER_NAME;
+            const paint = {'circle-radius': ['case', ['boolean', ['feature-state', 'selected'], false], 20, 1]};
+            const layer = new CircleStyleLayer({id: 'layer', source: 'source', paint} as LayerSpecification, {});
+            layer.recalculate({} as EvaluationParameters, []);
+            const featureIndex = new FeatureIndex(tileID);
+            featureIndex.rawTileData = fromVectorTileJs({layers: {[GEOJSON_TILE_LAYER_NAME]: geojsonWrapper}}) as any as ArrayBuffer;
+            featureIndex.bucketLayerIDs = [['layer']];
+            featureIndex.insert(geojsonWrapper.feature(0), [[new Point(1, 1)]], 0, 0, 0);
+
+            const result = featureIndex.query({
+                queryPadding: 0,
+                tileSize: 512,
+                scale: 1,
+                queryGeometry: [new Point(0, 0), new Point(10, 10)],
+                cameraQueryGeometry: [new Point(0, 0), new Point(10, 10)],
+                params: {},
+                transform
+            } as any, {layer}, {layer: {id: 'layer', source: 'source', type: 'circle', paint, layout: {}}} as any, {getState: () => ({selected: true})} as any);
+            expect(result.layer[0].feature.id).toBe(0);
+            expect(result.layer[0].feature.layer.paint['circle-radius']).toBe(20);
+        });
+
         test('query mlt tile', () => {
             const layer = new CircleStyleLayer({source: 'source', paint: {}} as LayerSpecification, {});
             layer.recalculate({} as EvaluationParameters, []);

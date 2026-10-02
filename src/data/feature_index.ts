@@ -250,7 +250,7 @@ export class FeatureIndex {
             if (!styleLayer) continue;
 
             let featureState = {};
-            if (id && sourceFeatureState) {
+            if (id !== undefined && sourceFeatureState) {
                 // `feature-state` expression evaluation requires feature state to be available
                 featureState = sourceFeatureState.getState(styleLayer.sourceLayer || GEOJSON_TILE_LAYER_NAME, id);
             }
