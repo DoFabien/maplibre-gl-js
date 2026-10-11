@@ -352,10 +352,10 @@ function containsStyleFilter(filter: NormalizedFilter): boolean {
  * specification's own filter, through a columnar view of the row, so the result is the vector tile result.
  */
 export default function filter(featureTable: FeatureTable, expression: FilterSpecification | void, globalState?: Record<string, unknown>, canonical?: CanonicalTileID, globals: GlobalProperties = DEFAULT_GLOBALS): SelectionVector {
-    if (!expression) {
+    if (expression === undefined || expression === null) {
         return new SequenceSelectionVector(0, 1, featureTable.numFeatures);
     }
-    return executeFilter(featureTable, normalizeFilter(expression, globalState), undefined, new StyleRows(featureTable, canonical, globals));
+    return executeFilter(featureTable, normalizeFilter(expression as FilterSpecification, globalState), undefined, new StyleRows(featureTable, canonical, globals));
 }
 
 /** Evaluates a style filter row by row, on the selected rows only when a selection is given. */
