@@ -152,8 +152,23 @@ function getExactScale(featureTable: FeatureTable): number | undefined {
     return scale;
 }
 
-/** A row read as a vector tile feature: its id, type, properties and geometry scaled to the tile extent. */
-type FeatureRow = Pick<BucketFeature, 'id' | 'type' | 'properties' | 'geometry'>;
+/**
+ * A row read as a vector tile feature: its id, type and properties, and its geometry scaled to the tile extent,
+ * loaded on each read so that the points die young unless a bucket keeps them.
+ */
+class FeatureRow implements Pick<BucketFeature, 'id' | 'type' | 'properties' | 'geometry'> {
+    constructor(
+        readonly id: BucketFeature['id'],
+        readonly type: BucketFeature['type'],
+        readonly properties: BucketFeature['properties'],
+        private readonly rows: ColumnarFeatureRows,
+        private readonly index: number,
+    ) {}
+
+    get geometry(): Point[][] {
+        return this.rows.loadGeometry(this.index);
+    }
+}
 
 /**
  * The rows of a feature table read as vector tile buckets read features, each once for all the buckets of a
@@ -190,16 +205,17 @@ export class ColumnarFeatureRows {
         const ids = new Array<string | number | undefined>(count);
         const types = new Array<BucketFeature['type']>(count);
         const properties = new Array<Record<string, unknown>>(count);
-        const geometries = new Array<Point[][]>(count);
         for (let i = 0; i < count; i++) ids[i] = this.resolveId(indices[i]);
         for (let i = 0; i < count; i++) types[i] = this.view.setIndex(indices[i]).type;
         for (let i = 0; i < count; i++) properties[i] = createColumnarPublicProperties(this.bindings, indices[i]);
         for (let i = 0; i < count; i++) {
-            geometries[i] = this.exactScale ? loadFeatureGeometry(this.featureTable, indices[i], this.exactScale) : loadGeometry(this.view.setIndex(indices[i]));
+            this.rows[indices[i]] = new FeatureRow(ids[i], types[i], properties[i], this, indices[i]);
         }
-        for (let i = 0; i < count; i++) {
-            this.rows[indices[i]] = {id: ids[i], type: types[i], properties: properties[i], geometry: geometries[i]};
-        }
+    }
+
+    /** The geometry of a row scaled to the tile extent, as {@link loadGeometry} loads that of a vector tile feature. */
+    loadGeometry(index: number): Point[][] {
+        return this.exactScale ? loadFeatureGeometry(this.featureTable, index, this.exactScale) : loadGeometry(this.view.setIndex(index));
     }
 
     /** Evaluates a data-driven layout value for a read row, once for the rows that share the value. */
@@ -219,8 +235,8 @@ export class ColumnarFeatureRows {
 
     /** The bucket feature of a read row, as a vector tile bucket builds one for each feature it draws, with its sort key. */
     bucketFeature(index: number, sortKey?: number): BucketFeature {
-        const {id, type, properties, geometry} = this.rows[index];
-        return {id, properties, type, sourceLayerIndex: this.sourceLayerIndex, index, geometry, patterns: {}, dashes: {}, sortKey,
+        const {id, type, properties} = this.rows[index];
+        return {id, properties, type, sourceLayerIndex: this.sourceLayerIndex, index, geometry: this.loadGeometry(index), patterns: {}, dashes: {}, sortKey,
             paintValues: this.paintValues};
     }
 }
