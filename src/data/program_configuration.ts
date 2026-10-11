@@ -492,6 +492,8 @@ class CrossFadedDasharrayBinder extends CrossFadedBinder<DashEntry> {
 export class ProgramConfiguration {
     binders: {[_: string]: AttributeBinder | UniformBinder};
     cacheKey: string;
+    /** The binders that write vertex attributes for each feature, the ones {@link populatePaintArrays} calls. */
+    _paintArrayBinders: AttributeBinder[];
 
     _buffers: VertexBuffer[];
 
@@ -537,6 +539,8 @@ export class ProgramConfiguration {
         }
 
         this.cacheKey = keys.sort().join('');
+        this._paintArrayBinders = Object.values(this.binders).filter((binder): binder is AttributeBinder =>
+            binder instanceof SourceExpressionBinder || binder instanceof CompositeExpressionBinder || binder instanceof CrossFadedBinder);
     }
 
     getMaxValue(property: string): number {
@@ -545,10 +549,8 @@ export class ProgramConfiguration {
     }
 
     populatePaintArrays(newLength: number, feature: Feature, options: PaintOptions): void {
-        for (const property in this.binders) {
-            const binder = this.binders[property];
-            if (binder instanceof SourceExpressionBinder || binder instanceof CompositeExpressionBinder || binder instanceof CrossFadedBinder)
-                binder.populatePaintArray(newLength, feature, options);
+        for (const binder of this._paintArrayBinders) {
+            binder.populatePaintArray(newLength, feature, options);
         }
     }
     setConstantPatternPositions(posTo: ImagePosition, posFrom: ImagePosition): void {
@@ -826,5 +828,5 @@ register('SourceExpressionBinder', SourceExpressionBinder);
 register('CrossFadedPatternBinder', CrossFadedPatternBinder);
 register('CrossFadedDasharrayBinder', CrossFadedDasharrayBinder);
 register('CompositeExpressionBinder', CompositeExpressionBinder);
-register('ProgramConfiguration', ProgramConfiguration, {omit: ['_buffers']});
+register('ProgramConfiguration', ProgramConfiguration, {omit: ['_buffers', '_paintArrayBinders']});
 register('ProgramConfigurationSet', ProgramConfigurationSet);
