@@ -1,5 +1,6 @@
 import {StyleLayer, type QueryIntersectsFeatureParams} from '../style_layer.ts';
 import {CircleBucket} from '../../data/bucket/circle_bucket.ts';
+import {ColumnarCircleBucket} from '../../data/bucket/columnar/columnar_circle_bucket.ts';
 import {circleIntersection, getMaximumPaintValue, projectQueryGeometry, translateDistance, translate} from '../query_utils.ts';
 import properties, {type CircleLayoutPropsPossiblyEvaluated, type CirclePaintPropsPossiblyEvaluated} from './circle_style_layer_properties.g.ts';
 
@@ -26,7 +27,10 @@ export class CircleStyleLayer extends StyleLayer {
         super(layer, properties, globalState);
     }
 
-    createBucket(parameters: BucketParameters<any>): CircleBucket<any> {
+    createBucket(parameters: BucketParameters<any>): CircleBucket<any> | ColumnarCircleBucket {
+        if (parameters.encoding === 'mlt') {
+            return new ColumnarCircleBucket(parameters);
+        }
         return new CircleBucket(parameters);
     }
 
@@ -84,4 +88,3 @@ export class CircleStyleLayer extends StyleLayer {
         }, geometry);
     }
 }
-

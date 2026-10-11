@@ -27,6 +27,7 @@ import type {
     FormattedSection
 } from '@maplibre/maplibre-gl-style-spec';
 import type {FeatureStates} from '../source/source_state.ts';
+import type {BucketFeature, PaintValueCache} from './bucket.ts';
 import type {DashEntry} from '../render/line_atlas.ts';
 import type {VectorTileLayerLike} from '@maplibre/vt-pbf';
 
@@ -54,6 +55,11 @@ type PaintOptions = {
     formattedSection?: FormattedSection;
     globalState?: Record<string, any>;
 };
+
+/** The shared paint values of a bucket feature; formatted text sections are evaluated for each feature. */
+function getPaintValueCache(feature: Feature, options: PaintOptions): PaintValueCache | undefined {
+    return options.formattedSection ? undefined : (feature as BucketFeature).paintValues;
+}
 
 /**
  *  `Binder` is the interface definition for the strategies for constructing,
@@ -218,7 +224,13 @@ class SourceExpressionBinder implements AttributeBinder {
 
     populatePaintArray(newLength: number, feature: Feature, options: PaintOptions) {
         const start = this.paintVertexArray.length;
-        const value = this.expression.evaluate(new EvaluationParameters(0, options), feature, {}, options.canonical, [], options.formattedSection);
+        const cache = getPaintValueCache(feature, options);
+        const index = (feature as BucketFeature).index;
+        let value = cache?.get(this.expression, index);
+        if (value === undefined) {
+            value = this.expression.evaluate(new EvaluationParameters(0, options), feature, {}, options.canonical, [], options.formattedSection);
+            cache?.set(this.expression, index, value);
+        }
         this.paintVertexArray.resize(newLength);
         this._setPaintValue(start, newLength, value);
     }
@@ -290,8 +302,17 @@ class CompositeExpressionBinder implements AttributeBinder, UniformBinder {
     }
 
     populatePaintArray(newLength: number, feature: Feature, options: PaintOptions) {
-        const min = this.expression.evaluate(new EvaluationParameters(this.zoom, options), feature, {}, options.canonical, [], options.formattedSection);
-        const max = this.expression.evaluate(new EvaluationParameters(this.zoom + 1, options), feature, {}, options.canonical, [], options.formattedSection);
+        const cache = getPaintValueCache(feature, options);
+        const index = (feature as BucketFeature).index;
+        let range = cache?.get(this.expression, index) as [unknown, unknown] | undefined;
+        if (range === undefined) {
+            range = [
+                this.expression.evaluate(new EvaluationParameters(this.zoom, options), feature, {}, options.canonical, [], options.formattedSection),
+                this.expression.evaluate(new EvaluationParameters(this.zoom + 1, options), feature, {}, options.canonical, [], options.formattedSection)
+            ];
+            cache?.set(this.expression, index, range);
+        }
+        const [min, max] = range;
         const start = this.paintVertexArray.length;
         this.paintVertexArray.resize(newLength);
         this._setPaintValue(start, newLength, min, max);

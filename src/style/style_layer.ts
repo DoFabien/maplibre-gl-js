@@ -164,6 +164,10 @@ export abstract class StyleLayer extends Evented<ErrorEventType> {
         this._featureFilter = featureFilter(filter, `layers[${this.id}].filter`, this._globalState);
     }
 
+    getGlobalState(): Record<string, any> {
+        return this._globalState;
+    }
+
     getCrossfadeParameters(): CrossfadeParameters {
         return this._crossfadeParameters;
     }

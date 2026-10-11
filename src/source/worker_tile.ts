@@ -7,6 +7,7 @@ import {GlyphAtlas} from '../render/glyph_atlas.ts';
 import {EvaluationParameters} from '../style/evaluation_parameters.ts';
 import {OverscaledTileID} from '../tile/tile_id.ts';
 import {type GetDashesResponse, MessageType, type GetImagesResponse} from '../util/actor_messages.ts';
+import {getMltFeatureTable} from './vector_tile_mlt.ts';
 
 import type {Bucket, PopulateParameters} from '../data/bucket.ts';
 import type {IActor} from '../util/actor.ts';
@@ -20,6 +21,13 @@ import type {
 import type {PromoteIdSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {VectorTileLike} from '@maplibre/vt-pbf';
 import type {SubdivisionGranularitySetting} from '../render/subdivision_granularity_settings.ts';
+import type {FeatureTable} from '@maplibre/mlt';
+
+/** A bucket that reads the rows of an MLT feature table directly. */
+type FeatureTableBucket = Bucket & {
+    populateFeatureTable(featureTable: FeatureTable, options: PopulateParameters, canonical: OverscaledTileID['canonical']): void;
+};
+
 export class WorkerTile {
     tileID: OverscaledTileID;
     uid: string | number;
@@ -32,6 +40,7 @@ export class WorkerTile {
     showCollisionBoxes: boolean;
     collectResourceTiming: boolean;
     returnDependencies: boolean;
+    encoding?: 'mvt' | 'mlt';
 
     data: VectorTileLike;
     collisionBoxArray: CollisionBoxArray;
@@ -57,6 +66,7 @@ export class WorkerTile {
         this.collectResourceTiming = !!params.collectResourceTiming;
         this.returnDependencies = !!params.returnDependencies;
         this.promoteId = params.promoteId;
+        this.encoding = params.encoding;
         this.inFlightDependencies = [];
     }
 
@@ -64,10 +74,12 @@ export class WorkerTile {
         this.data = data;
 
         this.collisionBoxArray = new CollisionBoxArray();
-        const sourceLayerCoder = new DictionaryCoder(Object.keys(data.layers).sort());
+        const sourceLayerNames = Object.keys(data.layers).sort();
+        const sourceLayerCoder = new DictionaryCoder(sourceLayerNames);
 
         const featureIndex = new FeatureIndex(this.tileID, this.promoteId);
         featureIndex.bucketLayerIDs = [];
+        if (this.encoding === 'mlt') featureIndex.sourceLayerNames = sourceLayerNames;
 
         const buckets: {[_: string]: Bucket} = {};
 
@@ -94,8 +106,9 @@ export class WorkerTile {
             }
 
             const sourceLayerIndex = sourceLayerCoder.encode(sourceLayerId);
+            const featureTable = getMltFeatureTable(sourceLayer);
             const features = [];
-            for (let index = 0; index < sourceLayer.length; index++) {
+            for (let index = 0; !featureTable && index < sourceLayer.length; index++) {
                 const feature = sourceLayer.feature(index);
                 const id = featureIndex.getId(feature, sourceLayerId);
                 features.push({feature, id, index, sourceLayerIndex});
@@ -118,10 +131,15 @@ export class WorkerTile {
                     overscaling: this.overscaling,
                     collisionBoxArray: this.collisionBoxArray,
                     sourceLayerIndex,
-                    sourceID: this.source
+                    sourceID: this.source,
+                    encoding: this.encoding
                 });
 
-                bucket.populate(features, options, this.tileID.canonical);
+                if (featureTable) {
+                    (bucket as FeatureTableBucket).populateFeatureTable(featureTable, options, this.tileID.canonical);
+                } else {
+                    bucket.populate(features, options, this.tileID.canonical);
+                }
                 featureIndex.bucketLayerIDs.push(family.map((l) => l.id));
             }
         }

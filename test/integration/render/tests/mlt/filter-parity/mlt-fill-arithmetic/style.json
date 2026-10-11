@@ -1,0 +1,102 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "height": 256
+        }
+    },
+    "center": [
+        13.418056,
+        52.499167
+    ],
+    "zoom": 14,
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/mlt/gl-js/{z}-{x}-{y}.mlt"
+            ],
+            "encoding": "mlt"
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#fbf7fb"
+            }
+        },
+        {
+            "id": "building-modulo-context",
+            "type": "fill",
+            "source": "maplibre",
+            "source-layer": "building",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "Polygon"
+                ],
+                [
+                    ">=",
+                    [
+                        "%",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        5
+                    ],
+                    2
+                ]
+            ],
+            "paint": {
+                "fill-color": "#d8c7e8",
+                "fill-opacity": 0.55
+            }
+        },
+        {
+            "id": "building-modulo",
+            "type": "fill",
+            "source": "maplibre",
+            "source-layer": "building",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "Polygon"
+                ],
+                [
+                    "<",
+                    [
+                        "%",
+                        [
+                            "to-number",
+                            [
+                                "get",
+                                "osm_id"
+                            ]
+                        ],
+                        5
+                    ],
+                    2
+                ]
+            ],
+            "paint": {
+                "fill-color": "#c60000",
+                "fill-opacity": 0.9
+            }
+        }
+    ]
+}

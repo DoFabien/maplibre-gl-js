@@ -1,5 +1,6 @@
 import {type QueryIntersectsFeatureParams, StyleLayer} from '../style_layer.ts';
 import {FillExtrusionBucket} from '../../data/bucket/fill_extrusion_bucket.ts';
+import {ColumnarFillExtrusionBucket} from '../../data/bucket/columnar/columnar_fill_extrusion_bucket.ts';
 import {polygonIntersectsPolygon, polygonIntersectsMultiPolygon} from '../../util/intersection_tests.ts';
 import {translateDistance, translate} from '../query_utils.ts';
 import properties, {type FillExtrusionLayoutPropsPossiblyEvaluated, type FillExtrusionPaintPropsPossiblyEvaluated} from './fill_extrusion_style_layer_properties.g.ts';
@@ -29,7 +30,10 @@ export class FillExtrusionStyleLayer extends StyleLayer {
         super(layer, properties, globalState);
     }
 
-    createBucket(parameters: BucketParameters<FillExtrusionStyleLayer>): FillExtrusionBucket {
+    createBucket(parameters: BucketParameters<FillExtrusionStyleLayer>): FillExtrusionBucket | ColumnarFillExtrusionBucket {
+        if (parameters.encoding === 'mlt') {
+            return new ColumnarFillExtrusionBucket(parameters);
+        }
         return new FillExtrusionBucket(parameters);
     }
 

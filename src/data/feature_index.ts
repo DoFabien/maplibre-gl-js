@@ -16,6 +16,8 @@ import {FeatureIndexArray} from './array_types.g.ts';
 import {MLTVectorTile} from '../source/vector_tile_mlt.ts';
 import {Bounds} from '../geo/bounds.ts';
 import {VectorTile} from '@mapbox/vector-tile';
+import {normalizeColumnarValue} from './bucket/columnar/feature_properties.ts';
+import {getMltFeatureId} from '../util/mlt_feature_id.ts';
 
 import type Point from '@mapbox/point-geometry';
 import type {OverscaledTileID} from '../tile/tile_id.ts';
@@ -27,6 +29,7 @@ import type {StyleLayer} from '../style/style_layer.ts';
 import type {Feature, FeatureFilter, FeatureState, FilterSpecification, PromoteIdSpecification} from '@maplibre/maplibre-gl-style-spec';
 import type {IReadonlyTransform, GetElevation} from '../geo/transform_interface.ts';
 import type {TileEncoding} from '../source/worker_source.ts';
+import type {FeatureTable, Vector} from '@maplibre/mlt';
 
 export {GEOJSON_TILE_LAYER_NAME};
 
@@ -57,6 +60,8 @@ export type QueryResultsItem = {
     intersectionZ?: boolean | number;
 };
 
+export type MltIdResolver = (featureIndex: number) => string | number | undefined;
+
 /**
  * An in memory index class to allow fast interaction with features
  */
@@ -75,6 +80,8 @@ export class FeatureIndex {
 
     vtLayers: {[_: string]: VectorTileLayerLike};
     sourceLayerCoder: DictionaryCoder;
+    /** Worker index order when layer projection differs from the complete raw tile decoded for public queries. */
+    sourceLayerNames?: string[];
 
     constructor(tileID: OverscaledTileID, promoteId?: PromoteIdSpecification | null) {
         this.tileID = tileID;
@@ -116,13 +123,13 @@ export class FeatureIndex {
         if (!this.vtLayers) {
             switch (this.encoding) {
                 case 'mlt':
-                    this.vtLayers = new MLTVectorTile(this.rawTileData).layers;
+                    this.vtLayers = new MLTVectorTile(this.rawTileData, {deferPropertyColumns: true}).layers;
                     break;
                 case 'mvt':
                 default:
                     this.vtLayers = new VectorTile(new PbfReader(this.rawTileData)).layers;
             }
-            this.sourceLayerCoder = new DictionaryCoder(this.vtLayers ? Object.keys(this.vtLayers).sort() : [GEOJSON_TILE_LAYER_NAME]);
+            this.sourceLayerCoder = new DictionaryCoder(this.sourceLayerNames ?? (this.vtLayers ? Object.keys(this.vtLayers).sort() : [GEOJSON_TILE_LAYER_NAME]));
         }
         return this.vtLayers;
     }
@@ -335,6 +342,39 @@ export class FeatureIndex {
         }
         return id;
     }
+
+    /**
+     * Resolves all id/promoteId columns once, so high-cardinality query output
+     * loops only perform indexed vector reads.
+     */
+    createMltIdResolver(featureTable: FeatureTable, sourceLayerId: string): MltIdResolver {
+        if (!this.promoteId) {
+            return (featureIndex) => getMltFeatureId(featureTable, featureIndex);
+        }
+
+        const propertyName = typeof this.promoteId === 'string'
+            ? this.promoteId
+            : this.promoteId[sourceLayerId];
+        const promotedIdVector = propertyName === undefined
+            ? undefined
+            : featureTable.getPropertyVector(propertyName);
+        const clusterVector = featureTable.getPropertyVector('cluster');
+        const clusterIdVector = featureTable.getPropertyVector('cluster_id');
+
+        return (featureIndex) => {
+            const promotedId = readColumnarVector(promotedIdVector, featureIndex);
+            if (promotedId !== undefined) {
+                return typeof promotedId === 'boolean'
+                    ? Number(promotedId)
+                    : promotedId as string | number;
+            }
+
+            if (readColumnarVector(clusterVector, featureIndex)) {
+                return Number(readColumnarVector(clusterIdVector, featureIndex));
+            }
+            return undefined;
+        };
+    }
 }
 
 register(
@@ -376,6 +416,15 @@ function evaluateProperties<Props, PossiblyEvaluatedProps>(
             null;
         return needsEvaluating(value) ? value.evaluate(feature, featureState, undefined, availableImages) : value;
     });
+}
+
+function readColumnarVector(vector: Vector | undefined, featureIndex: number): unknown {
+    if (!vector) return undefined;
+    if (typeof (vector as any).has === 'function' && !(vector as any).has(featureIndex)) {
+        return undefined;
+    }
+    const value = vector.getValue(featureIndex);
+    return value === null || value === undefined ? undefined : normalizeColumnarValue(value);
 }
 
 function topDownFeatureComparator(a: number, b: number) {

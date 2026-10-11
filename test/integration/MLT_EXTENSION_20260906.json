@@ -1,0 +1,165 @@
+{
+  "date": "2026-09-06",
+  "appliedAfter": "594ba2eb7",
+  "unit": {
+    "total": 3712,
+    "passed": 3712,
+    "failed": 0,
+    "skipped": 0
+  },
+  "build": {
+    "total": 750,
+    "passed": 750,
+    "failed": 0,
+    "skipped": 0
+  },
+  "targeted": {
+    "total": 262,
+    "passed": 262,
+    "failed": 0,
+    "skipped": 0
+  },
+  "softwareRender": {
+    "executed": 243,
+    "passed": 243,
+    "skipped": 1680
+  },
+  "hardwareRender": {
+    "total": 1923,
+    "passed": 1887,
+    "failed": 36,
+    "skipped": 0,
+    "exitCode": 1,
+    "failedFixtures": [
+      "Render tests tests/combinations/fill-opaque--fill-extrusion-translucent",
+      "Render tests tests/combinations/fill-opaque--line-translucent",
+      "Render tests tests/combinations/fill-translucent--fill-extrusion-translucent",
+      "Render tests tests/debug/collision",
+      "Render tests tests/debug/tile-raster",
+      "Render tests tests/fill-extrusion-height/steep-pitch-near-horizon",
+      "Render tests tests/font-faces/complex-scripts",
+      "Render tests tests/high-pitch/pitch95",
+      "Render tests tests/icon-text-fit/textFit-grid-long",
+      "Render tests tests/mlt/filter-parity/mlt-fill-arithmetic",
+      "Render tests tests/mlt/filter-parity/mlt-line-filter-matrix",
+      "Render tests tests/mlt/filter-parity/mvt-fill-arithmetic",
+      "Render tests tests/mlt/filter-parity/mvt-line-filter-matrix",
+      "Render tests tests/mlt/render-layers/render-fill-extrusion",
+      "Render tests tests/mlt/render-layers/render-fill-extrusion-pattern",
+      "Render tests tests/mlt/render-layers/render-symbol-visibility-visible",
+      "Render tests tests/projection/globe/background-pattern",
+      "Render tests tests/projection/globe/custom/tent-3d-globe",
+      "Render tests tests/projection/globe/icon-text-translate-viewport",
+      "Render tests tests/projection/globe/raster-warped",
+      "Render tests tests/projection/globe/sky-transition",
+      "Render tests tests/projection/globe/terrain/atmosphere/base",
+      "Render tests tests/projection/globe/terrain/custom/tent-3d-globe",
+      "Render tests tests/projection/globe/terrain/fill-planet-tiles",
+      "Render tests tests/projection/globe/terrain/fill-seams/checkerboard",
+      "Render tests tests/projection/globe/terrain/raster-planet",
+      "Render tests tests/raster-npot-mipmap/pitch-60",
+      "Render tests tests/regressions/mapbox-gl-js#5631",
+      "Render tests tests/terrain/fog-sky-blend-globe",
+      "Render tests tests/terrain/pitched-world",
+      "Render tests tests/terrain/symbol-height-offset-occluded-ground",
+      "Render tests tests/text-field/formatted-grapheme-sections",
+      "Render tests tests/text-local-glyphs/missing",
+      "Render tests tests/text-local-glyphs/no-glyphs",
+      "Render tests tests/text-local-ideographs/cjk-symbols",
+      "Render tests tests/visibility/symbol/visible"
+    ],
+    "newFailedFixtures": [],
+    "resolvedFailedFixtures": [],
+    "renderers": [
+      "ANGLE (Intel, Mesa Intel(R) Iris(R) Xe Graphics (ADL GT2), OpenGL ES 3.2)"
+    ]
+  },
+  "filterAudit": {
+    "supported": 998,
+    "valid-unsupported": 0,
+    "spec-invalid": 1
+  },
+  "softwareCounters": {
+    "workerFilterFallbackFeatures": 0,
+    "vectorTileFeatureWrappers": 0,
+    "propertyObjects": 0,
+    "propertyProxyMisses": 0,
+    "pointObjects": 0,
+    "geometryPartsMaterialized": 0,
+    "queryCandidates": 0,
+    "queryResults": 0,
+    "estimatedQueryResultBytes": 0,
+    "queryGeometriesLoaded": 0,
+    "overzoomFeaturesClipped": 6597,
+    "overzoomPointObjects": 0,
+    "mvtReencodes": 0,
+    "rawTileBytesCopied": 156568643,
+    "rawTileMainThreadDecodes": 0,
+    "decodedLayers": 817,
+    "decodedColumns": 2221,
+    "decodedValues": 1888273,
+    "decodedColumnBytes": 23521972,
+    "temporaryScalarBuffers": 0,
+    "temporaryScalarValues": 0,
+    "coordinateTuples": 0,
+    "propertyDescriptors": 0
+  },
+  "hardwareCounters": {
+    "workerFilterFallbackFeatures": 0,
+    "vectorTileFeatureWrappers": 0,
+    "propertyObjects": 0,
+    "propertyProxyMisses": 0,
+    "pointObjects": 0,
+    "geometryPartsMaterialized": 0,
+    "queryCandidates": 0,
+    "queryResults": 0,
+    "estimatedQueryResultBytes": 0,
+    "queryGeometriesLoaded": 0,
+    "overzoomFeaturesClipped": 6597,
+    "overzoomPointObjects": 0,
+    "mvtReencodes": 0,
+    "rawTileBytesCopied": 156568643,
+    "rawTileMainThreadDecodes": 0,
+    "decodedLayers": 817,
+    "decodedColumns": 2221,
+    "decodedValues": 1888273,
+    "decodedColumnBytes": 23521972,
+    "temporaryScalarBuffers": 0,
+    "temporaryScalarValues": 0,
+    "coordinateTuples": 0,
+    "propertyDescriptors": 0
+  },
+  "newHardwarePairs": {
+    "basic": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    },
+    "data-driven": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    },
+    "feature-state": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    },
+    "globe": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    },
+    "zoom-filter": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    },
+    "script-filter": {
+      "pixels": 65536,
+      "rgbaDifferingPixels": 0
+    }
+  },
+  "notes": [
+    "Historical budget failures were not waived or rebaselined.",
+    "Hardware failures name exactly the same 36 fixtures as before; this is not a globally passing suite.",
+    "Only new MVT fixtures generated expected images; previous expected images remain unchanged.",
+    "Integration interaction suite was not rerun after the extension.",
+    "Raw validation reports remain under /tmp/mlt-performance.jt1Hcv; benchmark raw campaigns are committed separately."
+  ]
+}

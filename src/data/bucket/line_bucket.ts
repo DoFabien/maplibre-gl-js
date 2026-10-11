@@ -647,7 +647,7 @@ export class LineBucket implements Bucket {
         this.updateScaledDistance();
     }
 
-    private hasLineDasharray(layers: LineStyleLayer[]): boolean {
+    protected hasLineDasharray(layers: LineStyleLayer[]): boolean {
         for (const layer of layers) {
             const dasharrayProperty = layer.paint.get('line-dasharray');
             if (dasharrayProperty && !dasharrayProperty.isConstant()) {
@@ -657,7 +657,7 @@ export class LineBucket implements Bucket {
         return false;
     }
 
-    private addLineDashDependencies(layers: LineStyleLayer[], bucketFeature: BucketFeature, zoom: number, options: PopulateParameters) {
+    protected addLineDashDependencies(layers: LineStyleLayer[], bucketFeature: BucketFeature, zoom: number, options: PopulateParameters): void {
         for (const layer of layers) {
             const dasharrayProperty = layer.paint.get('line-dasharray');
 

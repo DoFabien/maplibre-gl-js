@@ -24,6 +24,7 @@ export type BucketParameters<Layer extends TypedStyleLayer> = {
     collisionBoxArray: CollisionBoxArray;
     sourceLayerIndex: number;
     sourceID: string;
+    encoding?: 'mvt' | 'mlt';
 };
 
 export type PopulateParameters = {
@@ -88,6 +89,20 @@ export type BucketFeature = {
     };
     readonly dashes?: NonNullable<StyleFeature['dashes']>;
     sortKey?: number;
+    /** Paint values this feature shares with other features of its bucket, see {@link PaintValueCache}. */
+    paintValues?: PaintValueCache;
+};
+
+/**
+ * Values of data-driven paint expressions that a bucket knows several of its features share, such as features
+ * whose expression reads one property and that have the same value of it. A feature reads its value from the
+ * cache, and the first feature of a group that does not find it evaluates the expression and stores it.
+ */
+export type PaintValueCache = {
+    /** The value of `expression` stored for features that share it with the feature at `featureIndex`, if any. */
+    get(expression: unknown, featureIndex: number): unknown;
+    /** Stores the value of `expression` for the features that share it with the feature at `featureIndex`. */
+    set(expression: unknown, featureIndex: number, value: unknown): void;
 };
 
 /**

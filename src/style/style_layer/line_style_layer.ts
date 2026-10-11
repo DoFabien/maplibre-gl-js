@@ -1,5 +1,6 @@
 import {type QueryIntersectsFeatureParams, StyleLayer} from '../style_layer.ts';
 import {LineBucket} from '../../data/bucket/line_bucket.ts';
+import {ColumnarLineBucket} from '../../data/bucket/columnar/columnar_line_bucket.ts';
 import {polygonIntersectsBufferedMultiLine} from '../../util/intersection_tests.ts';
 import {getMaximumPaintValue, translateDistance, translate, offsetLine} from '../query_utils.ts';
 import properties, {type LineLayoutPropsPossiblyEvaluated, type LinePaintPropsPossiblyEvaluated} from './line_style_layer_properties.g.ts';
@@ -78,7 +79,10 @@ export class LineStyleLayer extends StyleLayer {
             lineFloorwidthProperty.possiblyEvaluate(this._transitioningPaint._values['line-width'].value, parameters);
     }
 
-    createBucket(parameters: BucketParameters<any>): LineBucket {
+    createBucket(parameters: BucketParameters<any>): LineBucket | ColumnarLineBucket {
+        if (parameters.encoding === 'mlt') {
+            return new ColumnarLineBucket(parameters);
+        }
         return new LineBucket(parameters);
     }
 

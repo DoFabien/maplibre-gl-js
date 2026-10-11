@@ -1,0 +1,48 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "debug": true,
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [
+        11.525101,
+        48.144716
+    ],
+    "zoom": 14.92,
+    "pitch": 60,
+    "bearing": -20,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/{z}/{x}/{y}.mlt"]
+        }
+    },
+    "sprite": "local://sprites/emerald",
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#0f172a"
+            }
+        },
+        {
+            "id": "extrusion",
+            "type": "fill-extrusion",
+            "source": "openmaptiles",
+            "source-layer": "building",
+            "filter": ["has", "render_height"],
+            "paint": {
+                "fill-extrusion-pattern": "generic_icon",
+                "fill-extrusion-height": ["get", "render_height"],
+                "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
+                "fill-extrusion-opacity": 0.95
+            }
+        }
+    ]
+}

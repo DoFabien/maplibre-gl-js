@@ -1,0 +1,40 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {}
+    },
+    "zoom": 0.99,
+    "center": [
+        0.7,
+        0
+    ],
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/mlt/gl-js/{z}-{x}-{y}.mlt"
+            ],
+            "encoding": "mlt"
+        }
+    },
+    "sprite": "local://sprites/solid-black",
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "white"
+            }
+        },
+        {
+            "id": "land",
+            "type": "fill",
+            "source": "maplibre",
+            "source-layer": "water",
+            "paint": {
+                "fill-pattern": "black"
+            }
+        }
+    ]
+}

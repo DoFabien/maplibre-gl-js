@@ -6,7 +6,7 @@ import {OverscaledTileID} from '../../../src/tile/tile_id.ts';
 import {FeatureIndex} from '../../../src/data/feature_index.ts';
 import {SubdivisionGranularitySetting} from '../../../src/render/subdivision_granularity_settings.ts';
 
-import type {IndexedFeature, PopulateParameters} from '../../../src/data/bucket.ts';
+import type {BucketDependencyParameters, IndexedFeature, PopulateParameters} from '../../../src/data/bucket.ts';
 import type {VectorTileLayerLike} from '@maplibre/vt-pbf';
 
 export type CreateBucketParameters = {
@@ -24,7 +24,13 @@ export function loadVectorTile(name = 'mbsv5-6-18-23.vector.pbf'): VectorTile {
 export function getFeaturesFromLayer(sourceLayer: VectorTileLayerLike): IndexedFeature[] {
     const features = new Array<IndexedFeature>(sourceLayer.length);
     for (let i = 0; i < sourceLayer.length; i++) {
-        features[i] = {feature: sourceLayer.feature(i), index: i} as unknown as IndexedFeature;
+        const feature = sourceLayer.feature(i);
+        features[i] = {
+            feature,
+            id: feature.id,
+            index: i,
+            sourceLayerIndex: 0
+        };
     }
     return features;
 }
@@ -39,4 +45,15 @@ export function createPopulateOptions(availableImages: string[]): PopulateParame
         availableImages,
         subdivisionGranularity: SubdivisionGranularitySetting.noSubdivision
     };
+}
+
+/** Supplies empty asynchronous resources for bucket tests that only need patterns or dashes. */
+export function createBucketDependencies(
+    options: PopulateParameters,
+    canonical: BucketDependencyParameters['canonical'],
+    patternPositions: BucketDependencyParameters['patternPositions'] = {},
+    dashPositions: BucketDependencyParameters['dashPositions'] = {},
+): BucketDependencyParameters {
+    return {options, canonical, patternPositions, dashPositions, patternMap: {},
+        glyphMap: {}, glyphPositions: {}, iconMap: {}, iconPositions: {}, showCollisionBoxes: false};
 }

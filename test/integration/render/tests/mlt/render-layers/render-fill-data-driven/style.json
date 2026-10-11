@@ -1,0 +1,59 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "debug": true,
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [
+        11.525101,
+        48.144716
+    ],
+    "zoom": 14.92,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/{z}/{x}/{y}.mlt"]
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#0f172a"
+            }
+        },
+        {
+            "id": "building-height",
+            "type": "fill",
+            "source": "openmaptiles",
+            "source-layer": "building",
+            "filter": [
+                "all",
+                ["has", "render_height"],
+                [">", ["get", "render_height"], 5]
+            ],
+            "paint": {
+                "fill-color": [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "render_height"],
+                    5,
+                    "#1d4ed8",
+                    20,
+                    "#22c55e",
+                    40,
+                    "#facc15",
+                    80,
+                    "#ef4444"
+                ],
+                "fill-opacity": 0.92
+            }
+        }
+    ]
+}

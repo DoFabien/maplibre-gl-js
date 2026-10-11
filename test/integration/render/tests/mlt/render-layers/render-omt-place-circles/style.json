@@ -1,0 +1,59 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [7.5, 48.0],
+    "zoom": 3.1,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/omt/{z}/{x}/{y}.mlt"],
+            "maxzoom": 14
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "omt-place-circles",
+            "type": "circle",
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "filter": [
+                "any",
+                ["==", ["get", "class"], "country"],
+                ["==", ["get", "class"], "city"]
+            ],
+            "paint": {
+                "circle-radius": [
+                    "match",
+                    ["get", "class"],
+                    "country",
+                    10,
+                    7
+                ],
+                "circle-color": [
+                    "match",
+                    ["get", "class"],
+                    "country",
+                    "#f97316",
+                    "#2563eb"
+                ],
+                "circle-stroke-width": 2,
+                "circle-stroke-color": "#0f172a",
+                "circle-opacity": 0.95
+            }
+        }
+    ]
+}

@@ -1,0 +1,174 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "height": 256
+        }
+    },
+    "center": [
+        13.418056,
+        52.499167
+    ],
+    "zoom": 14,
+    "sources": {
+        "maplibre": {
+            "type": "vector",
+            "maxzoom": 14,
+            "tiles": [
+                "local://tiles/mlt/gl-js/{z}-{x}-{y}.mlt"
+            ],
+            "encoding": "mlt"
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f3f7f4"
+            }
+        },
+        {
+            "id": "road-string-computed-context",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "all",
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "LineString"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    "path"
+                ],
+                [
+                    "!",
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "coalesce",
+                                [
+                                    "==",
+                                    [
+                                        "concat",
+                                        [
+                                            "get",
+                                            "class"
+                                        ],
+                                        "-",
+                                        [
+                                            "get",
+                                            "type"
+                                        ]
+                                    ],
+                                    "path-path"
+                                ],
+                                false
+                            ],
+                            [
+                                "==",
+                                [
+                                    "length",
+                                    [
+                                        "get",
+                                        "type"
+                                    ]
+                                ],
+                                4
+                            ],
+                            [
+                                "==",
+                                [
+                                    "get",
+                                    "class"
+                                ],
+                                [
+                                    "get",
+                                    "type"
+                                ]
+                            ]
+                        ],
+                        true,
+                        false
+                    ]
+                ]
+            ],
+            "paint": {
+                "line-width": 4,
+                "line-color": "#c6a77d",
+                "line-opacity": 0.85
+            }
+        },
+        {
+            "id": "road-string-computed",
+            "type": "line",
+            "source": "maplibre",
+            "source-layer": "road",
+            "filter": [
+                "case",
+                [
+                    "all",
+                    [
+                        "coalesce",
+                        [
+                            "==",
+                            [
+                                "concat",
+                                [
+                                    "get",
+                                    "class"
+                                ],
+                                "-",
+                                [
+                                    "get",
+                                    "type"
+                                ]
+                            ],
+                            "path-path"
+                        ],
+                        false
+                    ],
+                    [
+                        "==",
+                        [
+                            "length",
+                            [
+                                "get",
+                                "type"
+                            ]
+                        ],
+                        4
+                    ],
+                    [
+                        "==",
+                        [
+                            "get",
+                            "class"
+                        ],
+                        [
+                            "get",
+                            "type"
+                        ]
+                    ]
+                ],
+                true,
+                false
+            ],
+            "paint": {
+                "line-width": 16,
+                "line-color": "#008a55"
+            }
+        }
+    ]
+}

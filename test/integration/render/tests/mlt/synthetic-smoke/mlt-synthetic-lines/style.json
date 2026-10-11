@@ -1,0 +1,44 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [0, 0],
+    "zoom": 0,
+    "sources": {
+        "routes": {
+            "type": "vector",
+            "encoding": "mlt",
+            "maxzoom": 0,
+            "tiles": ["local://tiles/mlt/synthetic/0/0/line.mlt"]
+        }
+    },
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "route-context",
+            "type": "line",
+            "source": "routes",
+            "source-layer": "layer1",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-width": 7,
+                "line-color": "#64748b",
+                "line-opacity": 0.8
+            }
+        }
+    ]
+}

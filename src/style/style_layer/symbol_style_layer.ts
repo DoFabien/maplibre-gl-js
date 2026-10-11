@@ -1,5 +1,6 @@
 import {StyleLayer} from '../style_layer.ts';
 import {SymbolBucket, type SymbolFeature} from '../../data/bucket/symbol_bucket.ts';
+import {ColumnarSymbolBucket} from '../../data/bucket/columnar/columnar_symbol_bucket.ts';
 import {resolveTokens} from '../../util/resolve_tokens.ts';
 import properties, {type SymbolLayoutPropsPossiblyEvaluated, type SymbolPaintPropsPossiblyEvaluated} from './symbol_style_layer_properties.g.ts';
 import {
@@ -96,7 +97,10 @@ export class SymbolStyleLayer extends StyleLayer {
         return value;
     }
 
-    createBucket(parameters: BucketParameters<any>): SymbolBucket {
+    createBucket(parameters: BucketParameters<any>): SymbolBucket | ColumnarSymbolBucket {
+        if (parameters.encoding === 'mlt') {
+            return new ColumnarSymbolBucket(parameters);
+        }
         return new SymbolBucket(parameters);
     }
 

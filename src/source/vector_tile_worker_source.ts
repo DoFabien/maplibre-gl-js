@@ -8,7 +8,8 @@ import {BoundedLRUCache} from '../tile/tile_cache.ts';
 import {ensureError, extend} from '../util/util.ts';
 import {RequestPerformance} from '../util/request_performance.ts';
 import {VectorTileOverzoomed, sliceVectorTileLayer} from './vector_tile_overzoomed.ts';
-import {MLTVectorTile} from './vector_tile_mlt.ts';
+import {MLTVectorTile, type MLTVectorTileOptions} from './vector_tile_mlt.ts';
+import {collectLayerPropertyDependencies} from '../data/bucket/columnar/property_dependencies.ts';
 
 import type {
     WorkerSource,
@@ -49,9 +50,10 @@ export class VectorTileWorkerSource implements WorkerSource {
      */
     loadVectorTile(params: WorkerTileParameters, rawData: ArrayBuffer): LoadVectorTileResult {
         try {
+            // The re-encoded data of an overzoomed tile answers queries, which read every property.
             const vectorTile = params.encoding !== 'mlt'
                 ? new VectorTile(new PbfReader(rawData))
-                : new MLTVectorTile(rawData);
+                : new MLTVectorTile(rawData, params.overzoomParameters ? undefined : createMltDecodeOptions(params, this.layerIndex));
 
             return {vectorTile, rawData};
         } catch (ex) {
@@ -242,4 +244,38 @@ export class VectorTileWorkerSource implements WorkerSource {
     async removeTile(params: TileParameters): Promise<void> {
         this.tileState.removeLoaded(params.uid);
     }
+}
+
+export function createMltDecodeOptions(params: WorkerTileParameters, layerIndex: StyleLayerIndex): MLTVectorTileOptions {
+    const sourceLayerFamilies = layerIndex.familiesBySource[params.source] ?? {};
+    const layerNames = Object.keys(sourceLayerFamilies);
+    const propertyColumnNamesByLayer = new Map<string, Set<string>>();
+
+    for (const sourceLayerId of layerNames) {
+        const neededProperties = new Set<string>();
+        let canFilterProperties = true;
+
+        for (const family of sourceLayerFamilies[sourceLayerId]) {
+            for (const layer of family) {
+                const layerDependencies = collectLayerPropertyDependencies(layer);
+                if (layerDependencies === null) {
+                    canFilterProperties = false;
+                    break;
+                }
+                for (const propertyName of layerDependencies) {
+                    neededProperties.add(propertyName);
+                }
+            }
+            if (!canFilterProperties) break;
+        }
+
+        const promoteId = typeof params.promoteId === 'string' ? params.promoteId : params.promoteId?.[sourceLayerId];
+        if (typeof promoteId === 'string') {
+            neededProperties.add(promoteId);
+        }
+
+        if (canFilterProperties) propertyColumnNamesByLayer.set(sourceLayerId, neededProperties);
+    }
+
+    return {layerNames, propertyColumnNamesByLayer};
 }

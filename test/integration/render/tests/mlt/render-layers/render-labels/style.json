@@ -7,33 +7,52 @@
         }
     },
     "center": [
-        15.311276,
-        50.821840
+        0,
+        0
     ],
-    "zoom": 5.7,
+    "zoom": 0,
     "sources": {
-        "openmaptiles": {
+        "synthetic": {
             "type": "vector",
             "encoding": "mlt",
-            "tiles": ["local://tiles/mlt/{z}/{x}/{y}.mlt"],
-            "maxzoom": 14
+            "tiles": ["local://tiles/mlt/synthetic/0/0/props_shared_dict_one_child.mlt"],
+            "maxzoom": 0
         }
     },
     "glyphs": "local://glyphs/{fontstack}/{range}.pbf",
-    "sprite": "local://sprites/sprite",
     "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "label-anchor",
+            "type": "circle",
+            "source": "synthetic",
+            "source-layer": "layer1",
+            "paint": {
+                "circle-radius": 5,
+                "circle-color": "#0ea5e9"
+            }
+        },
         {
             "id": "place_label_other",
             "type": "symbol",
-            "source": "openmaptiles",
-            "source-layer": "place",
+            "source": "synthetic",
+            "source-layer": "layer1",
             "layout": {
-                "text-field": "{name:latin}",
+                "text-field": "MLT LABEL",
                 "text-font": ["Noto Sans Regular"],
-                "text-size": ["interpolate", ["linear"], ["zoom"], 3, 12, 8, 22]
+                "text-size": 28,
+                "text-offset": [0, 1.2]
             },
             "paint": {
-                "text-color": "#ffffff"
+                "text-color": "#0f172a",
+                "text-halo-color": "#f8fafc",
+                "text-halo-width": 1.5
             }
         }
     ]

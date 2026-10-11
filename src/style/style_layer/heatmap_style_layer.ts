@@ -1,11 +1,12 @@
 import {type QueryIntersectsFeatureParams, StyleLayer} from '../style_layer.ts';
 import {HeatmapBucket} from '../../data/bucket/heatmap_bucket.ts';
+import {ColumnarCircleBucket} from '../../data/bucket/columnar/columnar_circle_bucket.ts';
 import properties, {type HeatmapPaintPropsPossiblyEvaluated} from './heatmap_style_layer_properties.g.ts';
 import {renderColorRamp} from '../../util/color_ramp.ts';
 import {circleIntersection, getMaximumPaintValue} from '../query_utils.ts';
 
-import type {Transitionable, Transitioning, PossiblyEvaluated} from '../properties.ts';
 import type {RGBAImage} from '../../util/image.ts';
+import type {Transitionable, Transitioning, PossiblyEvaluated} from '../properties.ts';
 import type {Texture} from '../../webgl/texture.ts';
 import type {Framebuffer} from '../../webgl/framebuffer.ts';
 import type {HeatmapPaintProps} from './heatmap_style_layer_properties.g.ts';
@@ -29,7 +30,8 @@ export class HeatmapStyleLayer extends StyleLayer {
     _transitioningPaint: Transitioning<HeatmapPaintProps>;
     paint: PossiblyEvaluated<HeatmapPaintProps, HeatmapPaintPropsPossiblyEvaluated>;
 
-    createBucket(options: any): HeatmapBucket {
+    createBucket(options: any): HeatmapBucket | ColumnarCircleBucket<HeatmapStyleLayer> {
+        if (options.encoding === 'mlt') return new ColumnarCircleBucket<HeatmapStyleLayer>(options);
         return new HeatmapBucket(options);
     }
 

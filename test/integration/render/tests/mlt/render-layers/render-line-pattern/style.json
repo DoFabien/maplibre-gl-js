@@ -1,0 +1,66 @@
+{
+    "version": 8,
+    "metadata": {
+        "test": {
+            "debug": true,
+            "width": 256,
+            "height": 256,
+            "timeout": 60000
+        }
+    },
+    "center": [
+        0,
+        0
+    ],
+    "zoom": 0,
+    "sources": {
+        "synthetic": {
+            "type": "vector",
+            "encoding": "mlt",
+            "tiles": ["local://tiles/mlt/synthetic/0/0/line.mlt"],
+            "maxzoom": 0
+        }
+    },
+    "sprite": "local://sprites/emerald",
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "#f8fafc"
+            }
+        },
+        {
+            "id": "road-pattern-thin",
+            "type": "line",
+            "source": "synthetic",
+            "source-layer": "layer1",
+            "paint": {
+                "line-width": 8,
+                "line-pattern": "generic_icon",
+                "line-translate": [0, -56]
+            }
+        },
+        {
+            "id": "road-pattern-medium-base",
+            "type": "line",
+            "source": "synthetic",
+            "source-layer": "layer1",
+            "paint": {
+                "line-width": 12,
+                "line-pattern": "generic_icon"
+            }
+        },
+        {
+            "id": "road-pattern-wide",
+            "type": "line",
+            "source": "synthetic",
+            "source-layer": "layer1",
+            "paint": {
+                "line-width": 16,
+                "line-pattern": "generic_icon",
+                "line-translate": [0, 56]
+            }
+        }
+    ]
+}
