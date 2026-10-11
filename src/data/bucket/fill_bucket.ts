@@ -108,7 +108,12 @@ export class FillBucket implements Bucket {
                 sortKey
             };
 
-            bucketFeatures.push(bucketFeature);
+            // Without sort keys, features are added as they are read, so that their geometry dies young.
+            if (sortFeaturesByKey) {
+                bucketFeatures.push(bucketFeature);
+            } else {
+                this.addBucketFeature(bucketFeature, features, options, canonical);
+            }
         }
 
         if (sortFeaturesByKey) {
@@ -116,20 +121,24 @@ export class FillBucket implements Bucket {
         }
 
         for (const bucketFeature of bucketFeatures) {
-            const {geometry, index, sourceLayerIndex} = bucketFeature;
-
-            if (this.hasDependencies) {
-                const patternFeature = addPatternDependencies('fill', this.layers, bucketFeature, {zoom: this.zoom}, options);
-                // pattern features are added only once the pattern is loaded into the image atlas
-                // so are stored during populate until later updated with positions by tile worker in addFeatures
-                this.patternFeatures.push(patternFeature);
-            } else {
-                this.addFeature(bucketFeature, geometry, index, canonical, {}, options.subdivisionGranularity);
-            }
-
-            const feature = features[index].feature;
-            options.featureIndex.insert(feature, geometry, index, sourceLayerIndex, this.index);
+            this.addBucketFeature(bucketFeature, features, options, canonical);
         }
+    }
+
+    private addBucketFeature(bucketFeature: BucketFeature, features: IndexedFeature[], options: PopulateParameters, canonical: CanonicalTileID): void {
+        const {geometry, index, sourceLayerIndex} = bucketFeature;
+
+        if (this.hasDependencies) {
+            const patternFeature = addPatternDependencies('fill', this.layers, bucketFeature, {zoom: this.zoom}, options);
+            // pattern features are added only once the pattern is loaded into the image atlas
+            // so are stored during populate until later updated with positions by tile worker in addFeatures
+            this.patternFeatures.push(patternFeature);
+        } else {
+            this.addFeature(bucketFeature, geometry, index, canonical, {}, options.subdivisionGranularity);
+        }
+
+        const feature = features[index].feature;
+        options.featureIndex.insert(feature, geometry, index, sourceLayerIndex, this.index);
     }
 
     update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {

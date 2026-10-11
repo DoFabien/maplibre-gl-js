@@ -124,8 +124,12 @@ export class CircleBucket<Layer extends CircleStyleLayer | HeatmapStyleLayer> im
                 sortKey
             };
 
-            bucketFeatures.push(bucketFeature);
-
+            // Without sort keys, features are added as they are read, so that their geometry dies young.
+            if (sortFeaturesByKey) {
+                bucketFeatures.push(bucketFeature);
+            } else {
+                this.addBucketFeature(bucketFeature, features, options, canonical, granularity);
+            }
         }
 
         if (sortFeaturesByKey) {
@@ -133,12 +137,16 @@ export class CircleBucket<Layer extends CircleStyleLayer | HeatmapStyleLayer> im
         }
 
         for (const bucketFeature of bucketFeatures) {
-            const {geometry, index, sourceLayerIndex} = bucketFeature;
-            const feature = features[index].feature;
-
-            this.addFeature(bucketFeature, geometry, index, canonical, granularity);
-            options.featureIndex.insert(feature, geometry, index, sourceLayerIndex, this.index);
+            this.addBucketFeature(bucketFeature, features, options, canonical, granularity);
         }
+    }
+
+    private addBucketFeature(bucketFeature: BucketFeature, features: IndexedFeature[], options: PopulateParameters, canonical: CanonicalTileID, granularity: CircleGranularity): void {
+        const {geometry, index, sourceLayerIndex} = bucketFeature;
+        const feature = features[index].feature;
+
+        this.addFeature(bucketFeature, geometry, index, canonical, granularity);
+        options.featureIndex.insert(feature, geometry, index, sourceLayerIndex, this.index);
     }
 
     update(states: FeatureStates, vtLayer: VectorTileLayerLike, imagePositions: {[_: string]: ImagePosition}): void {
