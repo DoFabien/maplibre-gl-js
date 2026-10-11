@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import {describe, expect, test, vi} from 'vitest';
 import {featureFilter, type FilterSpecification} from '@maplibre/maplibre-gl-style-spec';
-import {BitVector, BooleanFlatVector, createConstGeometryVector, FeatureTable, GEOMETRY_TYPE, IntFlatVector} from '@maplibre/mlt';
 import filter from './filter.ts';
 import {ColumnarEvaluationFeature} from '../../bucket/columnar/evaluation_feature.ts';
 import {toEvaluationFeature} from '../../evaluation_feature.ts';
@@ -13,8 +12,11 @@ import {
     createSyntheticLineFeatureTable,
     createSyntheticPointFeatureTable,
     createSyntheticPolygonFeatureTable,
+    encodeMltFeatureTable,
     signedMltFeatureId,
 } from '../../../../test/unit/lib/mlt_synthetic.ts';
+
+import type {FeatureInput, FeatureTable} from '@maplibre/mlt';
 
 const tiles = path.join(__dirname, '../../../../test/integration/assets/tiles/mlt');
 
@@ -25,13 +27,29 @@ function loadTable(file: string, layer: string): FeatureTable {
 
 /** Eight points whose `visible` column is true, false or missing, next to an integer `rank` column. */
 function createBooleanFeatureTable(): FeatureTable {
-    const count = 8;
-    const vertices = Int32Array.from({length: count * 2}, (_, i) => 100 + i * 10);
-    return new FeatureTable('booleans', createConstGeometryVector(count, GEOMETRY_TYPE.POINT, null, null, vertices), undefined, [
-        new BooleanFlatVector('visible', new BitVector(new Uint8Array([0b10110101]), count), new BitVector(new Uint8Array([0b11011111]), count)),
-        new IntFlatVector('rank', Int32Array.from({length: count}, (_, i) => i + 1), count),
-    ], 4096);
+    const visible = [true, false, true, false, true, null, false, true];
+    return encodeMltFeatureTable({name: 'booleans', features: visible.map((value, i) => ({
+        geometry: {type: 'Point', coordinates: [100 + i * 20, 110 + i * 20]},
+        properties: {visible: value, rank: i + 1},
+    }))});
 }
+
+/** Points, lines and polygons in one layer, with a dictionary string column. */
+function createMixedGeometryFeatureTable(): FeatureTable {
+    const geometries: Array<FeatureInput['geometry']> = [
+        {type: 'Point', coordinates: [10, 10]},
+        {type: 'LineString', coordinates: [[0, 0], [20, 20]]},
+        {type: 'Polygon', coordinates: [[[0, 0], [30, 0], [30, 30]]]},
+        {type: 'MultiPoint', coordinates: [[40, 40], [50, 50]]},
+        {type: 'MultiLineString', coordinates: [[[0, 40], [40, 0]], [[60, 60], [70, 70]]]},
+    ];
+    return encodeMltFeatureTable({name: 'mixed', features: geometries.map((geometry, i) => ({
+        id: i + 1, geometry, properties: {class: i % 2 ? 'road' : 'park', rank: i},
+    }))}, {stringEncodings: {class: 'dictionary'}});
+}
+
+/** A polygon around the whole Web Mercator world. */
+const world = {type: 'Polygon', coordinates: [[[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]]]};
 
 /** Up to three distinct non-null values of a column, as vector tiles decode them. */
 function sampleValues(table: FeatureTable, name: string): unknown[] {
@@ -60,7 +78,7 @@ function generateFilters(table: FeatureTable): unknown[] {
         const values = sampleValues(table, name);
         const value = values[0] ?? 'x';
         const other = typeof value === 'number' ? 'text' : 3;
-        for (const op of ['==', '!=', '<', '>=']) {
+        for (const op of ['==', '!=', '<', '<=', '>', '>=']) {
             leaves.push([op, ['get', name], value], [op, ['get', name], other]);
         }
         leaves.push(
@@ -79,8 +97,23 @@ function generateFilters(table: FeatureTable): unknown[] {
             ['==', ['get', name], String(value).toUpperCase(), ['collator', {'case-sensitive': false}]],
             ['==', ['feature-state', name], null],
             ['case', ['has', name], ['==', ['typeof', ['get', name]], 'string'], false],
+            ['has', ['literal', name]], ['match', ['get', name], [value, 'x'], false, true], ['match', ['get', name], value, true, false],
+            ['case', ['==', ['get', name], value], false, false], ['!in', ['get', name], ['literal', values]],
+            ['case', ['==', ['get', name], value], false, ['has', name], true, false],
+            ['all', ['==', ['get', name], value], ['in', ['geometry-type'], ['literal', ['Point', 'LineString']]]],
+            ['all', ['has', name], ['!=', '$type', 'Polygon']], ['all', ['has', name], ['==', '$type', 'Point']],
+            ['all', ['has', name], ['all', ['==', ['get', name], value], ['==', ['to-string', ['get', name]], 'x']]],
+            ['any', false, ['==', name, value]], ['all', true, ['==', name, value]],
+            ['all', ['has', name], ['>=', ['get', name], value]], ['all', ['has', name], ['<', name, value]],
+            ['==', ['get', name], ['global-state', 'list']],
         );
     }
+    filters.push(
+        true, false, ['literal', true], ['global-state', 'flag'], ['global-state', 'count'], ['all'], ['any'], ['has', '$type'], ['!has', '$type'],
+        ['==', ['get', 'missing'], 1], ['!=', 'missing', 1], ['in', 'missing', 1], ['!in', 'missing', 1], ['has', 'missing'], ['!has', 'missing'],
+        ['all', ['has', '$id'], ['!=', ['get', 'missing'], 1]], ['all', ['has', '$id'], ['==', 'missing', 1]],
+        ['within', world], ['!', ['within', world]], ['<', ['distance', {type: 'Point', coordinates: [0, 0]}], 1e7],
+    );
     filters.push(...leaves);
     for (let i = 0; i + 1 < leaves.length; i += 3) {
         const [a, b] = [leaves[i], leaves[i + 1]];
@@ -108,8 +141,8 @@ function selectRows(table: FeatureTable, expression: FilterSpecification): numbe
 }
 
 /** The style filter evaluated on each row as a vector tile feature: ids are unsigned, a missing id is undefined. */
-function styleSelection(table: FeatureTable, expression: unknown, canonical: CanonicalTileID): number[] {
-    const reference = featureFilter(expression as FilterSpecification, 'reference');
+function styleSelection(table: FeatureTable, expression: unknown, canonical: CanonicalTileID, globalState: Record<string, unknown>): number[] {
+    const reference = featureFilter(expression as FilterSpecification, 'reference', globalState);
     const view = new ColumnarEvaluationFeature(table);
     const selected: number[] = [];
     for (let i = 0; i < table.numFeatures; i++) {
@@ -126,9 +159,11 @@ function styleSelection(table: FeatureTable, expression: unknown, canonical: Can
 }
 
 describe('MLT filters select the rows the style specification selects', () => {
+    const globalState = {flag: true, count: 3, list: ['x']};
     const cases: Array<[string, () => FeatureTable, CanonicalTileID]> = [
         ['OpenMapTiles transportation_name, FSST and dictionary strings', () => loadTable('omt/14/8299/5635.mlt', 'transportation_name'), new CanonicalTileID(14, 8299, 5635)],
         ['booleans with missing values', createBooleanFeatureTable, new CanonicalTileID(0, 0, 0)],
+        ['mixed geometry types and a dictionary column', createMixedGeometryFeatureTable, new CanonicalTileID(0, 0, 0)],
         ['gl-js road, 64-bit integers', () => loadTable('gl-js/14-8802-5374.mlt', 'road'), new CanonicalTileID(14, 8802, 5374)],
         ['gl-js poi_label', () => loadTable('gl-js/14-8802-5374.mlt', 'poi_label'), new CanonicalTileID(14, 8802, 5374)],
         ['synthetic lines', createSyntheticLineFeatureTable, new CanonicalTileID(0, 0, 0)],
@@ -137,7 +172,6 @@ describe('MLT filters select the rows the style specification selects', () => {
     ];
 
     test.each(cases)('%s', (_label, createTable, canonical) => {
-        // The style specification warns about filters mixing legacy and expression syntax.
         const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const table = createTable();
         const mismatches: string[] = [];
@@ -145,9 +179,9 @@ describe('MLT filters select the rows the style specification selects', () => {
         try {
             for (const expression of generateFilters(table)) {
                 if (!isValidStyleFilter(expression)) continue;
-                const selection = filter(table, expression as FilterSpecification, undefined, canonical, {zoom: canonical.z});
+                const selection = filter(table, expression as FilterSpecification, globalState, canonical, {zoom: canonical.z});
                 const selected = Array.from({length: selection.limit}, (_, i) => Number(selection.getIndex(i))).sort((a, b) => a - b);
-                const expected = styleSelection(table, expression, canonical);
+                const expected = styleSelection(table, expression, canonical, globalState);
                 checked++;
                 if (selected.length !== expected.length || selected.some((index, i) => index !== expected[i])) {
                     mismatches.push(`${JSON.stringify(expression)}: ${selected.length} rows instead of ${expected.length}`);

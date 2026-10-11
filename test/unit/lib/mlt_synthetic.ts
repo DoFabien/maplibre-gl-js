@@ -1,15 +1,6 @@
 import Point from '@mapbox/point-geometry';
-import {
-    BitVector,
-    createConstGeometryVector,
-    createStringFlatVector,
-    FeatureTable,
-    GEOMETRY_TYPE,
-    IntFlatVector,
-    TopologyVector,
-    type Vector,
-} from '@maplibre/mlt';
-import {MLTVectorTile} from '../../../src/source/vector_tile_mlt.ts';
+import {encodeTile, type EncodeOptions, type FeatureTable, type Layer} from '@maplibre/mlt';
+import {getMltFeatureTable, MLTVectorTile} from '../../../src/source/vector_tile_mlt.ts';
 
 import type {IndexedFeature} from '../../../src/data/bucket.ts';
 import type {VectorTileLayerLike, VectorTileLike} from '@maplibre/vt-pbf';
@@ -59,25 +50,6 @@ export type SyntheticPointFeature = {
         icon: string;
     };
 };
-
-export function createNullableIntVector(name: string, values: Array<number | null>): IntFlatVector {
-    const nullability = new BitVector(new Uint8Array(Math.ceil(values.length / 8)), values.length);
-    for (let index = 0; index < values.length; index++) {
-        if (values[index] !== null) {
-            nullability.set(index, true);
-        }
-    }
-    return new IntFlatVector(name, new Int32Array(values.map(value => value ?? 0)), nullability);
-}
-
-export function createNumberPropertyVector(name: string, values: number[]): Vector {
-    return {
-        name,
-        size: values.length,
-        getValue: (index: number) => values[index],
-        has: () => true,
-    } as unknown as Vector;
-}
 
 export function syntheticLineFeatures(): SyntheticLineFeature[] {
     return [
@@ -153,121 +125,81 @@ export function syntheticPointFeatures(): SyntheticPointFeature[] {
     ];
 }
 
-export function createSyntheticLineFeatureTable(features: SyntheticLineFeature[] = syntheticLineFeatures()): FeatureTable {
-    const geometryOffsets = new Uint32Array(features.length + 1);
-    const partOffsets: number[] = [0];
-    const vertexBuffer: number[] = [];
-    let partCount = 0;
-    let vertexCount = 0;
+/** An MLT feature id: MLT stores unsigned ids, as which a negative vector tile id reads. */
+function mltId(id: number | null | undefined): bigint | undefined {
+    return id === null || id === undefined ? undefined : BigInt.asUintN(64, BigInt(id));
+}
 
-    for (let featureIndex = 0; featureIndex < features.length; featureIndex++) {
-        geometryOffsets[featureIndex] = partCount;
-        for (const part of features[featureIndex].parts) {
-            for (const [x, y] of part) {
-                vertexBuffer.push(x, y);
-                vertexCount++;
-            }
-            partCount++;
-            partOffsets.push(vertexCount);
-        }
-    }
-    geometryOffsets[features.length] = partCount;
+/** The rings of a polygon as MLT encodes them, without the closing vertex. */
+function openRing(ring: Array<[number, number]>): Array<[number, number]> {
+    const last = ring[ring.length - 1];
+    return ring.length > 1 && ring[0][0] === last[0] && ring[0][1] === last[1] ? ring.slice(0, -1) : ring;
+}
 
-    return new FeatureTable(
-        syntheticLineLayer,
-        createConstGeometryVector(
-            features.length,
-            GEOMETRY_TYPE.MULTILINESTRING,
-            new TopologyVector(geometryOffsets, new Uint32Array(partOffsets), null),
-            null,
-            new Int32Array(vertexBuffer)
-        ),
-        createNullableIntVector('id', features.map(feature => feature.id ?? null)),
-        [
-            createStringFlatVector(features.map(feature => feature.properties.kind), 'kind'),
-            new IntFlatVector('rank', new Int32Array(features.map(feature => feature.properties.rank)), features.length),
-            new IntFlatVector('sort', new Int32Array(features.map(feature => feature.properties.sort)), features.length),
-            new IntFlatVector('width', new Int32Array(features.map(feature => feature.properties.width)), features.length),
-            new IntFlatVector('opacity', new Int32Array(features.map(feature => feature.properties.opacity)), features.length),
-            new IntFlatVector('dash', new Int32Array(features.map(feature => feature.properties.dash)), features.length),
-            createStringFlatVector(features.map(feature => feature.properties.pattern), 'pattern'),
-            createNumberPropertyVector('geojsonvt_clip_start', features.map(feature => feature.properties.geojsonvt_clip_start)),
-            createNumberPropertyVector('geojsonvt_clip_end', features.map(feature => feature.properties.geojsonvt_clip_end)),
-        ]
-    );
+/** Encodes layers into an MLT tile and decodes it as sources do. */
+export function encodeMltTile(layers: Layer[], options?: EncodeOptions): MLTVectorTile {
+    const bytes = encodeTile(layers, options);
+    return new MLTVectorTile(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer);
+}
+
+/** Encodes one layer into an MLT tile and returns its feature table. */
+export function encodeMltFeatureTable(layer: Layer, options?: EncodeOptions): FeatureTable {
+    return getMltFeatureTable(encodeMltTile([layer], options).layers[layer.name]);
+}
+
+function syntheticLineLayerOf(features: SyntheticLineFeature[], extent = 4096): Layer {
+    return {
+        name: syntheticLineLayer,
+        extent,
+        features: features.map(feature => ({
+            id: mltId(feature.id),
+            geometry: {type: 'MultiLineString', coordinates: feature.parts},
+            properties: feature.properties,
+        })),
+    };
+}
+
+function syntheticPolygonLayerOf(features: SyntheticPolygonFeature[]): Layer {
+    return {
+        name: syntheticPolygonLayer,
+        extent: 4096,
+        features: features.map(feature => ({
+            id: mltId(feature.id),
+            geometry: {type: 'Polygon', coordinates: feature.rings.map(openRing)},
+            properties: feature.properties,
+        })),
+    };
+}
+
+function syntheticPointLayerOf(features: SyntheticPointFeature[]): Layer {
+    return {
+        name: syntheticPointLayer,
+        extent: 4096,
+        features: features.map(feature => ({
+            id: mltId(feature.id),
+            geometry: {type: 'Point', coordinates: feature.point},
+            properties: feature.properties,
+        })),
+    };
+}
+
+export function createSyntheticLineFeatureTable(features: SyntheticLineFeature[] = syntheticLineFeatures(), extent = 4096): FeatureTable {
+    return encodeMltFeatureTable(syntheticLineLayerOf(features, extent));
 }
 
 export function createSyntheticPolygonFeatureTable(features: SyntheticPolygonFeature[] = syntheticPolygonFeatures()): FeatureTable {
-    const partOffsets = new Uint32Array(features.length + 1);
-    const ringOffsets: number[] = [0];
-    const vertexBuffer: number[] = [];
-    let ringCount = 0;
-    let vertexCount = 0;
-
-    for (let featureIndex = 0; featureIndex < features.length; featureIndex++) {
-        partOffsets[featureIndex] = ringCount;
-        for (const ring of features[featureIndex].rings) {
-            const lastPoint = ring[ring.length - 1];
-            const isClosed = ring.length > 1 && ring[0][0] === lastPoint[0] && ring[0][1] === lastPoint[1];
-            const vertexLength = ring.length - (isClosed ? 1 : 0);
-            for (let vertexIndex = 0; vertexIndex < vertexLength; vertexIndex++) {
-                const [x, y] = ring[vertexIndex];
-                vertexBuffer.push(x, y);
-                vertexCount++;
-            }
-            ringCount++;
-            ringOffsets.push(vertexCount);
-        }
-    }
-    partOffsets[features.length] = ringCount;
-
-    return new FeatureTable(
-        syntheticPolygonLayer,
-        createConstGeometryVector(
-            features.length,
-            GEOMETRY_TYPE.POLYGON,
-            new TopologyVector(new Uint32Array(0), partOffsets, new Uint32Array(ringOffsets)),
-            null,
-            new Int32Array(vertexBuffer)
-        ),
-        createNullableIntVector('id', features.map(feature => feature.id ?? null)),
-        [
-            createStringFlatVector(features.map(feature => feature.properties.kind), 'kind'),
-            new IntFlatVector('height', new Int32Array(features.map(feature => feature.properties.height)), features.length),
-            new IntFlatVector('base', new Int32Array(features.map(feature => feature.properties.base)), features.length),
-            new IntFlatVector('sort', new Int32Array(features.map(feature => feature.properties.sort)), features.length),
-            new IntFlatVector('opacity', new Int32Array(features.map(feature => feature.properties.opacity)), features.length),
-            createStringFlatVector(features.map(feature => feature.properties.pattern), 'pattern'),
-        ]
-    );
+    return encodeMltFeatureTable(syntheticPolygonLayerOf(features));
 }
 
 export function createSyntheticPointFeatureTable(features: SyntheticPointFeature[] = syntheticPointFeatures()): FeatureTable {
-    return new FeatureTable(
-        syntheticPointLayer,
-        createConstGeometryVector(
-            features.length,
-            GEOMETRY_TYPE.POINT,
-            new TopologyVector(null, null, null),
-            null,
-            new Int32Array(features.flatMap(feature => feature.point))
-        ),
-        createNullableIntVector('id', features.map(feature => feature.id ?? null)),
-        [
-            createStringFlatVector(features.map(feature => feature.properties.category), 'category'),
-            new IntFlatVector('radius', new Int32Array(features.map(feature => feature.properties.radius)), features.length),
-            new IntFlatVector('sort', new Int32Array(features.map(feature => feature.properties.sort)), features.length),
-            createStringFlatVector(features.map(feature => feature.properties.label), 'label'),
-            createStringFlatVector(features.map(feature => feature.properties.icon), 'icon'),
-        ]
-    );
+    return encodeMltFeatureTable(syntheticPointLayerOf(features));
 }
 
 export function createSyntheticMltTile(): MLTVectorTile {
-    return MLTVectorTile.fromFeatureTables([
-        createSyntheticLineFeatureTable(),
-        createSyntheticPolygonFeatureTable(),
-        createSyntheticPointFeatureTable(),
+    return encodeMltTile([
+        syntheticLineLayerOf(syntheticLineFeatures()),
+        syntheticPolygonLayerOf(syntheticPolygonFeatures()),
+        syntheticPointLayerOf(syntheticPointFeatures()),
     ]);
 }
 
@@ -334,12 +266,4 @@ export function createSyntheticLegacyPointFeatures(features: SyntheticPointFeatu
         index,
         sourceLayerIndex: 0
     }));
-}
-
-export function getSyntheticFeatureRows(): {lines: SyntheticLineFeature[]; polygons: SyntheticPolygonFeature[]; points: SyntheticPointFeature[]} {
-    return {
-        lines: syntheticLineFeatures(),
-        polygons: syntheticPolygonFeatures(),
-        points: syntheticPointFeatures(),
-    };
 }

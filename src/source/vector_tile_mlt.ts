@@ -117,27 +117,6 @@ export class MLTVectorTile implements VectorTileLike {
         });
     }
 
-    static fromFeatureTables(featureTables: FeatureTable[]): MLTVectorTile {
-        const tile = Object.create(MLTVectorTile.prototype) as MLTVectorTile;
-        tile.layers = {};
-        tile.addFeatureTables(featureTables);
-        return tile;
-    }
-
-    private addFeatureTables(featureTables: FeatureTable[]): void {
-        const featureTableByName = Object.fromEntries(featureTables.map((featureTable) => [featureTable.name, featureTable]));
-        this.addLayerGetters(
-            featureTables.map((featureTable) => featureTable.name),
-            (layerName) => {
-                const featureTable = featureTableByName[layerName];
-                if (!featureTable) {
-                    throw new Error(`MLT layer '${layerName}' could not be resolved`);
-                }
-                return featureTable;
-            }
-        );
-    }
-
     private addLayerGetters(layerNames: string[], resolveFeatureTable: (layerName: string) => FeatureTable): void {
         const layerCache: Record<string, MLTVectorTileLayer> = {};
 

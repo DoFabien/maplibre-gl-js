@@ -1,4 +1,5 @@
 import {describe, expect, test} from 'vitest';
+import Point from '@mapbox/point-geometry';
 import {featureFilter} from '@maplibre/maplibre-gl-style-spec';
 import {CanonicalTileID} from '../../../tile/tile_id';
 import {createPopulateOptions} from '../../../../test/unit/lib/tile';
@@ -9,6 +10,7 @@ import {
     createSyntheticLineFeatureTable,
     createSyntheticPointFeatureTable,
     createSyntheticPolygonFeatureTable,
+    encodeMltFeatureTable,
     syntheticLineLayer,
     syntheticPointLayer,
     syntheticPolygonFeatures,
@@ -18,6 +20,7 @@ import {LineStyleLayer} from '../../../style/style_layer/line_style_layer';
 import {FillStyleLayer} from '../../../style/style_layer/fill_style_layer';
 import {CircleStyleLayer} from '../../../style/style_layer/circle_style_layer';
 import {FillExtrusionStyleLayer} from '../../../style/style_layer/fill_extrusion_style_layer';
+import {HeatmapStyleLayer} from '../../../style/style_layer/heatmap_style_layer';
 import {LineBucket} from '../line_bucket';
 import {FillBucket} from '../fill_bucket';
 import {CircleBucket} from '../circle_bucket';
@@ -28,7 +31,7 @@ import {ColumnarCircleBucket} from './columnar_circle_bucket';
 import {ColumnarFillExtrusionBucket} from './columnar_fill_extrusion_bucket';
 import {deserialize, serialize} from '../../../util/web_worker_transfer';
 
-import type {BucketParameters} from '../../bucket';
+import type {BucketParameters, IndexedFeature} from '../../bucket';
 import type {ZoomHistory} from '../../../style/zoom_history';
 import type {EvaluationParameters} from '../../../style/evaluation_parameters';
 
@@ -115,6 +118,18 @@ describe('synthetic MLT columnar bucket parity', () => {
         expect(columnar.layoutVertexArray.length).toBeGreaterThan(0);
         expect(structArrayBytes(columnar.layoutVertexArray as any)).toEqual(structArrayBytes(legacy.layoutVertexArray as any));
         expect(structArrayBytes(columnar.indexArray as any)).toEqual(structArrayBytes(legacy.indexArray as any));
+    });
+
+    test('line bucket matches legacy when the tile extent is not a multiple of the table extent', () => {
+        const layer = createLineLayer(undefined, {'line-width': 2});
+        const legacy = new LineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0} as BucketParameters<LineStyleLayer>);
+        const columnar = new ColumnarLineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<LineStyleLayer>);
+        const legacyFeatures = createSyntheticLegacyLineFeatures().map(indexed => ({...indexed, feature: {...indexed.feature, extent: 3000}}));
+        legacy.populate(legacyFeatures, createPopulateOptions([]), canonical);
+        columnar.populateFeatureTable(createSyntheticLineFeatureTable(undefined, 3000), createPopulateOptions([]), canonical);
+
+        expect(columnar.layoutVertexArray.length).toBeGreaterThan(0);
+        expect(structArrayBytes(columnar.layoutVertexArray as any)).toEqual(structArrayBytes(legacy.layoutVertexArray as any));
     });
 
     test('line bucket matches legacy for multi-part lines, clips, sorting and data-driven paint', () => {
@@ -237,6 +252,39 @@ describe('synthetic MLT columnar bucket parity', () => {
         expectPaintBytesEqual(legacyBucket, columnarBucket, layer.id, 'circle-opacity');
     });
 
+    test('heatmap bucket matches legacy for subdivided multipoints and data-driven paint', () => {
+        const layer = recalculate(new HeatmapStyleLayer({id: 'heatmap', type: 'heatmap', source: 'source', 'source-layer': 'points', paint: {
+            'heatmap-radius': ['get', 'radius'],
+            'heatmap-weight': ['case', ['>', ['get', 'weight'], 1], ['/', ['get', 'weight'], 4], 0.5],
+        }}, {}));
+        const rows = [
+            {id: 1, radius: 5, weight: 1, points: [[1024, 1024], [2048, 2048], [-100, 100]]},
+            {id: 2, radius: 9, weight: 3, points: [[3072, 3072]]},
+        ] as Array<{id: number; radius: number; weight: number; points: Array<[number, number]>}>;
+        const table = encodeMltFeatureTable({name: 'points', features: rows.map(row => ({
+            id: row.id, geometry: {type: 'MultiPoint', coordinates: row.points}, properties: {radius: row.radius, weight: row.weight},
+        }))});
+        const legacyFeatures = rows.map((row, index) => ({id: row.id, index, sourceLayerIndex: 0, feature: {
+            id: row.id, type: 1, extent: 4096, properties: {radius: row.radius, weight: row.weight},
+            loadGeometry: () => [row.points.map(([x, y]) => new Point(x, y))],
+        }})) as IndexedFeature[];
+        const parameters = {layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0};
+        const legacyBucket = layer.createBucket({...parameters, encoding: 'mvt'});
+        const columnarBucket = layer.createBucket({...parameters, encoding: 'mlt'}) as ColumnarCircleBucket<HeatmapStyleLayer>;
+        const legacyOptions = createPopulateOptions([]);
+        const columnarOptions = createPopulateOptions([]);
+        legacyOptions.subdivisionGranularity = columnarOptions.subdivisionGranularity = {...legacyOptions.subdivisionGranularity, circle: 3};
+
+        legacyBucket.populate(legacyFeatures, legacyOptions, canonical);
+        columnarBucket.populateFeatureTable(table, columnarOptions, canonical);
+
+        expect(columnarBucket.layoutVertexArray).toHaveLength(3 * 16);
+        expect(structArrayBytes(columnarBucket.layoutVertexArray as any)).toEqual(structArrayBytes(legacyBucket.layoutVertexArray as any));
+        expect(structArrayBytes(columnarBucket.indexArray as any)).toEqual(structArrayBytes(legacyBucket.indexArray as any));
+        expectPaintBytesEqual(legacyBucket, columnarBucket, layer.id, 'heatmap-radius');
+        expectPaintBytesEqual(legacyBucket, columnarBucket, layer.id, 'heatmap-weight');
+    });
+
     test('fill-extrusion bucket matches legacy for polygon height/base expressions', () => {
         const layer = applyFilter(createFillExtrusionLayer({
             'fill-extrusion-height': ['get', 'height'],
@@ -298,11 +346,11 @@ describe('synthetic MLT columnar bucket parity', () => {
         expect(roundTripped.segments.get()).toEqual(bucket.segments.get());
     });
 
-    test('line bucket collects data-driven dash and pattern dependencies like legacy', () => {
-        const layer = applyFilter(createLineLayer(undefined, {
-            'line-pattern': ['get', 'pattern'],
-            'line-dasharray': ['case', ['==', ['get', 'dash'], 1], ['literal', [2, 1]], ['literal', [1, 2]]]
-        }), ['in', ['get', 'kind'], ['literal', ['primary', 'secondary']]]);
+    test.each([
+        {name: 'pattern', paint: {'line-pattern': ['get', 'pattern']}},
+        {name: 'dash', paint: {'line-dasharray': ['case', ['==', ['get', 'dash'], 1], ['literal', [2, 1]], ['literal', [1, 2]]]}},
+    ])('line bucket collects data-driven $name dependencies like legacy', ({paint}) => {
+        const layer = applyFilter(createLineLayer(undefined, paint), ['in', ['get', 'kind'], ['literal', ['primary', 'secondary']]]);
         const legacyBucket = new LineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0} as BucketParameters<LineStyleLayer>);
         const columnarBucket = new ColumnarLineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<LineStyleLayer>);
         const legacyOptions = createPopulateOptions(['stripe', 'dot']);

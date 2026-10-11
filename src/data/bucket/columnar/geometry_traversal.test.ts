@@ -3,7 +3,7 @@ import {createSyntheticMltTile, syntheticPolygonLayer} from '../../../../test/un
 import {getMltFeatureTable} from '../../../source/vector_tile_mlt.ts';
 import {loadGeometry} from '../../load_geometry.ts';
 import {loadFeatureGeometry} from './geometry_traversal.ts';
-import {createConstGeometryVector, FeatureTable, GEOMETRY_TYPE, TopologyVector} from '@maplibre/mlt';
+import {GEOMETRY_TYPE, type FeatureTable} from '@maplibre/mlt';
 
 describe('loadFeatureGeometry', () => {
     test('matches the geometry of the vector tile feature', () => {
@@ -13,16 +13,14 @@ describe('loadFeatureGeometry', () => {
     });
 
     test('loads vertex-offset geometry', () => {
-        const featureTable = new FeatureTable(
-            'offset-line',
-            createConstGeometryVector(
-                1,
-                GEOMETRY_TYPE.LINESTRING,
-                new TopologyVector(null, new Uint32Array([0, 2]), null),
-                new Uint32Array([1, 0]),
-                new Int32Array([10, 20, 30, 40]),
-            ),
-        );
+        const geometryVector = {
+            numGeometries: 1,
+            geometryType: () => GEOMETRY_TYPE.LINESTRING,
+            topologyVector: {partOffsets: new Uint32Array([0, 2])},
+            vertexOffsets: new Uint32Array([1, 0]),
+            vertexBuffer: new Int32Array([10, 20, 30, 40]),
+        };
+        const featureTable = {name: 'offset-line', extent: 4096, geometryVector} as unknown as FeatureTable;
 
         expect(loadFeatureGeometry(featureTable, 0).map((part) => part.map(({x, y}) => [x, y])))
             .toEqual([[[30, 40], [10, 20]]]);
@@ -34,7 +32,7 @@ describe('loadFeatureGeometry', () => {
             numGeometries: 1,
             geometryType: () => GEOMETRY_TYPE.LINESTRING,
             containsPolygonGeometry: () => false,
-            topologyVector: new TopologyVector(null, new Uint32Array([0, 2]), null),
+            topologyVector: {partOffsets: new Uint32Array([0, 2])},
             vertexBuffer: new Uint32Array(),
             mortonSettings: {numBits: 4, coordinateShift: 0},
             getVertex,

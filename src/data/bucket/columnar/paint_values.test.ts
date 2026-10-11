@@ -1,9 +1,9 @@
 import {describe, expect, test, vi} from 'vitest';
-import {createConstGeometryVector, createStringDictionaryVector, FeatureTable, GEOMETRY_TYPE, IntFlatVector, TopologyVector} from '@maplibre/mlt';
 import {ColumnarLineBucket} from './columnar_line_bucket';
 import {LineBucket} from '../line_bucket';
 import {LineStyleLayer} from '../../../style/style_layer/line_style_layer';
-import {MLTVectorTile} from '../../../source/vector_tile_mlt';
+import {getMltFeatureTable, type MLTVectorTile} from '../../../source/vector_tile_mlt';
+import {encodeMltTile} from '../../../../test/unit/lib/mlt_synthetic';
 import {CanonicalTileID} from '../../../tile/tile_id';
 import {createPopulateOptions, getFeaturesFromLayer} from '../../../../test/unit/lib/tile';
 
@@ -25,18 +25,15 @@ function createLayer(): LineStyleLayer {
     return layer;
 }
 
-/** Six lines whose class is a, b, a, b, a and missing. */
-function createFeatureTable(): FeatureTable {
-    const coordinates = Array.from({length: 6}, (_, line) => [0, line * 10, 100, line * 10]).flat();
-    return new FeatureTable(
-        'roads',
-        createConstGeometryVector(6, GEOMETRY_TYPE.LINESTRING, new TopologyVector(null, new Uint32Array([0, 2, 4, 6, 8, 10, 12]), null), null, new Int32Array(coordinates)),
-        new IntFlatVector('id', new Int32Array([1, 2, 3, 4, 5, 6]), 6),
-        [
-            createStringDictionaryVector(['a', 'b', 'a', 'b', 'a', null], 'class'),
-            new IntFlatVector('rank', new Int32Array([3, 1, 3, 3, 1, 2]), 6)
-        ]
-    );
+/** Six lines whose class, a dictionary column, is a, b, a, b, a and missing. */
+function createTile(): MLTVectorTile {
+    const classes = ['a', 'b', 'a', 'b', 'a', null];
+    const ranks = [3, 1, 3, 3, 1, 2];
+    return encodeMltTile([{name: 'roads', features: classes.map((value, line) => ({
+        id: line + 1,
+        geometry: {type: 'LineString', coordinates: [[0, line * 10], [100, line * 10]]},
+        properties: {class: value, rank: ranks[line]},
+    }))}], {stringEncodings: {class: 'dictionary'}});
 }
 
 function arrayBytes(array: {arrayBuffer: ArrayBuffer; length: number; bytesPerElement: number}): number[] {
@@ -54,7 +51,7 @@ describe('ColumnarPaintValues', () => {
         const opacity = vi.spyOn((layer.paint as any).get('line-opacity').value, 'evaluate');
         const bucket = new ColumnarLineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<LineStyleLayer>);
 
-        bucket.populateFeatureTable(createFeatureTable(), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
+        bucket.populateFeatureTable(getMltFeatureTable(createTile().layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
 
         expect(color).toHaveBeenCalledTimes(3);
         expect(opacity).toHaveBeenCalledTimes(6);
@@ -62,7 +59,7 @@ describe('ColumnarPaintValues', () => {
         color.mockRestore();
         opacity.mockRestore();
         const legacy = new LineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0} as BucketParameters<LineStyleLayer>);
-        legacy.populate(getFeaturesFromLayer(MLTVectorTile.fromFeatureTables([createFeatureTable()]).layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
+        legacy.populate(getFeaturesFromLayer(createTile().layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
         expect(paintBytes(bucket, 'line-color')).toEqual(paintBytes(legacy, 'line-color'));
         expect(paintBytes(bucket, 'line-opacity')).toEqual(paintBytes(legacy, 'line-opacity'));
     });
@@ -80,7 +77,7 @@ describe('ColumnarPaintValues', () => {
         const width = vi.spyOn((layer.paint as any).get('line-width').value, 'evaluate');
         const bucket = new ColumnarLineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<LineStyleLayer>);
 
-        bucket.populateFeatureTable(createFeatureTable(), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
+        bucket.populateFeatureTable(getMltFeatureTable(createTile().layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
 
         expect(sortKey).toHaveBeenCalledTimes(3);
         expect(width).toHaveBeenCalledTimes(3);
@@ -88,7 +85,7 @@ describe('ColumnarPaintValues', () => {
         sortKey.mockRestore();
         width.mockRestore();
         const legacy = new LineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0} as BucketParameters<LineStyleLayer>);
-        legacy.populate(getFeaturesFromLayer(MLTVectorTile.fromFeatureTables([createFeatureTable()]).layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
+        legacy.populate(getFeaturesFromLayer(createTile().layers.roads), createPopulateOptions([]), new CanonicalTileID(0, 0, 0));
         expect(paintBytes(bucket, 'line-width')).toEqual(paintBytes(legacy, 'line-width'));
         expect(arrayBytes(bucket.layoutVertexArray)).toEqual(arrayBytes(legacy.layoutVertexArray));
     });

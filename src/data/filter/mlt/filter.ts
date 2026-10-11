@@ -333,16 +333,6 @@ class StyleRows {
 
 const DEFAULT_GLOBALS = {} as GlobalProperties;
 
-/** Whether a filter runs entirely on the columns, without row-by-row style evaluation. */
-export function isColumnarMltFilter(filter: FilterSpecification | void, globalState?: Record<string, unknown>): boolean {
-    return !filter || !containsStyleFilter(normalizeFilter(filter, globalState));
-}
-
-function containsStyleFilter(filter: NormalizedFilter): boolean {
-    if (filter.operator === 'style') return true;
-    return 'children' in filter && filter.children.some(containsStyleFilter);
-}
-
 /**
  * Selects the rows of an MLT feature table that pass a style filter; runtime globals must use the effective
  * zoom, not the canonical tile zoom.

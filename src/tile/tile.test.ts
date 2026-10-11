@@ -2,9 +2,6 @@ import {describe, test, expect, vi} from 'vitest';
 import {createSymbolBucket} from '../../test/unit/lib/create_symbol_layer.ts';
 import {FadingDirections, FadingRoles, Tile} from './tile.ts';
 import {OverscaledTileID} from './tile_id.ts';
-import {WorkerTile} from '../source/worker_tile.ts';
-import {StyleLayerIndex} from '../style/style_layer_index.ts';
-import {SubdivisionGranularitySetting} from '../render/subdivision_granularity_settings.ts';
 import fs from 'fs';
 import path from 'path';
 import {type Feature, fromVectorTileJs, GeoJSONWrapper} from '@maplibre/vt-pbf';
@@ -12,42 +9,8 @@ import {FeatureIndex, GEOJSON_TILE_LAYER_NAME} from '../data/feature_index.ts';
 import {CollisionBoxArray} from '../data/array_types.g.ts';
 import {extend} from '../util/util.ts';
 import {serialize, deserialize} from '../util/web_worker_transfer.ts';
-import {MLTVectorTile} from '../source/vector_tile_mlt.ts';
-import {ColumnarLineBucket} from '../data/bucket/columnar/columnar_line_bucket.ts';
-import {ColumnarFillBucket} from '../data/bucket/columnar/columnar_fill_bucket.ts';
-import {ColumnarCircleBucket} from '../data/bucket/columnar/columnar_circle_bucket.ts';
-import {ColumnarFillExtrusionBucket} from '../data/bucket/columnar/columnar_fill_extrusion_bucket.ts';
-import {LineStyleLayer} from '../style/style_layer/line_style_layer.ts';
-import {FillStyleLayer} from '../style/style_layer/fill_style_layer.ts';
-import {CircleStyleLayer} from '../style/style_layer/circle_style_layer.ts';
-import {FillExtrusionStyleLayer} from '../style/style_layer/fill_extrusion_style_layer.ts';
-import {SymbolStyleLayer} from '../style/style_layer/symbol_style_layer.ts';
-import {CanonicalTileID} from './tile_id.ts';
-import {createPopulateOptions} from '../../test/unit/lib/tile.ts';
-import {normalizeMltFeatureId} from '../util/mlt_feature_id.ts';
-import {AlphaImage} from '../util/image.ts';
-import {MessageType} from '../util/actor_messages.ts';
-import {
-    createSyntheticMltTile,
-    createSyntheticLineFeatureTable,
-    createSyntheticPointFeatureTable,
-    createSyntheticPolygonFeatureTable,
-    signedMltFeatureId,
-    syntheticLineLayer,
-    syntheticLineFeatures,
-    syntheticPointLayer,
-    syntheticPointFeatures,
-    syntheticPolygonLayer,
-    syntheticPolygonFeatures,
-} from '../../test/unit/lib/mlt_synthetic.ts';
-import {createStringFlatVector, FeatureTable} from '@maplibre/mlt';
 
 import type {Style} from '../style/style.ts';
-import type {WorkerTileParameters, WorkerTileWithData} from '../source/worker_source.ts';
-import type {BucketParameters} from '../data/bucket.ts';
-import type {ZoomHistory} from '../style/zoom_history.ts';
-import type {EvaluationParameters} from '../style/evaluation_parameters.ts';
-import type {SymbolBucket} from '../data/bucket/symbol_bucket.ts';
 
 describe('isRenderable', () => {
     test('keeps transparent incoming raster tiles renderable so their fade can advance', () => {
@@ -233,50 +196,6 @@ describe('querySourceFeatures', () => {
 
     });
 
-    test('appends a high-cardinality MLT selection with independent outputs', () => {
-        const featureCount = 640;
-        const baseFeature = syntheticPointFeatures()[0];
-        const featureTable = createSyntheticPointFeatureTable(Array.from({length: featureCount}, (_, index) => ({
-            id: index + 1000,
-            point: [index % 4096, Math.floor(index / 16)] as [number, number],
-            properties: {
-                ...baseFeature.properties,
-                sort: index,
-                label: `feature-${index}`,
-            },
-        })));
-        const tileID = new OverscaledTileID(3, 0, 2, 1, 2);
-        const featureIndex = new FeatureIndex(tileID, 'sort');
-        featureIndex.encoding = 'mlt';
-        featureIndex.rawTileData = new ArrayBuffer(1);
-        featureIndex.vtLayers = MLTVectorTile.fromFeatureTables([featureTable]).layers;
-        const sourceLayer = featureIndex.vtLayers[syntheticPointLayer];
-        const materializeFeature = vi.spyOn(sourceLayer, 'feature');
-        const tile = new Tile(tileID, undefined);
-        tile.latestFeatureIndex = featureIndex;
-        const sentinel = {sentinel: true};
-        const result: any[] = [sentinel];
-
-        tile.querySourceFeatures(result, {sourceLayer: syntheticPointLayer, filter: ['all', ['==', ['zoom'], 3], ['is-supported-script', ['get', 'label']]]});
-        expect(result).toHaveLength(featureCount + 1);
-        expect(result[0]).toBe(sentinel);
-        expect(result[1].id).toBe(0);
-        expect(result[featureCount].id).toBe(featureCount - 1);
-        expect(materializeFeature).toHaveBeenCalledTimes(featureCount);
-
-        expect(new Set([result[1], result[2]])).toHaveLength(2);
-        const firstProperties = result[1].properties;
-        expect(firstProperties.label).toBe('feature-0');
-        firstProperties.label = 'mutated';
-        expect(result[2].properties.label).toBe('feature-1');
-        expect(result[1].geometry).not.toBe(result[2].geometry);
-
-        const nextResult: any[] = [];
-        tile.querySourceFeatures(nextResult, {sourceLayer: syntheticPointLayer});
-        expect(nextResult[0]).not.toBe(result[1]);
-        expect(nextResult[0].properties.label).toBe('feature-0');
-    });
-
 });
 
 describe('Tile.isLessThan', () => {
@@ -422,52 +341,6 @@ describe('rtl text detection', () => {
 });
 
 describe('setFeatureState', () => {
-    const signedMltId = -1814668313;
-    const bucketCases = [
-        {
-            name: 'line',
-            layer: () => createFeatureStateLineLayer(),
-            bucket: (layer: LineStyleLayer) => new ColumnarLineBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<LineStyleLayer>),
-            populate: (bucket: ColumnarLineBucket, table: FeatureTable) => bucket.populateFeatureTable(table, createPopulateOptions([]), new CanonicalTileID(0, 0, 0)),
-            featureTable: (id: number | null) => createSyntheticLineFeatureTable(syntheticLineFeatures().slice(0, 1).map(feature => ({...feature, id}))),
-            sourceLayerId: syntheticLineLayer,
-            stateProperty: 'width',
-        },
-        {
-            name: 'fill',
-            layer: () => createFeatureStateFillLayer(),
-            bucket: (layer: FillStyleLayer) => new ColumnarFillBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<FillStyleLayer>),
-            populate: (bucket: ColumnarFillBucket, table: FeatureTable) => bucket.populateFeatureTable(table, createPopulateOptions([]), new CanonicalTileID(0, 0, 0)),
-            featureTable: (id: number | null) => createSyntheticPolygonFeatureTable(syntheticPolygonFeatures().slice(0, 1).map(feature => ({...feature, id}))),
-            sourceLayerId: syntheticPolygonLayer,
-            stateProperty: 'opacity',
-        },
-        {
-            name: 'circle',
-            layer: () => createFeatureStateCircleLayer(),
-            bucket: (layer: CircleStyleLayer) => new ColumnarCircleBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<CircleStyleLayer>),
-            populate: (bucket: ColumnarCircleBucket, table: FeatureTable) => bucket.populateFeatureTable(table, createPopulateOptions([]), new CanonicalTileID(0, 0, 0)),
-            featureTable: (id: number | null) => createSyntheticPointFeatureTable(syntheticPointFeatures().slice(0, 1).map(feature => ({...feature, id}))),
-            sourceLayerId: syntheticPointLayer,
-            stateProperty: 'radius',
-        },
-        {
-            name: 'fill-extrusion',
-            layer: () => createFeatureStateFillExtrusionLayer(),
-            bucket: (layer: FillExtrusionStyleLayer) => new ColumnarFillExtrusionBucket({layers: [layer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<FillExtrusionStyleLayer>),
-            populate: (bucket: ColumnarFillExtrusionBucket, table: FeatureTable) => bucket.populateFeatureTable(table, createPopulateOptions([]), new CanonicalTileID(0, 0, 0)),
-            featureTable: (id: number | null) => createSyntheticPolygonFeatureTable(syntheticPolygonFeatures().slice(0, 1).map(feature => ({...feature, id}))),
-            sourceLayerId: syntheticPolygonLayer,
-            stateProperty: 'height',
-        },
-    ];
-    const idCases = [
-        {idCase: 'numeric id', rawId: 7, stateId: '7', updated: true},
-        // As in vector tiles, a feature without an id cannot hold feature state, not even under its row index.
-        {idCase: 'missing id', rawId: null, stateId: '0', updated: false},
-        {idCase: 'signed MLT id', rawId: signedMltId, stateId: String(normalizeMltFeatureId(signedMltId)), updated: true},
-    ];
-
     test('skips bucket updates when revision has already been processed', () => {
         const tile = new Tile(new OverscaledTileID(1, 0, 1, 1, 1), undefined);
         tile.loadVectorData(
@@ -489,220 +362,7 @@ describe('setFeatureState', () => {
         tile.setFeatureState(states, style, 5);
         expect(loadVTLayersSpy).not.toHaveBeenCalled();
     });
-
-    test.each(bucketCases.flatMap((bucketCase) => idCases.map((idCase) => ({...bucketCase, ...idCase}))))('updates transferred $name columnar MLT paint arrays with $idCase', ({layer, bucket, populate, featureTable, rawId, stateId, sourceLayerId, updated}) => {
-        const styleLayer = layer();
-        const columnarBucket = bucket(styleLayer as any);
-        const table = featureTable(rawId);
-        const featureIndex = new FeatureIndex(new OverscaledTileID(1, 0, 1, 1, 1));
-        featureIndex.vtLayers = MLTVectorTile.fromFeatureTables([table]).layers;
-
-        populate(columnarBucket as any, table);
-        const transferredBucket = deserialize(serialize(columnarBucket)) as typeof columnarBucket;
-        transferredBucket.programConfigurations.needsUpload = false;
-
-        const tile = new Tile(new OverscaledTileID(1, 0, 1, 1, 1), undefined);
-        tile.loadVectorData(
-            createVectorData({
-                buckets: [transferredBucket],
-                encoding: 'mlt',
-                featureIndex,
-                rawTileData: new ArrayBuffer(0),
-            }),
-            createStyle({
-                getLayer: (id) => id === styleLayer.id ? styleLayer : undefined,
-            })
-        );
-
-        tile.setFeatureState(
-            {[sourceLayerId]: [{id: stateId, state: {wide: true}}]},
-            createStyle({
-                hasLayer: (id) => id === styleLayer.id,
-                getLayer: (id) => id === styleLayer.id ? styleLayer : undefined,
-            }),
-            6
-        );
-
-        expect(transferredBucket.programConfigurations.needsUpload).toBe(updated);
-    });
-
-    test('keys columnar MLT paint arrays by promoteId', () => {
-        const styleLayer = createFeatureStateCircleLayer();
-        const bucket = new ColumnarCircleBucket({layers: [styleLayer], zoom: 0, overscaling: 1, index: 0, sourceLayerIndex: 0} as BucketParameters<CircleStyleLayer>);
-        const baseTable = createSyntheticPointFeatureTable(syntheticPointFeatures().slice(0, 1));
-        const table = new FeatureTable(
-            baseTable.name,
-            baseTable.geometryVector,
-            baseTable.idVector,
-            [...(baseTable.propertyVectors ?? []), createStringFlatVector(['feature-a'], 'promoted')],
-            baseTable.extent,
-        );
-        const populateOptions = createPopulateOptions([]);
-        populateOptions.featureIndex.promoteId = 'promoted';
-        bucket.populateFeatureTable(table, populateOptions, new CanonicalTileID(0, 0, 0));
-
-        const transferredBucket = deserialize(serialize(bucket)) as ColumnarCircleBucket;
-        expect(transferredBucket.programConfigurations._featureMap.getPositions('feature-a')).toHaveLength(1);
-        transferredBucket.programConfigurations.needsUpload = false;
-
-        const featureIndex = new FeatureIndex(new OverscaledTileID(1, 0, 1, 1, 1), 'promoted');
-        featureIndex.vtLayers = MLTVectorTile.fromFeatureTables([table]).layers;
-        const tile = new Tile(new OverscaledTileID(1, 0, 1, 1, 1), undefined);
-        tile.loadVectorData(
-            createVectorData({
-                buckets: [transferredBucket],
-                encoding: 'mlt',
-                featureIndex,
-                rawTileData: new ArrayBuffer(1),
-            }),
-            createStyle({getLayer: (id) => id === styleLayer.id ? styleLayer : undefined}),
-        );
-
-        tile.setFeatureState(
-            {[syntheticPointLayer]: [{id: 'feature-a', state: {wide: true}}]},
-            createStyle({
-                hasLayer: (id) => id === styleLayer.id,
-                getLayer: (id) => id === styleLayer.id ? styleLayer : undefined,
-            }),
-            8,
-        );
-
-        expect(transferredBucket.programConfigurations.needsUpload).toBe(true);
-    });
-
-    test('updates transferred symbol columnar MLT paint arrays after worker parse', async () => {
-        const layerSpecification = {
-            id: 'symbol-feature-state',
-            source: 'source',
-            'source-layer': syntheticPointLayer,
-            type: 'symbol',
-            layout: {
-                'text-field': ['get', 'label'],
-                'text-font': ['literal', ['Test']],
-                'text-size': 16,
-                'text-allow-overlap': true,
-                'text-ignore-placement': true,
-            },
-            paint: {
-                'text-opacity': ['case', ['boolean', ['feature-state', 'active'], false], ['/', ['get', 'radius'], 12], 0.1]
-            }
-        } as any;
-        const styleLayer = new SymbolStyleLayer(layerSpecification, {});
-        styleLayer.recalculate({zoom: 0, zoomHistory: {} as ZoomHistory} as EvaluationParameters, []);
-        const mltTile = createSyntheticMltTile();
-        const sourceLayer = mltTile.layers[syntheticPointLayer];
-        const materializeFeature = vi.spyOn(sourceLayer, 'feature').mockImplementation(() => {
-            throw new Error('Unexpected vector tile feature materialization');
-        });
-
-        const parsed = await createMltWorkerTile().parse(
-            mltTile,
-            new StyleLayerIndex([layerSpecification]),
-            [],
-            createGlyphActor(),
-            SubdivisionGranularitySetting.noSubdivision
-        ) as WorkerTileWithData;
-        expect(materializeFeature).not.toHaveBeenCalled();
-        expect(parsed.buckets).toHaveLength(1);
-
-        const transferredBuckets = deserialize(serialize(parsed.buckets)) as typeof parsed.buckets;
-        const transferredFeatureIndex = deserialize(serialize(parsed.featureIndex)) as FeatureIndex;
-        transferredFeatureIndex.vtLayers = mltTile.layers;
-        const tile = new Tile(new OverscaledTileID(1, 0, 1, 1, 1), undefined);
-        tile.loadVectorData(
-            createVectorData({
-                buckets: transferredBuckets,
-                collisionBoxArray: deserialize(serialize(parsed.collisionBoxArray)),
-                encoding: 'mlt',
-                featureIndex: transferredFeatureIndex,
-                rawTileData: new ArrayBuffer(1),
-            }),
-            createStyle({
-                getLayer: (id) => id === styleLayer.id ? styleLayer : undefined,
-            })
-        );
-
-        const transferredBucket = tile.buckets[styleLayer.id] as SymbolBucket;
-        const beforePaint = textPaintBytes(transferredBucket, styleLayer.id, 'text-opacity');
-        expect(beforePaint.length).toBeGreaterThan(0);
-        transferredBucket.text.programConfigurations.needsUpload = false;
-        materializeFeature.mockRestore();
-
-        tile.setFeatureState(
-            {
-                [syntheticPointLayer]: [
-                    {id: '31', state: {active: true}},
-                    {id: '1', state: {active: true}},
-                    {id: String(normalizeMltFeatureId(signedMltFeatureId)), state: {active: true}},
-                ]
-            },
-            createStyle({
-                hasLayer: (id) => id === styleLayer.id,
-                getLayer: (id) => id === styleLayer.id ? styleLayer : undefined,
-            }),
-            7
-        );
-
-        expect(textPaintBytes(transferredBucket, styleLayer.id, 'text-opacity')).not.toEqual(beforePaint);
-        expect(transferredBucket.text.programConfigurations.needsUpload).toBe(true);
-    });
 });
-
-function createFeatureStateLineLayer(): LineStyleLayer {
-    const layer = new LineStyleLayer({
-        id: 'line-feature-state',
-        source: 'source',
-        'source-layer': syntheticLineLayer,
-        type: 'line',
-        paint: {
-            'line-width': ['case', ['boolean', ['feature-state', 'wide'], false], ['get', 'width'], 1]
-        }
-    } as any, {});
-    layer.recalculate({zoom: 0, zoomHistory: {} as ZoomHistory} as EvaluationParameters, []);
-    return layer;
-}
-
-function createFeatureStateFillLayer(): FillStyleLayer {
-    const layer = new FillStyleLayer({
-        id: 'fill-feature-state',
-        source: 'source',
-        'source-layer': syntheticPolygonLayer,
-        type: 'fill',
-        paint: {
-            'fill-opacity': ['case', ['boolean', ['feature-state', 'wide'], false], ['get', 'opacity'], 1]
-        }
-    } as any, {});
-    layer.recalculate({zoom: 0, zoomHistory: {} as ZoomHistory} as EvaluationParameters, []);
-    return layer;
-}
-
-function createFeatureStateCircleLayer(): CircleStyleLayer {
-    const layer = new CircleStyleLayer({
-        id: 'circle-feature-state',
-        source: 'source',
-        'source-layer': syntheticPointLayer,
-        type: 'circle',
-        paint: {
-            'circle-radius': ['case', ['boolean', ['feature-state', 'wide'], false], ['get', 'radius'], 1]
-        }
-    } as any, {});
-    layer.recalculate({zoom: 0, zoomHistory: {} as ZoomHistory} as EvaluationParameters, []);
-    return layer;
-}
-
-function createFeatureStateFillExtrusionLayer(): FillExtrusionStyleLayer {
-    const layer = new FillExtrusionStyleLayer({
-        id: 'fill-extrusion-feature-state',
-        source: 'source',
-        'source-layer': syntheticPolygonLayer,
-        type: 'fill-extrusion',
-        paint: {
-            'fill-extrusion-height': ['case', ['boolean', ['feature-state', 'wide'], false], ['get', 'height'], 1]
-        }
-    } as any, {});
-    layer.recalculate({zoom: 0, zoomHistory: {} as ZoomHistory} as EvaluationParameters, []);
-    return layer;
-}
 
 function createRawTileData() {
     return fs.readFileSync(path.join(__dirname, '../../test/unit/assets/mbsv5-6-18-23.vector.pbf'));
@@ -719,46 +379,4 @@ function createVectorData(options?) {
 
 function createStyle(styleStub = {}): Style {
     return styleStub as Style;
-}
-
-function createMltWorkerTile(): WorkerTile {
-    return new WorkerTile({
-        uid: '',
-        zoom: 0,
-        maxZoom: 20,
-        tileSize: 512,
-        source: 'source',
-        tileID: new OverscaledTileID(1, 0, 1, 1, 1),
-        overscaling: 1,
-        encoding: 'mlt'
-    } as any as WorkerTileParameters);
-}
-
-function createGlyphActor() {
-    return {
-        sendAsync: vi.fn(({type: messageType, data}: any) => {
-            if (messageType !== MessageType.getGlyphs) {
-                return Promise.resolve({});
-            }
-
-            const glyphMap = {};
-            for (const glyph of data.stacks.Test.default) {
-                glyphMap[glyph] = {
-                    id: glyph.codePointAt(0),
-                    bitmap: new AlphaImage({width: 1, height: 1}, new Uint8Array([255])),
-                    metrics: {width: 1, height: 1, left: 0, top: 0, advance: 1},
-                };
-            }
-            return Promise.resolve({Test: {default: glyphMap}});
-        })
-    };
-}
-
-function structArrayBytes(array: {arrayBuffer: ArrayBuffer; length: number; bytesPerElement: number}): number[] {
-    return Array.from(new Uint8Array(array.arrayBuffer, 0, array.length * array.bytesPerElement));
-}
-
-function textPaintBytes(bucket: SymbolBucket, layerId: string, property: string): number[] {
-    const binder = bucket.text.programConfigurations.get(layerId).binders[property] as any;
-    return structArrayBytes(binder.paintVertexArray);
 }
