@@ -224,7 +224,9 @@ export class ScrollZoomHandler implements Handler {
         e.preventDefault();
     }
 
-    _onTimeout = (initialEvent: MouseEvent): void => {
+    /** Retains the delayed wheel event so movement events identify the input that initiated this zoom. */
+    _onTimeout = (initialEvent: WheelEvent): void => {
+        this._lastWheelEvent = initialEvent;
         this._type = 'wheel';
         this._delta -= this._lastValue;
         if (!this._active) {
